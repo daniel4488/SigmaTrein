@@ -2,5 +2,5 @@ networkx
 pyvis
 matplotlib
 numpy
-plotli
+plotly
 scipy
