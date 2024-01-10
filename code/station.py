@@ -1,4 +1,4 @@
-class Station():
+class Station:
     """ Class voor station. """
 
     def __init__(self, naam):
