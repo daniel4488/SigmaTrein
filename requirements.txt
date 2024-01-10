@@ -1,0 +1,6 @@
+networkx
+pyvis
+matplotlib
+numpy
+plotli
+scipy
