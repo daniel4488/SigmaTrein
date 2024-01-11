@@ -14,12 +14,12 @@ class Load:
         self.add_edges()
 
         # Visualize graph
-        self.draw_graph()
+        # self.draw_graph()
 
     def add_nodes(self) -> None:
 
         # Open StationsHolland.csv
-        with open("../data/holland/StationsHolland.csv", "r") as file:
+        with open("data/holland/StationsHolland.csv", "r") as file:
             # Remove header
             _ = file.readline()
 
@@ -43,7 +43,7 @@ class Load:
     def add_edges(self) -> None:
 
         # Open ConnectiesHolland.csv
-        with open("../data/holland/ConnectiesHolland.csv", "r") as file:
+        with open("data/holland/ConnectiesHolland.csv", "r") as file:
             # Remove header
             _ = file.readline()
 
@@ -63,17 +63,17 @@ class Load:
                 # Add edge to graph
                 self.G.add_edge(station1, station2, **edge_attr)
 
-    def draw_graph(self) -> None:
-
-        # pos = nx.kamada_kawai_layout(self.G)
-        #
-        # nx.draw_networkx(G=self.G, pos=pos)
-        # plt.show()
-        # plt.savefig("output.png")
-
-        net = Network()
-        net.from_nx(self.G)
-        net.save_graph("networkx-pyvis.html")
+    # def draw_graph(self) -> None:
+    #
+    #     # pos = nx.kamada_kawai_layout(self.G)
+    #     #
+    #     # nx.draw_networkx(G=self.G, pos=pos)
+    #     # plt.show()
+    #     # plt.savefig("output.png")
+    #
+    #     net = Network()
+    #     net.from_nx(self.G)
+    #     net.save_graph("networkx-pyvis.html")
 
 
 
