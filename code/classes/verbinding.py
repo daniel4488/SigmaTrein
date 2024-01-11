@@ -4,4 +4,11 @@ class Verbinding:
         self.station_1: str = station_1
         self.station_2: str = station_2
         self.duration: int = duration
+
+    def get_destination_station(self, departure_station):
+        if self.station_1 == departure_station:
+            return self.station_2
+        elif self.station_2 == departure_station:
+            return self.station_1
+
         
