@@ -1,14 +1,14 @@
 # path finding problem
 class Traject:
     def __init__(self) -> None:
-        self.trajectduur: int = 0
+        self.duration: int = 0
         self.stations: list[str] = []
 
-    def voeg_station_toe(self, station: str) -> None:
+    def add_station_to_trajectory(self, station: str) -> None:
         self.stations.append(station)
 
-    def print_traject(self) -> None:
+    def print_trajectory(self) -> None:
         print(self.stations)
 
-    def print_trajectduur(self) -> None:
+    def print_trajectory_duration(self) -> None:
         print(self.trajectduur)

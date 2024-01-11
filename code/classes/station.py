@@ -1,27 +1,23 @@
 class Station:
     """ Class voor station. """
 
-    def __init__(self, naam: str, x: float, y: float):
-        self.naam: str = naam
+    def __init__(self, station_name: str, x: float, y: float):
+        self.station_name: str = station_name
         self.x: float = x
         self.y: float = y
-        self.verbindingen: dict[str, list[int]] = dict()
-        self.mogelijke_verbindingen: list[int] = []
+        self.connections: list[int] = []
+        self.possible_connections: list[int] = []
 
-    def voeg_verbinding_toe(self, bestemmingsstation: str, duur: int, trajectnummer: int) -> None:
+    def add_connection(self, traject_nummer: int) -> None:
         """ Voeg nieuwe verbinding toe aan het station. """
-        self.verbindingen[bestemmingsstation] = [duur, trajectnummer]
-
-    def geef_verbinding(self, bestemmingsstation: str) -> list[int]:
-        """ Laat verbinding zien naar station toe. """
-        return self.verbindingen[bestemmingsstation]
+        self.connections.append(traject_nummer)
     
-    def maak_mogelijke_verbindingen(self) -> None:
-        for count, key in enumerate(self.verbindingen):
-            self.mogelijke_verbindingen.append(self.verbindingen[key][1])
+    def repopulate_possible_connections(self) -> None:
+        for value in self.connections:
+            self.possible_connections.append(value)
 
-    def verwijder_mogelijke_verbinding(self, verbinding_nummer: int) -> None:
-        self.mogelijke_verbindingen.remove(verbinding_nummer)
+    def remove_possible_connection(self, verbinding_nummer: int) -> None:
+        self.possible_connections.remove(verbinding_nummer)
 
     def __str__(self) -> str:
-        return self.naam
+        return self.station_name

@@ -1,1 +1,4 @@
 # SigmaTrein
+# Gebruik
+# Structuur
+# Auteurs
