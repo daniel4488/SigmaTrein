@@ -3,6 +3,7 @@ from traject import Traject
 from verbinding import Verbinding
 import random
 
+
 class RailNL:
     def __init__(self) -> None:
         # Dict met de naam van het station als key en een bijbehordend object

@@ -23,3 +23,5 @@ class Station:
     def verwijder_mogelijke_verbinding(self, verbinding_nummer: int) -> None:
         self.mogelijke_verbindingen.remove(verbinding_nummer)
 
+    def __str__(self) -> str:
+        return self.naam
