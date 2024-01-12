@@ -10,5 +10,5 @@ class Traject:
     def print_trajectory(self) -> None:
         print(self.stations)
 
-    def print_trajectory_duration(self) -> None:
-        print(self.trajectduur)
+    # def print_trajectory_duration(self) -> None:
+    #     print(self.trajectduur)

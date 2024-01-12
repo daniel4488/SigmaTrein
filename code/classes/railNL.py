@@ -4,7 +4,7 @@ from code.classes.verbinding import Verbinding
 
 
 class RailNL:
-    def __init__(self):
+    def __init__(self) -> None:
         # Dict met de naam van het station als key en een bijbehordend object
         self.stations: dict[str, Station] = {}
         # Dict met het trajectnummer als key en een bijbehordend object
@@ -17,7 +17,7 @@ class RailNL:
         # Laad de verbindingen in
         self.laad_verbindingen()
 
-    def laad_stations(self):
+    def laad_stations(self) -> None:
         # Open StationsHolland.csv
         with open("data/holland/StationsHolland.csv", "r") as file:
             # Remove header
@@ -31,9 +31,9 @@ class RailNL:
                 # Split line based on a comma
                 station, y, x = line.split(",")
                 
-                self.stations[station] = Station(station, x, y)
+                self.stations[station] = Station(station, float(x), float(y))
 
-    def laad_verbindingen(self):
+    def laad_verbindingen(self) -> None:
 
         with open("data/holland/ConnectiesHolland.csv", "r") as file:
             # Remove header
@@ -46,10 +46,10 @@ class RailNL:
                 line = line.strip()
 
                 # Split line
-                station_1, station_2, duur = line.split(",")
+                station_1, station_2, duur_str = line.split(",")
 
                 # Convert van string naar integer
-                duur = int(duur)
+                duur = int(duur_str)
 
                 # Voeg verbinding toe voor beide stations
                 self.stations[station_1].add_connection(traject_nummer)
