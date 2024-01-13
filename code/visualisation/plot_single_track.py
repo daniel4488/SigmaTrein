@@ -273,7 +273,7 @@ class PlotlyLoad(Load):
 
         # Add track info
         fig.add_annotation(
-            text=f"<b>Trajectory:</b> {traject}<br><b>Total time:</b> {trajectory_total_time}",
+            text=f"<b>Trajectory:</b> {trajectory}<br><b>Total time:</b> {trajectory_total_time}",
             align="left",
             xref="paper",
             yref="paper",
