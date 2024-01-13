@@ -7,7 +7,7 @@ class PlotlyLoad(Load):
     def __init__(self) -> None:
         super().__init__()
 
-    def draw_graph(self, traject: list[str]) -> None:
+    def draw_graph(self, trajectory: list[str]) -> None:
 
         # attr = {
         #     "distance": 2,
@@ -15,10 +15,10 @@ class PlotlyLoad(Load):
         # }
         # self.G.add_edge("Den Helder", "Alkmaar", **attr)
 
-        # traject
-        # traject = ["Beverwijk", "Castricum", "Alkmaar", "Hoorn", "Zaandam"]
-        traject_edges = set((traject[i], traject[i + 1]) for i in range(len(traject) - 1))
-        traject_total_time = 0
+        # trajectory
+        # trajectory = ["Beverwijk", "Castricum", "Alkmaar", "Hoorn", "Zaandam"]
+        trajectory_edges = set((trajectory[i], trajectory[i + 1]) for i in range(len(trajectory) - 1))
+        trajectory_total_time = 0
 
         # # create edges
         # edge_x = []
@@ -54,7 +54,7 @@ class PlotlyLoad(Load):
         middle_node_y = []
         middle_node_text = []
         for edge in self.G.edges():
-            if edge in traject_edges or (edge[1], edge[0]) in traject_edges:
+            if edge in trajectory_edges or (edge[1], edge[0]) in trajectory_edges:
                 edge_trace = go.Scatter(
                     x=[], y=[],
                     line=dict(
@@ -64,7 +64,7 @@ class PlotlyLoad(Load):
                     hoverinfo='none',
                     mode='lines'
                 )
-                traject_total_time += self.G.edges[edge]["distance"]
+                trajectory_total_time += self.G.edges[edge]["distance"]
             else:
                 # color = '#888'
                 edge_trace = go.Scatter(
@@ -123,26 +123,26 @@ class PlotlyLoad(Load):
             )
         )
 
-        # # traject
-        # traject = ["Beverwijk", "Castricum", "Alkmaar", "Hoorn", "Zaandam"]
+        # # trajectory
+        # trajectory = ["Beverwijk", "Castricum", "Alkmaar", "Hoorn", "Zaandam"]
         #
-        # traject_edge_x = []
-        # traject_edge_y = []
+        # trajectory_edge_x = []
+        # trajectory_edge_y = []
         #
-        # for edge in iter.combinations(traject, r=2):
+        # for edge in iter.combinations(trajectory, r=2):
         #     x0 = self.G.nodes[edge[0]]['x']
         #     y0 = self.G.nodes[edge[0]]['y']
         #     x1 = self.G.nodes[edge[1]]['x']
         #     y1 = self.G.nodes[edge[1]]['y']
-        #     traject_edge_x.append(x0)
-        #     traject_edge_x.append(x1)
-        #     traject_edge_x.append(None)
-        #     traject_edge_y.append(y0)
-        #     traject_edge_y.append(y1)
-        #     traject_edge_y.append(None)
+        #     trajectory_edge_x.append(x0)
+        #     trajectory_edge_x.append(x1)
+        #     trajectory_edge_x.append(None)
+        #     trajectory_edge_y.append(y0)
+        #     trajectory_edge_y.append(y1)
+        #     trajectory_edge_y.append(None)
         #
-        # traject_trace = go.Scatter(
-        #     x=traject_edge_x, y=traject_edge_y,
+        # trajectory_trace = go.Scatter(
+        #     x=trajectory_edge_x, y=trajectory_edge_y,
         #     line=dict(width=0.5, color='lightgreen'),
         #     hoverinfo='none',
         #     mode='lines'
@@ -273,7 +273,7 @@ class PlotlyLoad(Load):
 
         # Add track info
         fig.add_annotation(
-            text=f"<b>Traject:</b> {traject}<br><b>Total time:</b> {traject_total_time}",
+            text=f"<b>Trajectory:</b> {traject}<br><b>Total time:</b> {trajectory_total_time}",
             align="left",
             xref="paper",
             yref="paper",

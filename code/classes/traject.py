@@ -1,8 +1,8 @@
 # path finding problem
-class Traject:
+class Trajectory:
     """ Represents the route of a train. """
     def __init__(self) -> None:
-        """ Creates an Traject object. """
+        """ Creates a Trajectory object. """
         self.duration: int = 0
         self.stations: list[str] = []
 

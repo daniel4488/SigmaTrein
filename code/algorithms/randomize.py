@@ -1,4 +1,4 @@
-from code.classes.traject import Traject
+from code.classes.traject import Trajectory
 from code.classes.station import Station
 from code.classes.connection import Connection
 
@@ -26,7 +26,7 @@ class Randomize:
         
         self.repopulate_possible_connections_for_all_stations()
 
-        random_trajectory = Traject()
+        random_trajectory = Trajectory()
         
         random_departure_station = random.choice(list(self.stations.keys()))
         random_departure_station_object = self.stations[random_departure_station]
