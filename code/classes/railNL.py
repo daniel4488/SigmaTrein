@@ -1,6 +1,6 @@
 from code.classes.station import Station
 from code.classes.traject import Traject
-from code.classes.verbinding import Verbinding
+from code.classes.connection import Connection
 
 
 class RailNL:
@@ -8,7 +8,7 @@ class RailNL:
         # Dict met de naam van het station als key en een bijbehordend object
         self.stations: dict[str, Station] = {}
         # Dict met het trajectnummer als key en een bijbehordend object
-        self.verbindingen: dict[int, Verbinding] = {}
+        self.verbindingen: dict[int, Connection] = {}
         # Dict met de trajectnaam als key en een bijbehordend object
         self.trajecten: list[Traject] = []
 
@@ -56,7 +56,7 @@ class RailNL:
                 self.stations[station_2].add_connection(traject_nummer)
 
                 # Voeg verbinding toe 
-                self.verbindingen[traject_nummer] = (Verbinding(traject_nummer, station_1, station_2, duur))  
+                self.verbindingen[traject_nummer] = (Connection(traject_nummer, station_1, station_2, duur))
 
                 # Houd bij welk trajectnummer dit was
                 traject_nummer += 1

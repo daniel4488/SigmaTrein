@@ -1,8 +1,7 @@
 from code.classes.traject import Traject
-from code.classes.station import Station
-from code.classes.verbinding import Verbinding
 
 import random
+
 
 class Randomize:
     def __init__(self, stations: dict, connections: dict):
