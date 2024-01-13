@@ -6,7 +6,7 @@ if __name__ == "__main__":
     # Initialize raiLNL
     railNL = RailNL()
 
-    randomize = Randomize(railNL.stations, railNL.verbindingen)
+    randomize = Randomize(railNL.stations, railNL.connections)
 
     randomize.make_random_trajectory()
 

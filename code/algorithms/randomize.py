@@ -1,20 +1,28 @@
 from code.classes.traject import Traject
+from code.classes.station import Station
+from code.classes.connection import Connection
 
 import random
 
 
 class Randomize:
-    def __init__(self, stations: dict, connections: dict):
-        self.stations = stations
-        self.connections = connections
-        
-        self.randomized_trajectory = []
+    """ Algorithm to generate a randomly chosen trajectory. """
 
-    def repopulate_possible_connections_for_all_stations(self):
-        for i in self.stations:
-            self.stations[i].repopulate_possible_connections()
+    def __init__(self, stations: dict[str, Station], connections: dict[int, Connection]) -> None:
+        """ Initiates the random algorithm. """
 
-    def make_random_trajectory(self):
+        self.stations: dict[str, Station] = stations
+        self.connections: dict[int, Connection] = connections
+
+        self.randomized_trajectory: list[str] = []
+
+    def repopulate_possible_connections_for_all_stations(self) -> None:
+        """ Prepare for the generation of a new trajectory. """
+        for station in self.stations:
+            self.stations[station].repopulate_possible_connections()
+
+    def make_random_trajectory(self) -> None:
+        """ Generates a randomly chosen trajectory. """
         
         self.repopulate_possible_connections_for_all_stations()
 
