@@ -19,6 +19,7 @@ class Station:
         # In that case there will be duplicates in possible connections
         # Question: is order important for connections? if not -> change to set
         # A set will also prevent having duplicates
+        self.possible_connections = []
         for value in self.connections:
             self.possible_connections.append(value)
 

@@ -19,17 +19,17 @@ class Solution:
         used_connections = set()
         Min = 0
         for traject in self.trajectories:
-            used_connections.union(traject.connections)
+            used_connections.update(traject.connections)
             Min += traject.duration
         p = len(used_connections) / 28
 
         K = p * 10000 - (T * 100 + Min)
+        # print(f"T = {T}")
+        # print(f"Min = {Min}")
+        # print(f"p = {p}")
         return K
 
     def write_score(self) -> None:
         with open("data/scores/random.csv", "a") as file:
             file.write(str(self.score))
             file.write("\n")
-
-    def __str__(self) -> str:
-        raise NotImplemented

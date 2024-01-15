@@ -16,7 +16,7 @@ class Trajectory:
         self.connections.add(connection_number)
 
     def __str__(self) -> str:
-        return str(self.stations)
+        return "[" + ", ".join(map(str, self.stations)) + "]"
 
     # def print_trajectory(self) -> None:
     #     print(self.stations)

@@ -71,9 +71,6 @@ class RandomizeTrajectory:
         # create trajectory list of stations
         return random_trajectory
 
-    def add_used_connections(self, connection_number: int) -> None:
-        self.used_connections.add(connection_number)
-
     def reset_used_connections(self) -> None:
         self.used_connections.clear()
 
