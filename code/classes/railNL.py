@@ -61,8 +61,9 @@ class RailNL:
                 # Split line
                 station_1, station_2, duration_str = line.split(",")
 
+                duration = float(duration_str)
                 # Convert string to integer
-                duration = int(duration_str.strip(".0"))
+                
 
                 # Add connection to both stations
                 self.stations[station_1].add_connection(trajectory_number)

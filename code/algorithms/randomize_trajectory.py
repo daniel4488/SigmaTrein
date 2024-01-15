@@ -49,7 +49,7 @@ class RandomizeTrajectory:
             
             # choose random connection number from possible connections at departure station
             random_connection = random.choice(random_departure_station_object.possible_connections)
-            random_trajectory.add_connection_number(random_connection)
+            
 
             # get name of destination station from chosen connection 
             random_destination_station = self.connections[random_connection].get_destination_station(random_departure_station)
@@ -63,18 +63,28 @@ class RandomizeTrajectory:
 
             # update total duration of the trajectory
             duration_candidate = random_trajectory.duration + self.connections[random_connection].duration
-
+            print("Duration candidate is: ", end="")
+            print(duration_candidate)
             # add station to trajectory if it fits within 120 mins
             if duration_candidate <= 120:
+                print("added")
                 # add station to trajectory
                 random_trajectory.add_station_to_trajectory(random_destination_station)
 
                 # promote candidate
                 random_trajectory.duration = duration_candidate
 
-            # update departure station to the current station
-            random_departure_station = random_destination_station
-            random_departure_station_object = random_destination_station_object
+                random_trajectory.add_connection_number(random_connection)
+
+                # update departure station to the current station
+                random_departure_station = random_destination_station
+                random_departure_station_object = random_destination_station_object
+                print("total trajectory time is now: ", end="")
+                print(random_trajectory.duration)
+            else:
+                print("not added")
+
+            
 
         # create trajectory list of stations
         return random_trajectory
@@ -135,7 +145,7 @@ class RandomizeTrajectory:
     def make_baseline(self) -> None:
         self.prepare_csv_file()
 
-        number_of_simulations = 100
+        number_of_simulations = 1000000
 
         for _ in range(number_of_simulations):
-            self.make_random_solution(write_output=False)
+            self.make_random_solution(write_output=True)
