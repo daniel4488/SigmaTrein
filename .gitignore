@@ -168,3 +168,6 @@ code/visualisation/lib/
 
 # Visualization html file
 single_track.html
+
+# Scores dir
+data/scores/
