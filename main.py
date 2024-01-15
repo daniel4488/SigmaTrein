@@ -8,10 +8,12 @@ if __name__ == "__main__":
 
     randomize = RandomizeTrajectory(railNL.stations, railNL.connections)
 
-    randomize.make_random_trajectory()
+    randomize.make_baseline()
 
-    print(randomize.randomized_trajectory)
-
-    # Visualization
-    plot_device = PlotlyLoad()
-    plot_device.draw_graph(randomize.randomized_trajectory)
+    # random_trajectory = randomize.make_random_trajectory()
+    #
+    # print(random_trajectory)
+    #
+    # # Visualization
+    # plot_device = PlotlyLoad()
+    # plot_device.draw_graph(random_trajectory.stations)

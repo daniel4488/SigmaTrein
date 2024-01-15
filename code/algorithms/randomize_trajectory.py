@@ -1,8 +1,10 @@
 from code.classes.trajectory import Trajectory
 from code.classes.station import Station
 from code.classes.connection import Connection
+from code.classes.solution import Solution
 
 import random
+import os
 
 
 class RandomizeTrajectory:
@@ -61,6 +63,8 @@ class RandomizeTrajectory:
             # add station to trajectory if it fits within 120 mins
             if random_trajectory.duration <= 120:
                 random_trajectory.add_station_to_trajectory(random_destination_station)
+            else:
+                break
 
             # update departure station to the current station
             random_departure_station = random_destination_station
@@ -75,17 +79,52 @@ class RandomizeTrajectory:
     def reset_used_connections(self) -> None:
         self.used_connections.clear()
 
+    @staticmethod
+    def clear_scores_file() -> None:
+        file_path = "data/scores/random.csv"
+
+        if os.path.exists(file_path):
+            input("WARNING scores file will be deleted.")
+            os.remove(file_path)
+
     def make_random_solution(self) -> None:
         self.reset_used_connections()
+
+        if not (os.path.exists("data/scores") and os.path.isdir("data/scores")):
+            os.mkdir("data/scores")
+
+        trajectories = set()
+        is_valid = False
 
         for i in range(1, 7):
             # Make random trajectory
             current_trajectory = self.make_random_trajectory()
 
+            # Add to set of trajectories
+            trajectories.add(current_trajectory)
+
             # Add trajectory connections to used_connections
             self.used_connections.union(current_trajectory.connections)
 
             if len(self.used_connections) == 28:
-                break
+                is_valid = True
+
+        # Create solution instance
+        solution = Solution(trajectories, is_valid)
+        print(f"Score: {solution.score}")
+
+        for trajectory in solution.trajectories:
+            print("Stations:", end="")
+            print(trajectory, end="")
+            print()
+
+    def make_baseline(self) -> None:
+        self.clear_scores_file()
+
+        number_of_simulations = 1
+
+        for _ in range(number_of_simulations):
+            self.make_random_solution()
+
 
 

@@ -15,6 +15,9 @@ class Trajectory:
         """ Add a station number to the trajectory. """
         self.connections.add(connection_number)
 
+    def __str__(self) -> str:
+        return str(self.stations)
+
     # def print_trajectory(self) -> None:
     #     print(self.stations)
 
