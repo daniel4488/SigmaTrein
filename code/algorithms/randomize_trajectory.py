@@ -13,6 +13,9 @@ class RandomizeTrajectory:
     def __init__(self, stations: dict[str, Station], connections: dict[int, Connection]) -> None:
         """ Initiates the random algorithm. """
 
+        # Make algorithm pseudo random
+        random.seed(324488)
+
         self.stations: dict[str, Station] = stations
         self.connections: dict[int, Connection] = connections
 
@@ -82,11 +85,17 @@ class RandomizeTrajectory:
             input("WARNING scores file will be deleted.")
             os.remove(file_path)
 
-    def make_random_solution(self) -> None:
-        self.reset_used_connections()
+    def prepare_csv_file(self) -> None:
+        self.clear_scores_file()
 
         if not (os.path.exists("data/scores") and os.path.isdir("data/scores")):
             os.mkdir("data/scores")
+
+        with open("data/scores/random.csv", "w") as file:
+            file.write("score\n")
+
+    def make_random_solution(self) -> None:
+        self.reset_used_connections()
 
         trajectories = set()
         is_valid = False
@@ -114,12 +123,9 @@ class RandomizeTrajectory:
             print()
 
     def make_baseline(self) -> None:
-        self.clear_scores_file()
+        self.prepare_csv_file()
 
-        number_of_simulations = 1
+        number_of_simulations = 10000
 
         for _ in range(number_of_simulations):
             self.make_random_solution()
-
-
-

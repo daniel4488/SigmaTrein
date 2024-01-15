@@ -1,6 +1,7 @@
 from code.classes.railNL import RailNL
 from code.algorithms.randomize_trajectory import RandomizeTrajectory
 from code.visualisation.plot_single_track import PlotlyLoad
+from code.visualisation.baseline import visualize_baseline
 
 if __name__ == "__main__":
     # Initialize raiLNL
@@ -9,6 +10,8 @@ if __name__ == "__main__":
     randomize = RandomizeTrajectory(railNL.stations, railNL.connections)
 
     randomize.make_baseline()
+
+    visualize_baseline()
 
     # random_trajectory = randomize.make_random_trajectory()
     #

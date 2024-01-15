@@ -5,3 +5,5 @@ numpy
 plotly
 scipy
 mypy
+pandas
+seaborn
