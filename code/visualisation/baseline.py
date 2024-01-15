@@ -21,6 +21,9 @@ def visualize_baseline() -> None:
     fig.set(**plot_settings)
     plt.show()
 
+    # Export graph
+    plt.savefig("code/visualisation/baseline.svg", format="svg")
+
 
 if __name__ == "__main__":
     visualize_baseline()
