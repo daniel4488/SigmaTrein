@@ -14,14 +14,15 @@ class RandomizeTrajectory:
         self.stations: dict[str, Station] = stations
         self.connections: dict[int, Connection] = connections
 
-        self.randomized_trajectory: list[str] = []
+        self.used_connections: set = set()
+        self.solution: dict[int, list[str]] = {}
 
     def repopulate_possible_connections_for_all_stations(self) -> None:
         """ Prepare for the generation of a new trajectory. """
         for station in self.stations:
             self.stations[station].repopulate_possible_connections()
 
-    def make_random_trajectory(self) -> None:
+    def make_random_trajectory(self) -> Trajectory:
         """ Generates a randomly chosen trajectory. """
         
         self.repopulate_possible_connections_for_all_stations()
@@ -42,6 +43,7 @@ class RandomizeTrajectory:
             
             # choose random connection number from possible connections at departure station
             random_connection = random.choice(random_departure_station_object.possible_connections)
+            random_trajectory.add_connection_number(random_connection)
 
             # get name of destination station from chosen connection 
             random_destination_station = self.connections[random_connection].get_destination_station(random_departure_station)
@@ -65,4 +67,25 @@ class RandomizeTrajectory:
             random_departure_station_object = random_destination_station_object
 
         # create trajectory list of stations
-        self.randomized_trajectory = random_trajectory.stations    
+        return random_trajectory
+
+    def add_used_connections(self, connection_number: int) -> None:
+        self.used_connections.add(connection_number)
+
+    def reset_used_connections(self) -> None:
+        self.used_connections.clear()
+
+    def make_random_solution(self) -> None:
+        self.reset_used_connections()
+
+        for i in range(1, 7):
+            # Make random trajectory
+            current_trajectory = self.make_random_trajectory()
+
+            # Add trajectory connections to used_connections
+            self.used_connections.union(current_trajectory.connections)
+
+            if len(self.used_connections) == 28:
+                break
+
+
