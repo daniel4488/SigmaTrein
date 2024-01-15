@@ -1,5 +1,5 @@
 from code.classes.railNL import RailNL
-from code.algorithms.randomize import RandomizeTrajectory
+from code.algorithms.randomize_trajectory import RandomizeTrajectory
 from code.visualisation.plot_single_track import PlotlyLoad
 
 if __name__ == "__main__":
