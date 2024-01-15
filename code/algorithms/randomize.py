@@ -5,7 +5,7 @@ from code.classes.connection import Connection
 import random
 
 
-class Randomize:
+class RandomizeTrajectory:
     """ Algorithm to generate a randomly chosen trajectory. """
 
     def __init__(self, stations: dict[str, Station], connections: dict[int, Connection]) -> None:

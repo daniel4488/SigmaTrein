@@ -1,12 +1,12 @@
 from code.classes.railNL import RailNL
-from code.algorithms.randomize import Randomize
+from code.algorithms.randomize import RandomizeTrajectory
 from code.visualisation.plot_single_track import PlotlyLoad
 
 if __name__ == "__main__":
     # Initialize raiLNL
     railNL = RailNL()
 
-    randomize = Randomize(railNL.stations, railNL.connections)
+    randomize = RandomizeTrajectory(railNL.stations, railNL.connections)
 
     randomize.make_random_trajectory()
 
