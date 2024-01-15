@@ -1,4 +1,4 @@
-from code.classes.traject import Trajectory
+from code.classes.trajectory import Trajectory
 from code.classes.station import Station
 from code.classes.connection import Connection
 
