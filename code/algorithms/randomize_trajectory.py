@@ -63,8 +63,6 @@ class RandomizeTrajectory:
             # add station to trajectory if it fits within 120 mins
             if random_trajectory.duration <= 120:
                 random_trajectory.add_station_to_trajectory(random_destination_station)
-            else:
-                break
 
             # update departure station to the current station
             random_departure_station = random_destination_station
