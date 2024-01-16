@@ -61,12 +61,16 @@ class RandomizeTrajectory:
             random_destination_station_object.remove_possible_connection(random_connection)
             random_departure_station_object.remove_possible_connection(random_connection)
 
-            # add duration of created connection to duration of the trajectory
-            random_trajectory.duration += self.connections[random_connection].duration
+            # update total duration of the trajectory
+            duration_candidate = random_trajectory.duration + self.connections[random_connection].duration
 
             # add station to trajectory if it fits within 120 mins
-            if random_trajectory.duration <= 120:
+            if duration_candidate <= 120:
+                # add station to trajectory
                 random_trajectory.add_station_to_trajectory(random_destination_station)
+
+                # promote candidate
+                random_trajectory.duration = duration_candidate
 
             # update departure station to the current station
             random_departure_station = random_destination_station
