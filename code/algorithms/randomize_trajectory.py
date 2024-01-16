@@ -2,6 +2,7 @@ from code.classes.trajectory import Trajectory
 from code.classes.station import Station
 from code.classes.connection import Connection
 from code.classes.solution import Solution
+from code.classes.output import Output
 
 import random
 import os
@@ -94,13 +95,13 @@ class RandomizeTrajectory:
         with open("data/scores/random.csv", "w") as file:
             file.write("score\n")
 
-    def make_random_solution(self) -> None:
+    def make_random_solution(self, write_output: bool) -> None:
         self.reset_used_connections()
 
         trajectories = set()
         is_valid = False
 
-        for i in range(1, 7):
+        for _ in range(7):
             # Make random trajectory
             current_trajectory = self.make_random_trajectory()
 
@@ -114,7 +115,10 @@ class RandomizeTrajectory:
                 is_valid = True
 
         # Create solution instance
-        solution = Solution(trajectories, is_valid)
+        if write_output:
+            solution = Output(trajectories, is_valid)
+        else:
+            solution = Solution(trajectories, is_valid)
         print(f"Score: {solution.score}")
 
         for trajectory in solution.trajectories:
@@ -128,4 +132,4 @@ class RandomizeTrajectory:
         number_of_simulations = 10000
 
         for _ in range(number_of_simulations):
-            self.make_random_solution()
+            self.make_random_solution(write_output=False)

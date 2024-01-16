@@ -171,3 +171,9 @@ single_track.html
 
 # Scores dir
 data/scores/
+
+# Baseline visualization
+code/visualisation/baseline.svg
+
+# Output CSV file
+output.csv

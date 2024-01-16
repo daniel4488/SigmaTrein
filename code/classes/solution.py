@@ -24,9 +24,9 @@ class Solution:
         p = len(used_connections) / 28
 
         K = p * 10000 - (T * 100 + Min)
-        # print(f"T = {T}")
-        # print(f"Min = {Min}")
-        # print(f"p = {p}")
+        print(f"T = {T}")
+        print(f"Min = {Min}")
+        print(f"p = {p}")
         return K
 
     def write_score(self) -> None:
