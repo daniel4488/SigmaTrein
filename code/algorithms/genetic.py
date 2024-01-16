@@ -29,8 +29,10 @@ class Genetic:
     def generate_population(self, size: int):
         return [self.generate_solution() for _ in range(size)]
     
-    def fitness(self, solution, things: [Thing], weight_limit: int) -> int:
-
+    def fitness(self, solution: Solution) -> int:
+        return solution.score
+    
+    def fitness
 
     def repopulate_possible_connections_for_all_stations(self) -> None:
         """ Prepare for the generation of a new trajectory. """
