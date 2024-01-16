@@ -1,6 +1,0 @@
-networkx
-pyvis
-matplotlib
-numpy
-plotly
-scipy
