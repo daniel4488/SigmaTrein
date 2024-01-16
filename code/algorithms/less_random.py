@@ -7,13 +7,16 @@ from code.classes.railNL import RailNL
 
 import random
 
-class Genetic:
+class LessRandom:
     def __init__(self, stations: dict[str, Station], connections: dict[int, Connection]):
         self.stations = stations
         self.connections = connections
 
+        self.preferred_departure = ["Den Helder", "Dordrecht", "Hoorn", "Schiphol Airport", "Gouda", "Heemstede-Aerdenhout", "Schiphol Airport"]
+        self.preferred_departure_copy = []
+
         self.used_connections: set = set()
-        self.population = self.generate_population(5)
+        # self.population = self.generate_population(5)
 
 
     def generate_solution(self):
@@ -31,13 +34,14 @@ class Genetic:
     
     def fitness(self, solution: Solution) -> int:
         return solution.score
-    
-    # def fitness
 
     def repopulate_possible_connections_for_all_stations(self) -> None:
         """ Prepare for the generation of a new trajectory. """
         for station in self.stations:
             self.stations[station].repopulate_possible_connections()
+
+    def repopulate_preferred_departure_stations(self) -> None:
+        self.preferred_departure_copy = self.preferred_departure[:]
          
     def make_random_trajectory(self) -> Trajectory:
         """ Generates a randomly chosen trajectory. """
@@ -48,7 +52,7 @@ class Genetic:
         random_trajectory = Trajectory()
         
         # choose a random station to depart from
-        random_departure_station = random.choice(list(self.stations.keys()))
+        random_departure_station = self.preferred_departure_copy.pop(0)
         random_departure_station_object = self.stations[random_departure_station]
 
         # add departure station to the trajectory
@@ -116,6 +120,20 @@ class Genetic:
                 break
             
         solution = Solution(trajectories, is_valid)
+        score = solution.score
             
-        return solution
+        return score
 
+    def run(self) -> None:
+
+        number_of_simulations = 10000
+        highest_score = 0
+
+        for _ in range(number_of_simulations):
+            self.repopulate_preferred_departure_stations()
+            score = self.make_random_solution()
+
+            if score > highest_score:
+                highest_score = score
+
+        print(highest_score)
