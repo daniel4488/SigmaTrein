@@ -1,11 +1,12 @@
 import pandas as pd
+import plotly.express as px
 import seaborn as sns
 import matplotlib.pyplot as plt
 
 
 def visualize_baseline() -> None:
     scores = pd.read_csv("data/scores/random.csv")
-    print(scores.head())
+    scores.head()
 
     line_settings = {
         "linewidth": "2"
@@ -25,5 +26,17 @@ def visualize_baseline() -> None:
     plt.savefig("code/visualisation/baseline.svg", format="svg")
 
 
+def visualize_iterations_to_score() -> None:
+    scores = pd.read_csv("data/scores/random.csv")
+    scores.head()
+
+    fig = px.line(scores, x = range(len(scores)), y = 'score', labels = {
+                  'x': 'Iterations',
+                  'score': 'Score'},
+                  title = 'Scores of 100 iterations from a random algorithm')
+    fig.show()
+
+
 if __name__ == "__main__":
     visualize_baseline()
+    visualize_iterations_to_score()

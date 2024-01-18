@@ -135,7 +135,7 @@ class RandomizeTrajectory:
     def make_baseline(self) -> None:
         self.prepare_csv_file()
 
-        number_of_simulations = 10000
+        number_of_simulations = 100
 
         for _ in range(number_of_simulations):
             self.make_random_solution(write_output=False)
