@@ -6,7 +6,7 @@ from code.visualisation.baseline import visualize_baseline, visualize_iterations
 
 if __name__ == "__main__":
     # Initialize raiLNL
-    railNL = RailNL()
+    railNL = RailNL(dataset="holland")
 
     randomize = RandomizeTrajectory(railNL.stations, railNL.connections)
 

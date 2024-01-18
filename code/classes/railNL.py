@@ -7,8 +7,11 @@ class RailNL:
 
     NUMBER_OF_CONNECTIONS: int = -1
 
-    def __init__(self) -> None:
+    def __init__(self, dataset: str) -> None:
         """ Creates a RailNL object. """
+
+        # Name of the dataset in lowercase
+        self.dataset = dataset.lower()
 
         # Dictionary with station name as key mapping to its object
         self.stations: dict[str, Station] = {}
@@ -26,7 +29,7 @@ class RailNL:
         """ Converts the station data to Station classes. """
         
         # Open StationsHolland.csv
-        with open("data/holland/StationsHolland.csv", "r") as file:
+        with open(f"data/{self.dataset}/Stations{self.dataset.capitalize()}.csv", "r") as file:
             # Remove header
             _ = file.readline()
 
@@ -44,7 +47,7 @@ class RailNL:
     def load_connections(self) -> None:
         """ Converts connections data to Connection classes. """
 
-        with open("data/holland/ConnectiesHolland.csv", "r") as file:
+        with open(f"data/{self.dataset}/Connecties{self.dataset.capitalize()}.csv", "r") as file:
             # Remove header
             _ = file.readline()
 
@@ -59,7 +62,7 @@ class RailNL:
                 station_1, station_2, duration_str = line.split(",")
 
                 # Convert string to integer
-                duration = int(duration_str)
+                duration = int(duration_str.strip(".0"))
 
                 # Add connection to both stations
                 self.stations[station_1].add_connection(trajectory_number)

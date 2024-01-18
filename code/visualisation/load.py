@@ -3,6 +3,9 @@ from pyvis.network import Network
 
 
 class Load:
+
+    DATASET = "holland"
+
     def __init__(self) -> None:
         # Initiate empty undirected graph
         self.G: nx.Graph = nx.Graph()
@@ -19,7 +22,7 @@ class Load:
     def add_nodes(self) -> None:
 
         # Open StationsHolland.csv
-        with open("data/holland/StationsHolland.csv", "r") as file:
+        with open(f"data/{self.DATASET}/Stations{self.DATASET.capitalize()}.csv", "r") as file:
             # Remove header
             _ = file.readline()
 
@@ -43,7 +46,7 @@ class Load:
     def add_edges(self) -> None:
 
         # Open ConnectiesHolland.csv
-        with open("data/holland/ConnectiesHolland.csv", "r") as file:
+        with open(f"data/{self.DATASET}/Connecties{self.DATASET.capitalize()}.csv", "r") as file:
             # Remove header
             _ = file.readline()
 
@@ -56,7 +59,7 @@ class Load:
 
                 # Edges attributes
                 edge_attr = {
-                    "distance": int(distance),
+                    "distance": int(distance.strip(".0")),
                     "title": distance
                 }
 
@@ -74,16 +77,6 @@ class Load:
     #     net = Network()
     #     net.from_nx(self.G)
     #     net.save_graph("networkx-pyvis.html")
-
-
-
-
-
-
-
-
-
-
 
 
 if __name__ == "__main__":
