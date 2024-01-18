@@ -5,6 +5,8 @@ from code.classes.connection import Connection
 class RailNL:
     """ The RailNL class loads the csv data into memory. """
 
+    NUMBER_OF_CONNECTIONS: int = -1
+
     def __init__(self) -> None:
         """ Creates a RailNL object. """
 
@@ -68,4 +70,7 @@ class RailNL:
 
                 # Increment the current trajectory number
                 trajectory_number += 1
+
+            # Make number of connections / trajectories a class variable
+            RailNL.NUMBER_OF_CONNECTIONS = trajectory_number
                 

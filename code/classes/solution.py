@@ -1,4 +1,5 @@
 from code.classes.trajectory import Trajectory
+from code.classes.railNL import RailNL
 
 
 class Solution:
@@ -21,7 +22,8 @@ class Solution:
         for traject in self.trajectories:
             used_connections.update(traject.connections)
             Min += traject.duration
-        p = len(used_connections) / 28
+        assert RailNL.NUMBER_OF_CONNECTIONS != -1
+        p = len(used_connections) / RailNL.NUMBER_OF_CONNECTIONS
 
         K = p * 10000 - (T * 100 + Min)
         print(f"T = {T}")
