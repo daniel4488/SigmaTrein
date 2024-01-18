@@ -3,6 +3,7 @@ from code.classes.station import Station
 from code.classes.connection import Connection
 from code.classes.solution import Solution
 from code.classes.output import Output
+from code.classes.railNL import RailNL
 
 import random
 import os
@@ -63,11 +64,8 @@ class RandomizeTrajectory:
 
             # update total duration of the trajectory
             duration_candidate = random_trajectory.duration + self.connections[random_connection].duration
-            print("Duration candidate is: ", end="")
-            print(duration_candidate)
             # add station to trajectory if it fits within 120 mins
             if duration_candidate <= 120:
-                print("added")
                 # add station to trajectory
                 random_trajectory.add_station_to_trajectory(random_destination_station)
 
@@ -79,12 +77,6 @@ class RandomizeTrajectory:
                 # update departure station to the current station
                 random_departure_station = random_destination_station
                 random_departure_station_object = random_destination_station_object
-                print("total trajectory time is now: ", end="")
-                print(random_trajectory.duration)
-            else:
-                print("not added")
-
-            
 
         # create trajectory list of stations
         return random_trajectory
@@ -123,29 +115,30 @@ class RandomizeTrajectory:
             trajectories.add(current_trajectory)
 
             # Add trajectory connections to used_connections
-            self.used_connections.union(current_trajectory.connections)
+            self.used_connections.update(current_trajectory.connections)
 
-            if len(self.used_connections) == 28:
+            if len(self.used_connections) == RailNL.NUMBER_OF_CONNECTIONS:
                 is_valid = True
+                break
 
         # Create solution instance
         if write_output:
             solution = Output(trajectories, is_valid)
         else:
             solution = Solution(trajectories, is_valid)
-        print(f"Score: {solution.score}")
+        # print(f"Score: {solution.score}")
 
-        for trajectory in solution.trajectories:
-            print("Stations:", end="")
-            print(trajectory, end="")
-            print()
+        # for trajectory in solution.trajectories:
+        #     print("Stations:", end="")
+        #     print(trajectory, end="")
+        #     print()
 
         return solution
 
     def make_baseline(self) -> None:
         self.prepare_csv_file()
 
-        number_of_simulations = 1000000
+        number_of_simulations = 100000
 
         for _ in range(number_of_simulations):
             self.make_random_solution(write_output=True)
