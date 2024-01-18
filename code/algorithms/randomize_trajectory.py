@@ -99,7 +99,7 @@ class RandomizeTrajectory:
         with open("data/scores/random.csv", "w") as file:
             file.write("score\n")
 
-    def make_random_solution(self, write_output: bool) -> None:
+    def make_random_solution(self, write_output: bool) -> Solution | Output:
         self.reset_used_connections()
 
         trajectories = set()
@@ -129,6 +129,8 @@ class RandomizeTrajectory:
             print("Stations:", end="")
             print(trajectory, end="")
             print()
+
+        return solution
 
     def make_baseline(self) -> None:
         self.prepare_csv_file()
