@@ -6,6 +6,7 @@ from code.classes.output import Output
 from code.classes.railNL import RailNL
 
 import random
+import os
 
 class LessRandom:
     def __init__(self, stations: dict[str, Station], connections: dict[int, Connection]):
@@ -98,6 +99,23 @@ class LessRandom:
     def reset_used_connections(self) -> None:
         self.used_connections.clear()
 
+    @staticmethod
+    def clear_scores_file() -> None:
+        file_path = "data/scores/random.csv"
+
+        if os.path.exists(file_path):
+            input("WARNING scores file will be deleted.")
+            os.remove(file_path)
+
+    def prepare_csv_file(self) -> None:
+        self.clear_scores_file()
+
+        if not (os.path.exists("data/scores") and os.path.isdir("data/scores")):
+            os.mkdir("data/scores")
+
+        with open("data/scores/random.csv", "w") as file:
+            file.write("score\n")
+
     def make_random_solution(self):
         self.reset_used_connections()
 
@@ -125,6 +143,8 @@ class LessRandom:
         return score
 
     def run(self) -> None:
+
+        self.prepare_csv_file()
 
         number_of_simulations = 10000
         highest_score = 0
