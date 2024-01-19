@@ -103,7 +103,6 @@ class RandomizeTrajectory:
                 # update departure station to the current station
                 departure_station = destination_station
 
-        # create trajectory list of stations
         return trajectory
 
 
