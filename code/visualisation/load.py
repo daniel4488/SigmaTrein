@@ -4,9 +4,10 @@ from pyvis.network import Network
 
 class Load:
 
-    DATASET = "holland"
+    def __init__(self, dataset: str) -> None:
+        # set dataset
+        self.DATASET = dataset
 
-    def __init__(self) -> None:
         # Initiate empty undirected graph
         self.G: nx.Graph = nx.Graph()
 
