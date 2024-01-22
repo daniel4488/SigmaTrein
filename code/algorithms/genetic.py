@@ -7,6 +7,7 @@ from code.classes.railNL import RailNL
 
 import random
 
+
 class Genetic:
     def __init__(self, stations: dict[str, Station], connections: dict[int, Connection]):
         self.stations = stations
@@ -15,10 +16,9 @@ class Genetic:
         self.used_connections: set = set()
         self.population = self.generate_population(5)
 
-
     def generate_solution(self):
         """
-        CAUTION: may run indefinitely
+        CAUTION: may run indefinitely if no valid solution is found.
         """
         while (not (solution := self.make_random_solution()).is_valid):
             print(solution.is_valid)
@@ -28,11 +28,10 @@ class Genetic:
 
     def generate_population(self, size: int):
         return [self.generate_solution() for _ in range(size)]
-    
-    def fitness(self, solution: Solution) -> int:
+
+    @staticmethod
+    def fitness(solution: Solution) -> float:
         return solution.score
-    
-    # def fitness
 
     def repopulate_possible_connections_for_all_stations(self) -> None:
         """ Prepare for the generation of a new trajectory. """
@@ -60,7 +59,6 @@ class Genetic:
             
             # choose random connection number from possible connections at departure station
             random_connection = random.choice(random_departure_station_object.possible_connections)
-            
 
             # get name of destination station from chosen connection 
             random_destination_station = self.connections[random_connection].get_destination_station(random_departure_station)
@@ -118,4 +116,3 @@ class Genetic:
         solution = Solution(trajectories, is_valid)
             
         return solution
-

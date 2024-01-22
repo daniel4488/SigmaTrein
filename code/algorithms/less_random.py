@@ -8,6 +8,7 @@ from code.classes.railNL import RailNL
 import random
 import os
 
+
 class LessRandom:
     def __init__(self, stations: dict[str, Station], connections: dict[int, Connection]):
         self.stations = stations
@@ -19,12 +20,11 @@ class LessRandom:
         self.used_connections: set = set()
         # self.population = self.generate_population(5)
 
-
     def generate_solution(self):
         """
         CAUTION: may run indefinitely
         """
-        while (not (solution := self.make_random_solution()).is_valid):
+        while not (solution := self.make_random_solution()).is_valid:
             print(solution.is_valid)
             continue
 

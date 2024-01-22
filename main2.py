@@ -1,5 +1,5 @@
 from code.classes.railNL import RailNL
-from code.algorithms.randomize_trajectory import RandomizeTrajectory
+from code.algorithms.randomize import Randomize
 from code.visualisation.plot_single_track import PlotlyLoad
 from code.visualisation.baseline import visualize_baseline, visualize_iterations_to_score
 from code.algorithms.genetic import Genetic    

@@ -9,7 +9,7 @@ import random
 import os
 
 
-class RandomizeTrajectory:
+class Randomize:
     """ Algorithm to generate a randomly chosen trajectory. """
 
     def __init__(self, stations: dict[str, Station], connections: dict[int, Connection]) -> None:
@@ -24,7 +24,6 @@ class RandomizeTrajectory:
         self.used_connections: set = set()
         self.solution: dict[int, list[str]] = {}
 
-
     def choose_station(self, stations: list[str]) -> list[str, Station]:
         """ Chooses a random station from the given list and returns a list
             with its name and object. """
@@ -33,7 +32,6 @@ class RandomizeTrajectory:
         station = self.stations[name]
         return [name, station]
 
-
     def get_station(self, start: str, connection: int) -> list[str, Station]:
         """ Returns list with station name and object from given connection number. """
 
@@ -41,13 +39,11 @@ class RandomizeTrajectory:
         station = self.stations[name]
         return [name, station]
 
-
     def repopulate_possible_connections_for_all_stations(self) -> None:
         """ Prepare for the generation of a new trajectory. """
 
         for station in self.stations:
             self.stations[station].repopulate_possible_connections()
-
 
     def update_connections(self, connection: int, departure: Station, destination: Station) -> None:
         """ Removes a made connection from the possible connections of the
@@ -56,7 +52,6 @@ class RandomizeTrajectory:
         departure.remove_possible_connection(connection)
         destination.remove_possible_connection(connection)
 
-
     def update_trajectory(self, duration: int, connection: int, station: str, trajectory: Trajectory) -> None:
         """ Adds new connection and station to the given trajectory, and
             updates its total time. """
@@ -64,7 +59,6 @@ class RandomizeTrajectory:
         trajectory.add_station_to_trajectory(station)
         trajectory.duration = duration
         trajectory.add_connection_number(connection)
-
 
     def make_trajectory(self) -> Trajectory:
         """ Generates a randomly chosen trajectory. """
@@ -105,10 +99,8 @@ class RandomizeTrajectory:
 
         return trajectory
 
-
     def reset_used_connections(self) -> None:
         self.used_connections.clear()
-
 
     @staticmethod
     def clear_scores_file() -> None:
