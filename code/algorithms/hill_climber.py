@@ -8,14 +8,17 @@ from code.algorithms.randomize import Randomize
 
 import random
 import copy
+import os
 
 
 class HillClimber:
     """ Algorithm following the Hill Climber technique. """
 
-    def __init__(self, solution: Solution):
+    def __init__(self, dataset: str):
         self.verbose = False
-        self.solution = copy.deepcopy(solution)
+        self.railNL = RailNL(dataset=dataset)
+        self.randomize = Randomize(self.railNL.stations, self.railNL.connections)
+        self.solution = self.randomize.make_solution(write_output=False)
         self.trajectories = list(self.solution.trajectories)
         self.score = self.solution.score
 
@@ -35,11 +38,15 @@ class HillClimber:
     def mutate_trajectory(self, trajectory: Trajectory, new_solution: Solution):
         """ Mutates a trajectory and the new solution. """
 
-        self.delete_trajectory(trajectory, new_solution)
-        new_trajectory = Randomize.make_trajectory()
+        print(trajectory)
+
+        #self.delete_trajectory(trajectory, new_solution)
+        new_trajectory = self.randomize.make_trajectory()
         self.trajectories.append(new_trajectory)
         # save new set of trajectories in new solution object
-        new_solution.trajectories = set(trajectories)
+        new_solution.trajectories = set(self.trajectories)
+
+        print(new_trajectory)
 
     def check_score(self, new_solution: Solution):
         """ Checks and accepts better solutions than the current one. """
@@ -55,14 +62,42 @@ class HillClimber:
             self.solution.trajectories = new_solution.trajectories
             # change score to new score
             self.score = new_score
+            if self.verbose:
+                print(f"Accepted {new_score}")
             return True
         return False
+
+    @staticmethod
+    def clear_scores_file() -> None:
+        file_path = "data/scores/hill_climber.csv"
+
+        if os.path.exists(file_path):
+            input("WARNING scores file will be deleted.")
+            os.remove(file_path)
+
+    def prepare_csv_file(self) -> None:
+        self.clear_scores_file()
+
+        if not (os.path.exists("data/scores") and os.path.isdir("data/scores")):
+            os.mkdir("data/scores")
+
+        with open("data/scores/hill_climber.csv", "w") as file:
+            file.write("score\n")
+
+    def write_score(self) -> None:
+        with open("data/scores/hill_climber.csv", "a") as file:
+            file.write(str(self.score))
+            file.write("\n")
 
     def run(self, iterations: int, verbose: bool = False):
         """ Runs the Hill Climber algorithm for a given amount of iterations. """
         self.verbose = verbose
 
+        self.prepare_csv_file()
+
         for iteration in range(iterations):
+            print(iteration)
+
             new_solution = copy.deepcopy(self.solution)
             # choose random trajectory
             trajectory = self.choose_trajectory()
@@ -75,3 +110,7 @@ class HillClimber:
                 self.mutate_trajectory(trajectory, new_solution)
                 # check score
                 self.check_score(new_solution)
+            
+            # write score to csv file
+            self.write_score()
+            

@@ -2,7 +2,7 @@ from code.classes.railNL import RailNL
 from code.algorithms.randomize import Randomize
 from code.algorithms.hill_climber import HillClimber
 from code.visualisation.plot_single_track import PlotlyLoad
-from code.visualisation.baseline import visualize_baseline, visualize_iterations_to_score
+from code.visualisation.baseline import visualize_iterations_to_score
 
 import argparse
 
@@ -40,16 +40,22 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # initialize raiLNL
-    railNL = RailNL(dataset=args.dataset)
+    # railNL = RailNL(dataset=args.dataset)
 
     # initialise random algorithm
-    randomize = Randomize(railNL.stations, railNL.connections)
+    # randomize = Randomize(railNL.stations, railNL.connections)
 
     # make one random but valid solution
-    solution = randomize.make_solution(write_output=False)
+    # solution = randomize.make_solution(write_output=False)
 
     # hill climber
-    hc = HillClimber(solution)
+    hc = HillClimber(args.dataset)
 
     # run hill climber
-    hc.run(iterations=1, verbose=True)
+    hc.run(iterations=1, verbose=args.verbose)
+
+    # csv file
+    data = "data/scores/hill_climber.csv"
+
+    # visualize
+    visualize_iterations_to_score(data=data)

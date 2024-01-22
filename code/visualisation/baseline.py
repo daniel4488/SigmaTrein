@@ -4,15 +4,16 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 
-def read_score_file():
-    data = pd.read_csv("data/scores/random.csv")
+def read_score_file(data: str):
+    # data = pd.read_csv("data/scores/random.csv")
+    data = pd.read_csv(data)
     data.head()
     return data
 
 
-def visualize_baseline() -> None:
+def visualize_baseline(data: str) -> None:
     # get scores from csv file
-    scores = read_score_file()
+    scores = read_score_file(data)
 
     # set line settings
     line_settings = {
@@ -34,9 +35,9 @@ def visualize_baseline() -> None:
     plt.savefig("code/visualisation/baseline.svg", format="svg")
 
 
-def visualize_iterations_to_score() -> None:
+def visualize_iterations_to_score(data: str) -> None:
     # get scores from csv file
-    scores = read_score_file()
+    scores = read_score_file(data)
 
     # create graph
     fig = px.line(scores, x = range(len(scores)), y = 'score', labels = {
@@ -47,5 +48,5 @@ def visualize_iterations_to_score() -> None:
 
 
 if __name__ == "__main__":
-    visualize_baseline()
-    visualize_iterations_to_score()
+    visualize_baseline(data)
+    visualize_iterations_to_score(data)
