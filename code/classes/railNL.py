@@ -7,11 +7,14 @@ class RailNL:
 
     NUMBER_OF_CONNECTIONS: int = -1
 
+    DATASET: str = "none"
+
     def __init__(self, dataset: str) -> None:
         """ Creates a RailNL object. """
 
         # name of the dataset in lowercase
         self.dataset = dataset.lower()
+        RailNL.DATASET = dataset
 
         # dictionary with station name as key mapping to its object
         self.stations: dict[str, Station] = {}
