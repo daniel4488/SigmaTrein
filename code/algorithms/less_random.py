@@ -20,7 +20,7 @@ class LessRandom:
         self.used_connections: set = set()
         # self.population = self.generate_population(5)
 
-    def generate_solution(self):
+    def generate_solution(self, solution: Solution):
         """
         CAUTION: may run indefinitely
         """
