@@ -10,9 +10,9 @@ class Output(Solution):
     Output extents the solution class by writing an output file.
     """
 
-    def __init__(self, trajectories: set[Trajectory], is_valid: bool) -> None:
+    def __init__(self, trajectories: set[Trajectory], is_valid: bool, verbose: bool = False) -> None:
         """ Creates an instance of an Output object. """
-        super().__init__(trajectories, is_valid)
+        super().__init__(trajectories, is_valid, verbose)
         self.write_output()
 
     def write_output(self) -> None:

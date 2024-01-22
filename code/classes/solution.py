@@ -4,8 +4,9 @@ from code.classes.railNL import RailNL
 
 class Solution:
     """ Solution class to hold all information of one schedule. """
-    def __init__(self, trajectories: set[Trajectory], is_valid: bool):
+    def __init__(self, trajectories: set[Trajectory], is_valid: bool, verbose: bool = False):
         """ Creates a Solution object. """
+        self.verbose: bool = verbose
         self.is_valid: bool = is_valid
         self.trajectories: set[Trajectory] = trajectories
         self.score: float = self.calculate_score()
@@ -45,9 +46,10 @@ class Solution:
 
         # calculate score
         K = p * 10000 - (T * 100 + Min)
-        print(f"T = {T}")
-        print(f"Min = {Min}")
-        print(f"p = {p}")
+        if self.verbose:
+            print(f"T = {T}")
+            print(f"Min = {Min}")
+            print(f"p = {p}")
 
         # return score
         return K

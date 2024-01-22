@@ -24,6 +24,8 @@ class Randomize:
         self.used_connections: set[int] = set()
         self.solution: dict[int, list[str]] = {}
 
+        self.verbose: bool = False
+
     def choose_station(self, stations: list[str]) -> tuple[str, Station]:
         """ Chooses a random station from the given list and returns a list
             with its name and object. """
@@ -148,16 +150,20 @@ class Randomize:
             solution = Output(trajectories, is_valid)
         else:
             solution = Solution(trajectories, is_valid)
-        # print(f"Score: {solution.score}")
 
-        # for trajectory in solution.trajectories:
-        #     print("Stations:", end="")
-        #     print(trajectory, end="")
-        #     print()
+        if self.verbose:
+            print(f"Score: {solution.score}")
+
+            for trajectory in solution.trajectories:
+                print("Stations:", end="")
+                print(trajectory, end="")
+                print()
 
         return solution
 
-    def make_baseline(self) -> None:
+    def make_baseline(self, verbose: bool = False) -> None:
+        self.verbose = verbose
+
         self.prepare_csv_file()
 
         number_of_simulations = 100

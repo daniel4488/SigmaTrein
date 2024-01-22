@@ -6,8 +6,8 @@ from code.visualisation.baseline import visualize_baseline, visualize_iterations
 import argparse
 
 
-def valid_argument(arg: str) -> str:
-    """ Function to check if the given command line argument is correct. """
+def valid_dataset(arg: str) -> str:
+    """ Function to check if the given dataset argument is correct. """
     valid_arguments = {"holland", "nationaal"}
 
     if arg not in valid_arguments:
@@ -15,34 +15,40 @@ def valid_argument(arg: str) -> str:
     return arg
 
 
+def valid_verbose(arg: str) -> bool:
+    """ Function to check if the given verbose argument is correct. """
+    valid_arguments = {"False", "True"}
+
+    if arg not in valid_arguments:
+        raise argparse.ArgumentTypeError
+    return bool(arg)
+
+
 if __name__ == "__main__":
 
     # initialise parser
     parser = argparse.ArgumentParser(description="Run the main function of the RailNL case.")
 
-    # add command line argument with default value
-    parser.add_argument("--dataset", "-d", default="holland", type=valid_argument)
+    # add dataset command line argument with default value
+    parser.add_argument("--dataset", "-d", default="holland", type=valid_dataset)
+
+    # add verbose command line argument
+    parser.add_argument("--verbose", "-v", default=False, type=valid_verbose)
 
     # parse the command line argument
     args = parser.parse_args()
 
-    # Initialize raiLNL
+    # initialize raiLNL
     railNL = RailNL(dataset=args.dataset)
 
+    # initialise random algorithm
     randomize = Randomize(railNL.stations, railNL.connections)
 
-    randomize.make_baseline()
+    # make baseline
+    randomize.make_baseline(verbose=args.verbose)
 
     # histogram of scores from random algorithm
     visualize_baseline()
 
     # plot scores of iterations from random algorithm
     visualize_iterations_to_score()
-
-    # random_trajectory = randomize.make_random_trajectory()
-    #
-    # print(random_trajectory)
-    #
-    # # Visualization
-    # plot_device = PlotlyLoad()
-    # plot_device.draw_graph(random_trajectory.stations)
