@@ -27,7 +27,7 @@ class Solution:
         used_connections = set()
 
         # initialise number of minutes
-        Min = 0
+        Min = 0.0
 
         # iterate over trajectories in the schedule
         for traject in self.trajectories:

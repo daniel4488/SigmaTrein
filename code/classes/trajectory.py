@@ -3,7 +3,7 @@ class Trajectory:
     """ Represents the route of a train. """
     def __init__(self) -> None:
         """ Creates a Trajectory object. """
-        self.duration: int = 0
+        self.duration: float = 0.0
         self.stations: list[str] = []
         self.connections: set[int] = set()
 

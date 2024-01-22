@@ -21,23 +21,23 @@ class Randomize:
         self.stations: dict[str, Station] = stations
         self.connections: dict[int, Connection] = connections
 
-        self.used_connections: set = set()
+        self.used_connections: set[int] = set()
         self.solution: dict[int, list[str]] = {}
 
-    def choose_station(self, stations: list[str]) -> list[str, Station]:
+    def choose_station(self, stations: list[str]) -> tuple[str, Station]:
         """ Chooses a random station from the given list and returns a list
             with its name and object. """
 
         name = random.choice(stations)
         station = self.stations[name]
-        return [name, station]
+        return name, station
 
-    def get_station(self, start: str, connection: int) -> list[str, Station]:
+    def get_station(self, start: str, connection: int) -> tuple[str, Station]:
         """ Returns list with station name and object from given connection number. """
 
         name = self.connections[connection].get_destination_station(start)
         station = self.stations[name]
-        return [name, station]
+        return name, station
 
     def repopulate_possible_connections_for_all_stations(self) -> None:
         """ Prepare for the generation of a new trajectory. """
@@ -45,14 +45,16 @@ class Randomize:
         for station in self.stations:
             self.stations[station].repopulate_possible_connections()
 
-    def update_connections(self, connection: int, departure: Station, destination: Station) -> None:
+    @staticmethod
+    def update_connections(connection: int, departure: Station, destination: Station) -> None:
         """ Removes a made connection from the possible connections of the
             departure station, as well as from the destination station. """
 
         departure.remove_possible_connection(connection)
         destination.remove_possible_connection(connection)
 
-    def update_trajectory(self, duration: int, connection: int, station: str, trajectory: Trajectory) -> None:
+    @staticmethod
+    def update_trajectory(duration: float, connection: int, station: str, trajectory: Trajectory) -> None:
         """ Adds new connection and station to the given trajectory, and
             updates its total time. """
 
