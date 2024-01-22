@@ -16,7 +16,8 @@ class Randomize:
         """ Initiates the random algorithm. """
 
         # make algorithm pseudo random
-        random.seed(324488)
+        # random.seed(324488)
+        random.seed(1309)
 
         self.stations: dict[str, Station] = stations
         self.connections: dict[int, Connection] = connections

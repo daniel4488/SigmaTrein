@@ -39,20 +39,11 @@ if __name__ == "__main__":
     # parse the command line argument
     args = parser.parse_args()
 
-    # initialize raiLNL
-    # railNL = RailNL(dataset=args.dataset)
-
-    # initialise random algorithm
-    # randomize = Randomize(railNL.stations, railNL.connections)
-
-    # make one random but valid solution
-    # solution = randomize.make_solution(write_output=False)
-
     # hill climber
     hc = HillClimber(args.dataset)
 
     # run hill climber
-    hc.run(iterations=1, verbose=args.verbose)
+    hc.run(iterations=300000, verbose=args.verbose)
 
     # csv file
     data = "data/scores/hill_climber.csv"

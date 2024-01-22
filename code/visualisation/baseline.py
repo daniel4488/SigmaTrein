@@ -43,7 +43,7 @@ def visualize_iterations_to_score(data: str) -> None:
     fig = px.line(scores, x = range(len(scores)), y = 'score', labels = {
                   'x': 'Iterations',
                   'score': 'Score'},
-                  title = 'Scores of 100 iterations from a random algorithm')
+                  title = f'Scores of {len(scores)} iterations from a random algorithm')
     fig.show()
 
 
