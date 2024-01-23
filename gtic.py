@@ -46,7 +46,7 @@ if __name__ == "__main__":
     genetic.run()
 
     # csv file
-    # data = "data/scores/hill_climber.csv"
+    data = "data/scores/genetic.csv"
 
-    # visualize
-    # visualize_iterations_to_score(data=data)
+    # # visualize
+    visualize_iterations_to_score(data=data)

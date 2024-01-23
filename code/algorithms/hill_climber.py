@@ -43,15 +43,14 @@ class HillClimber:
     def mutate_trajectory(self, trajectory: Trajectory, new_solution: Solution):
         """ Mutates a trajectory and the new solution. """
 
-        print(trajectory)
+        #print(trajectory)
 
-        #self.delete_trajectory(trajectory, new_solution)
         new_trajectory = self.randomize.make_trajectory()
         self.trajectories.append(new_trajectory)
         # save new set of trajectories in new solution object
         new_solution.trajectories = set(self.trajectories)
 
-        print(new_trajectory)
+        #print(new_trajectory)
 
     def check_score(self, new_solution: Solution):
         """ Checks and accepts better solutions than the current one. """
@@ -61,12 +60,18 @@ class HillClimber:
         if self.verbose:
             print(f"Old score: {self.score}")
             print(f"New score: {new_score}")
-
+        # print("self.score")
+        # print(self.score)
+        # print("new_score")
+        # print(new_score)
         if new_score > self.score:
             # change trajectories of solution to improved trajectories
             self.solution.trajectories = new_solution.trajectories
             # change score to new score
             self.score = new_score
+            # update score of solution to improved score
+            self.solution.score = new_score
+
             if self.verbose:
                 print(f"Accepted {new_score}")
             return True
@@ -108,7 +113,7 @@ class HillClimber:
             # write score to csv file
             self.write_score()
 
-    def make_solution(self) -> Solution:
+    def make_solution(self):
         new_solution = copy.deepcopy(self.solution)
         # choose random trajectory
         trajectory = self.choose_trajectory()
@@ -121,8 +126,6 @@ class HillClimber:
             self.mutate_trajectory(trajectory, new_solution)
             # check score
             self.check_score(new_solution)
-        
-        return new_solution
             
         
 

@@ -17,7 +17,7 @@ class Randomize:
 
         # make algorithm pseudo random
         # random.seed(324488)
-        random.seed(1309)
+        # random.seed(1309)
 
         self.stations: dict[str, Station] = stations
         self.connections: dict[int, Connection] = connections
@@ -150,7 +150,7 @@ class Randomize:
         if write_output:
             solution = Output(trajectories, is_valid)
         else:
-            solution = Solution(trajectories, is_valid, verbose=False)
+            solution = Solution(trajectories, is_valid)
 
         if self.verbose:
             print(f"Score: {solution.score}")
@@ -171,3 +171,5 @@ class Randomize:
 
         for _ in range(number_of_simulations):
             self.make_solution(write_output=True)
+
+   
