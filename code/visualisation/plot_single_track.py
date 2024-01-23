@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 
 class PlotlyLoad(Load):
     def __init__(self) -> None:
-        super().__init__()
+        super().__init__(dataset="holland")
 
     def draw_graph(self, trajectory: list[str]) -> None:
 
