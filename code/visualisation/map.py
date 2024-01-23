@@ -5,6 +5,7 @@ from code.classes.output import Output
 import plotly.graph_objects as go
 import numpy as np
 import networkx as nx
+import os
 
 
 class PlotlyLoad(Load):
@@ -317,7 +318,9 @@ class PlotlyLoad(Load):
         #     cluster=dict(enabled=True)
         # )
 
-        fig.write_html("single_track.html", auto_open=True)
+        if not os.path.exists(".tmp"):
+            os.mkdir(".tmp")
+        fig.write_html(".tmp/single_track.html", auto_open=True)
 
 # Mapbox
 # latitude = y = north degrees
