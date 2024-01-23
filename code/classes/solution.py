@@ -3,7 +3,8 @@ from code.classes.railNL import RailNL
 
 
 class Solution:
-    def __init__(self, trajectories: set[Trajectory], is_valid: bool):
+    def __init__(self, trajectories: set[Trajectory], is_valid: bool, verbose: bool = False):
+        self.verbose: bool = verbose
         self.is_valid: bool = is_valid
         self.trajectories: set[Trajectory] = trajectories
         self.score: float = self.calculate_score()
@@ -26,9 +27,10 @@ class Solution:
         p = len(used_connections) / RailNL.NUMBER_OF_CONNECTIONS
 
         K = p * 10000 - (T * 100 + Min)
-        print(f"T = {T}")
-        print(f"Min = {Min}")
-        print(f"p = {p}")
+        if self.verbose:
+            print(f"T = {T}")
+            print(f"Min = {Min}")
+            print(f"p = {p}")
         return K
 
     def write_score(self) -> None:

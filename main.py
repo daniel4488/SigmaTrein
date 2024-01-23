@@ -47,8 +47,11 @@ if __name__ == "__main__":
     # make baseline
     randomize.make_baseline(verbose=args.verbose)
 
+    # csv
+    data = "data/scores/random.csv"
+
     # histogram of scores from random algorithm
-    visualize_baseline()
+    visualize_baseline(data)
 
     # plot scores of iterations from random algorithm
-    visualize_iterations_to_score()
+    visualize_iterations_to_score(data)

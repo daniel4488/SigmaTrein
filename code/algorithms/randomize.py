@@ -150,7 +150,7 @@ class Randomize:
         if write_output:
             solution = Output(trajectories, is_valid)
         else:
-            solution = Solution(trajectories, is_valid)
+            solution = Solution(trajectories, is_valid, verbose=False)
 
         if self.verbose:
             print(f"Score: {solution.score}")
