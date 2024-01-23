@@ -21,6 +21,7 @@ class HillClimber:
         self.solution: Solution = None
         self.trajectories: list[Trajectory] = None
         self.score: int = None
+        self.iterations = -1
 
     def make_first_solution(self):
         self.solution = self.randomize.make_solution(write_output=False)
@@ -96,17 +97,19 @@ class HillClimber:
 
     def run(self, iterations: int, verbose: bool = False):
         """ Runs the Hill Climber algorithm for a given amount of iterations. """
+
         self.verbose = verbose
 
+        self.iterations = iterations
         self.make_first_solution()
         self.prepare_csv_file()
 
         for iteration in range(iterations):
-            print(iteration)
             self.make_solution()
 
             # write score to csv file
             self.write_score()
+
 
     def make_solution(self) -> Solution:
         new_solution = copy.deepcopy(self.solution)
