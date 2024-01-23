@@ -18,9 +18,14 @@ class HillClimber:
         self.verbose = False
         self.railNL = RailNL(dataset=dataset)
         self.randomize = Randomize(self.railNL.stations, self.railNL.connections)
+        self.solution: Solution = None
+        self.trajectories: list[Trajectory] = None
+        self.score: int = None
+
+    def make_first_solution(self):
         self.solution = self.randomize.make_solution(write_output=False)
-        self.trajectories = list(self.solution.trajectories)
         self.score = self.solution.score
+        self.trajectories = list(self.solution.trajectories)
 
     def choose_trajectory(self):
         """ Selects random trajectory from current solution. """
@@ -93,6 +98,7 @@ class HillClimber:
         """ Runs the Hill Climber algorithm for a given amount of iterations. """
         self.verbose = verbose
 
+        self.make_first_solution()
         self.prepare_csv_file()
 
         for iteration in range(iterations):

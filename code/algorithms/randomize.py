@@ -171,12 +171,3 @@ class Randomize:
 
         for _ in range(number_of_simulations):
             self.make_solution(write_output=True)
-
-    def generate_solution(self):
-        """
-        CAUTION: may run indefinitely
-        """
-        while (not (solution := self.make_solution()).is_valid):
-            continue
-
-        return solution
