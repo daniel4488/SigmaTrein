@@ -3,6 +3,8 @@ import plotly.express as px
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+import os
+
 
 def read_score_file(data: str):
     # data = pd.read_csv("data/scores/random.csv")
@@ -44,9 +46,13 @@ def visualize_iterations_to_score(data: str) -> None:
                   'x': 'Iterations',
                   'score': 'Score'},
                   title = f'Scores of {len(scores)} iterations from a random algorithm')
-    fig.show()
+    # plt.show()
+    if not os.path.exists(".tmp"):
+        os.mkdir(".tmp")
+    fig.write_html(".tmp/iter_to_score.html", auto_open=True)
 
 
 if __name__ == "__main__":
+    data = "data/scores"
     visualize_baseline(data)
     visualize_iterations_to_score(data)

@@ -1,11 +1,12 @@
 # from load import Load
 from code.visualisation.load import Load
 import plotly.graph_objects as go
+import os
 
 
 class PlotlyLoad(Load):
     def __init__(self) -> None:
-        super().__init__()
+        super().__init__(dataset="holland")
 
     def draw_graph(self, trajectory: list[str]) -> None:
 
@@ -282,7 +283,9 @@ class PlotlyLoad(Load):
             y=-0.1
         )
 
-        fig.write_html("single_track.html", auto_open=True)
+        if not os.path.exists(".tmp"):
+            os.mkdir(".tmp")
+        fig.write_html(".tmp/single_track.html", auto_open=True)
 
 
 if __name__ == '__main__':

@@ -177,3 +177,6 @@ code/visualisation/baseline.svg
 
 # Output CSV file
 output.csv
+
+# Temporary files
+.tmp/
