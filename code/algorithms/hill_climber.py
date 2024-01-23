@@ -97,20 +97,27 @@ class HillClimber:
 
         for iteration in range(iterations):
             print(iteration)
+            self.make_solution()
 
-            new_solution = copy.deepcopy(self.solution)
-            # choose random trajectory
-            trajectory = self.choose_trajectory()
-            # delete trajectory
-            self.delete_trajectory(trajectory, new_solution)
-
-            # if score is not better, mutate trajectory
-            if not self.check_score(new_solution):
-                # try a new trajectory
-                self.mutate_trajectory(trajectory, new_solution)
-                # check score
-                self.check_score(new_solution)
-            
             # write score to csv file
             self.write_score()
+
+    def make_solution(self) -> Solution:
+        new_solution = copy.deepcopy(self.solution)
+        # choose random trajectory
+        trajectory = self.choose_trajectory()
+        # delete trajectory
+        self.delete_trajectory(trajectory, new_solution)
+
+        # if score is not better, mutate trajectory
+        if not self.check_score(new_solution):
+            # try a new trajectory
+            self.mutate_trajectory(trajectory, new_solution)
+            # check score
+            self.check_score(new_solution)
+        
+        return new_solution
+            
+        
+
             
