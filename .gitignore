@@ -180,3 +180,6 @@ output.csv
 
 # Temporary files
 .tmp/
+
+# Profiler output from cProfile
+*.prof
