@@ -36,29 +36,36 @@ class SimulatedAnnealing(HillClimber):
         *   Geometric decaying
         *
         """
-        self.temperature -= self.start_temperature / self.iterations
+        print(f"total iter: {self.iterations}") if self.verbose else None
+        # self.temperature = max(self.temperature - self.start_temperature / self.iterations, 1e-4)
 
         # Exponential would look like this:
         # alpha = 0.99
-        # self.T = self.T * alpha
+        # self.temperature = self.temperature * alpha
 
         # where alpha can be any value below 1 but above 0
+
+        # Square root
+        self.temperature = np.sqrt(self.temperature)
 
     def check_score(self, new_solution: Solution) -> bool:
         """ Override this function from hill climber. """
 
         new_score = new_solution.calculate_score()
 
+        print() if self.verbose else None
+
         if self.verbose:
             print(f"Old score: {self.score}")
             print(f"New score: {new_score}")
 
         # calculate the acceptance probability of the change
-        delta = self.score - new_score
+        delta = (self.score - new_score) / 70
         print(f"delta: {delta}") if self.verbose else None
         print(f"temperature: {self.temperature}") if self.verbose else None
-        # probability = np.exp(-delta / self.temperature)
-        probability = sigmoid(x=-delta)
+        print(f"x: {-delta / self.temperature}") if self.verbose else None
+        probability = np.exp(np.longdouble(-delta / self.temperature))
+        # probability = sigmoid(x=-delta)
         print(f"probability: {probability}") if self.verbose else None
 
         # NOTE: Keep in mind that if we want to maximize the value, we use:

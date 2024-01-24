@@ -5,7 +5,7 @@ from code.visualisation.map import PlotlyLoad
 if __name__ == "__main__":
 
     # init dataset
-    dataset = "holland"
+    dataset = "nationaal"
 
     # Initialize raiLNL
     railNL = RailNL(dataset=dataset)
