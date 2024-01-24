@@ -1,8 +1,10 @@
 from code.classes.railNL import RailNL
 from code.algorithms.randomize import Randomize
 from code.algorithms.hill_climber import HillClimber
-from code.visualisation.plot_single_track import PlotlyLoad
+from code.visualisation.map import PlotlyLoad
 from code.visualisation.baseline import visualize_iterations_to_score
+from code.algorithms.genetic import Genetic
+from code.algorithms.sigma import Sigma
 
 import argparse
 
@@ -24,7 +26,6 @@ def valid_verbose(arg: str) -> bool:
         raise argparse.ArgumentTypeError
     return bool(arg)
 
-
 if __name__ == "__main__":
 
     # initialise parser
@@ -40,14 +41,20 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # hill climber
-    hc = HillClimber(args.dataset)
+    sigma = Sigma()
 
-    # run hill climber with certain amount of mutations
-    hc.run(iterations=30000, mutations=3, verbose=args.verbose)
+
+
+    railNL = RailNL(dataset = args.dataset)
+
+    solution = sigma.run()
 
     # csv file
-    data = "data/scores/hill_climber.csv"
+    # data = "data/scores/genetic.csv"
 
+    # # visualize
+    # visualize_iterations_to_score(data=data)
 
-    # visualize
-    visualize_iterations_to_score(data=data)
+    # Visualization
+    plot_device = PlotlyLoad(dataset=args.dataset)
+    plot_device.draw_graph(solution)

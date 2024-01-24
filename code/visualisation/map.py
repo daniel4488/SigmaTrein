@@ -15,7 +15,13 @@ class PlotlyLoad(Load):
         # mapbox token
         self.token = open("code/visualisation/.mapbox_token").read()
 
-        self.coloring: list[str] = ["#34568B", "#FF6F61", "#6B5B95", "#88B04B", "#F7CAC9", "#92A8D1", "#FF0000"]
+        # self.coloring: list[str] = ["#34568B", "#FF6F61", "#6B5B95", "#88B04B", "#F7CAC9", "#92A8D1", "#FF0000"]
+        self.coloring: list[str] = [
+                         "#ffffff", "#ff0000", "#00ff00", "#0000ff", "#ff00ff",
+                        "#00ffff", "#ffff00", "#ff8000", "#80ff00", "#0080ff",
+                        "#ff0080", "#80ffff", "#ff80ff", "#ffff80", "#ffbf00",
+                        "#40ff00", "#0040ff", "#ff0040", "#40ffff", "#ffbf80"
+                        ]
         self.edges: dict[tuple[str, str], list[str]] = {}
 
         print(nx.dijkstra_path(self.G, source="Den Helder", target="Dordrecht", weight="distance"))
