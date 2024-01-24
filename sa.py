@@ -40,7 +40,7 @@ if __name__ == "__main__":
     sa = SimulatedAnnealing(args.dataset)
 
     # run hill climber
-    sa.run(iterations=300000, verbose=args.verbose)
+    sa.run(iterations=3000, verbose=args.verbose)
 
     # csv file
     data = "data/scores/hill_climber.csv"

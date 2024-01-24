@@ -305,9 +305,9 @@ class PlotlyLoad(Load):
 
         # Map settings
         fig.update_layout(mapbox_accesstoken=self.token)
-        fig.update_layout(mapbox_style="dark")
+        # fig.update_layout(mapbox_style="dark")
         # fig.update_layout(mapbox_style="mapbox://styles/daniel181/clrjnm54f000801pj10o7duci")
-        # fig.update_layout(mapbox_style="mapbox://styles/daniel181/clrooylos004201pedtslc1km")
+        fig.update_layout(mapbox_style="mapbox://styles/daniel181/clrooylos004201pedtslc1km")
         # fig.update_geos(fitbounds="locations")
         # fig.update_layout(mapbox_bounds={"west": 2.0, "east": 9.4, "south": 50.4, "north": 53.89})
         fig.update_layout(
