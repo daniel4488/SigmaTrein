@@ -42,11 +42,12 @@ if __name__ == "__main__":
     # hill climber
     hc = HillClimber(args.dataset)
 
-    # run hill climber
-    hc.run(iterations=300000, verbose=args.verbose)
+    # run hill climber with certain amount of mutations
+    hc.run(iterations=30000, mutations=3, verbose=args.verbose)
 
     # csv file
     data = "data/scores/hill_climber.csv"
+
 
     # visualize
     visualize_iterations_to_score(data=data)
