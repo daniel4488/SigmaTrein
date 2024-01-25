@@ -12,21 +12,31 @@ import os
 
 class Sigma:
     def __init__(self):
+        # initialize a list with pre-fixed routes that start of a trajectory
         self.standard_trajectories = [["Maastricht", "Sittard", "Heerlen", "Sittard", "Roermond", "Weert", "Eindhoven"],
                                        ["Venlo", "Helmond", "Eindhoven"], ["Vlissingen", "Roosendaal"],
                                        ["Den Helder", "Alkmaar"], ["Enschede", "Hengelo", "Almelo"], ["Lelystad Centrum", "Almere Centrum"]
                                        , ["Zwolle", "Assen", "Groningen", "Leeuwarden", "Heerenveen", "Steenwijk", "Zwolle"]]
         
+        # initialize a list with the corresponding connection numbers
         self.standard_trajectories_connections = [[76, 77, 77, 78, 79, 80, 91], 
                                                   [81, 82, 39], [75, 63], [71, 36], 
                                                   [88, 72, 17], [73, 14],
                                                   [74, 83, 84, 86, 85, 87, 146]]
         
+        # empty lists where copies of the above lists can be stored
+        self.standard_trajectories_copy = []
+        self.standard_trajectories_connections_copy = []
+        
+        # dictionaries with all leftover stations when prefixed routes are layed out
         self.stations: dict[str, Station] = {}
+        # dictionaries with all leftover connections when prefixed routes are layed out
         self.connections: dict[str, Connection] = {}
 
+        # initialize an empty set where used connections are going to be stored
         self.used_connections: set[int] = set()
 
+        # indicate that we do not want print statements
         self.verbose = False
 
         self.load_stations()
@@ -91,17 +101,17 @@ class Sigma:
     def make_trajectory(self) -> Trajectory:
         """ Generates a randomly chosen trajectory. """
         
+
         self.repopulate_possible_connections_for_all_stations()
-        
+
 
         # initialize empty trajectory
         trajectory = Trajectory()
         
-        if self.standard_trajectories:
-            stations: list[str] = self.standard_trajectories.pop(0)
-            connections: list[int] = self.standard_trajectories_connections.pop(0)
-
-            trajectory.duration = connections.pop()
+        if self.standard_trajectories_copy:
+            stations: list[str] = self.standard_trajectories_copy.pop(0)
+            connections: list[int] = self.standard_trajectories_connections_copy.pop(0)
+            trajectory.duration += connections.pop()
 
             for station in stations:
                 trajectory.add_station_to_trajectory(station)
@@ -119,7 +129,7 @@ class Sigma:
 
         # add stations to trajectory as long as its duration is less than 120 mins,
         # and there are still possible connections
-        while trajectory.duration <= 120 and departure_station[1].possible_connections:
+        while trajectory.duration <= 180 and departure_station[1].possible_connections:
             
             # choose random connection number from possible connections at departure station
             connection = random.choice(departure_station[1].possible_connections)
@@ -134,7 +144,7 @@ class Sigma:
             duration_candidate = trajectory.duration + self.connections[connection].duration
 
             # add station to trajectory if it fits within 120 mins
-            if duration_candidate <= 120:
+            if duration_candidate <= 180:
                 self.update_trajectory(duration_candidate, connection, destination_station[0], trajectory)
 
                 # update departure station to the current station
@@ -183,36 +193,57 @@ class Sigma:
 
         trajectories = set()
         is_valid = False
+        highest_score = 0 
+        iterations = 1
+        i = 0
+        for _ in range(iterations):
+            print(i)
+            while is_valid == False:
+                self.reset_used_connections()
+                self.standard_trajectories_copy = copy.deepcopy(self.standard_trajectories)
+                self.standard_trajectories_connections_copy = copy.deepcopy(self.standard_trajectories_connections)
 
-        for _ in range(20):
-            # make random trajectory
-            current_trajectory = self.make_trajectory()
+                trajectories = set()
+                for _ in range(20):
+                    # make random trajectory
+                    current_trajectory = self.make_trajectory()
 
-            # add to set of trajectories
-            trajectories.add(current_trajectory)
+                    # add to set of trajectories
+                    trajectories.add(current_trajectory)
 
-            # add trajectory connections to used_connections
-            self.used_connections.update(current_trajectory.connections)
+                    # add trajectory connections to used_connections
+                    self.used_connections.update(current_trajectory.connections)
+                    # print(len(self.used_connections))
+                    if len(self.used_connections) == 89:
+                        is_valid = True
 
-            if len(self.used_connections) == 73:
-                is_valid = True
-                break
+            i += 1
+            # NEW
+            trajectories = list(trajectories)
 
-        # create solution instance
-        if write_output:
-            solution = Output(trajectories, is_valid)
-        else:
+            # create solution instance
+            # if write_output:
+            # else:
             solution = Solution(trajectories, is_valid)
 
-        if self.verbose:
-            print(f"Score: {solution.score}")
+            if solution.score > highest_score:
+                highest_score = solution.score
+                highest_score_solution = Output(trajectories, is_valid)
 
-            for trajectory in solution.trajectories:
-                print("Stations:", end="")
-                print(trajectory, end="")
-                print()
 
-        return solution
+            if self.verbose:
+                print(f"Score: {solution.score}")
+
+                for trajectory in solution.trajectories:
+                    print("Stations:", end="")
+                    print(trajectory, end="")
+                    print()
+            
+            is_valid = False
+
+        
+        print(highest_score)
+        return highest_score_solution
 
     # def make_baseline(self, verbose: bool = False) -> None:
     #     self.verbose = verbose
