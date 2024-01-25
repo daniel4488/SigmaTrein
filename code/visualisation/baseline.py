@@ -46,6 +46,7 @@ def visualize_iterations_to_score(data: str) -> None:
                   'x': 'Iterations',
                   'score': 'Score'},
                   title = f'Scores of {len(scores)} iterations from a random algorithm')
+    # fig.update_yaxes(range=[0, 10000])
     # plt.show()
     if not os.path.exists(".tmp"):
         os.mkdir(".tmp")

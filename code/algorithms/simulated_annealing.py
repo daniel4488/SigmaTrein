@@ -60,7 +60,7 @@ class SimulatedAnnealing(HillClimber):
             print(f"New score: {new_score}")
 
         # calculate the acceptance probability of the change
-        delta = -(self.score - new_score)
+        delta = (self.score - new_score)
         print(f"delta: {delta}") if self.verbose else None
         print(f"temperature: {self.temperature}") if self.verbose else None
         print(f"x: {-delta / self.temperature}") if self.verbose else None
