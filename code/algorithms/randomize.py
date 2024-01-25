@@ -18,6 +18,8 @@ class Randomize:
         # make algorithm pseudo random
         # random.seed(324488)
         # random.seed(1309)
+        # random.seed(239094)
+        # random.seed(2024)
 
         self.stations: dict[str, Station] = stations
         self.connections: dict[int, Connection] = connections

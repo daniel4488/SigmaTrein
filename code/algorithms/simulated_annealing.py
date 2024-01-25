@@ -36,7 +36,7 @@ class SimulatedAnnealing(HillClimber):
         *   Geometric decaying
         *
         """
-        print(f"total iter: {self.iterations}")
+        print(f"total iter: {self.iterations}") if self.verbose else None
         # self.temperature = max(self.temperature - self.start_temperature / self.iterations, 1e-4)
 
         # Exponential would look like this:
@@ -53,7 +53,7 @@ class SimulatedAnnealing(HillClimber):
 
         new_score = new_solution.calculate_score()
 
-        print()
+        print() if self.verbose else None
 
         if self.verbose:
             print(f"Old score: {self.score}")
@@ -63,7 +63,7 @@ class SimulatedAnnealing(HillClimber):
         delta = (self.score - new_score) / 70
         print(f"delta: {delta}") if self.verbose else None
         print(f"temperature: {self.temperature}") if self.verbose else None
-        print(f"x: {-delta / self.temperature}")
+        print(f"x: {-delta / self.temperature}") if self.verbose else None
         probability = np.exp(np.longdouble(-delta / self.temperature))
         # probability = sigmoid(x=-delta)
         print(f"probability: {probability}") if self.verbose else None

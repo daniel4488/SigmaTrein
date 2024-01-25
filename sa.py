@@ -36,10 +36,10 @@ if __name__ == "__main__":
     # parse the command line argument
     args = parser.parse_args()
 
-    # hill climber
+    # simulated annealing
     sa = SimulatedAnnealing(args.dataset)
 
-    # run hill climber
+    # run simulated annealing
     sa.run(iterations=300000, verbose=args.verbose)
 
     # csv file
