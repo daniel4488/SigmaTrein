@@ -3,10 +3,12 @@ from code.classes.railNL import RailNL
 
 
 class Solution:
-    def __init__(self, trajectories: set[Trajectory], is_valid: bool, verbose: bool = False):
+    def __init__(self, trajectories: list[Trajectory], is_valid: bool, verbose: bool = True):
         self.verbose: bool = verbose
         self.is_valid: bool = is_valid
-        self.trajectories: set[Trajectory] = trajectories
+        self.trajectories: list[Trajectory] = trajectories
+        if self.is_valid:
+          self.remove_double_connections()
         self.score: float = self.calculate_score()
         self.write_score()
 
@@ -44,3 +46,45 @@ class Solution:
             return len(self.trajectories) <= 7 and new_trajectory.duration <= 120
         else:
             return len(self.trajectories) <= 20 and new_trajectory.duration <= 180
+        
+    def remove_double_connections(self):
+        for i, trajectory in enumerate(self.trajectories):
+            
+            connections = list(trajectory.connections)
+
+            used_connections = set()
+            for j, other_trajectory in enumerate(self.trajectories):
+                for connection in other_trajectory.connections:
+                    if i != j:
+                        used_connections.add(connection)
+ 
+            for k in range(1, len(connections) + 1):
+                if connections[-k] in used_connections:
+                    trajectory.connections.remove(connections[-k])
+                    connections[-k] = 0
+                    trajectory.stations.pop()
+                else:
+                    break
+
+            if trajectory.connections:
+                
+                for l in range(0, len(connections)):
+                    if connections[l] in used_connections:
+                        trajectory.connections.remove(connections[l])
+                        trajectory.stations.pop(0)
+                    else:
+                        break
+
+            
+            if not trajectory.connections:
+    
+                self.trajectories.remove(trajectory)
+            
+            
+
+                    
+            
+
+                 
+                    
+
