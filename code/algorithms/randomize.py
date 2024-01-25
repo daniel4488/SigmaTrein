@@ -4,6 +4,8 @@ from code.classes.connection import Connection
 from code.classes.solution import Solution
 from code.classes.output import Output
 from code.classes.railNL import RailNL
+from code.classes.data import DataInfo
+from code.classes.dataset_info import DatasetInfo
 
 import random
 import os
@@ -12,7 +14,7 @@ import os
 class Randomize:
     """ Algorithm to generate a randomly chosen trajectory. """
 
-    def __init__(self, stations: dict[str, Station], connections: dict[int, Connection]) -> None:
+    def __init__(self, dataset: str, stations: dict[str, Station], connections: dict[int, Connection]) -> None:
         """ Initiates the random algorithm. """
 
         # make algorithm pseudo random
@@ -23,11 +25,23 @@ class Randomize:
 
         self.stations: dict[str, Station] = stations
         self.connections: dict[int, Connection] = connections
+        self.constrictions: DatasetInfo = self.set_constrictions(dataset)
 
         self.used_connections: set[int] = set()
         self.solution: dict[int, list[str]] = {}
 
         self.verbose: bool = False
+
+    def set_constrictions(self, dataset: str) -> DatasetInfo:
+        """ Sets the restrictions on trajectories for the chosen dataset. """
+
+        data_info = DataInfo()
+        
+        if dataset == "holland":
+            return data_info.holland
+        elif dataset == "nationaal":
+            return data_info.nationaal
+        
 
     def choose_station(self, stations: list[str]) -> tuple[str, Station]:
         """ Chooses a random station from the given list and returns a list
@@ -84,7 +98,7 @@ class Randomize:
 
         # add stations to trajectory as long as its duration is less than 120 mins,
         # and there are still possible connections
-        while trajectory.duration <= 120 and departure_station[1].possible_connections:
+        while trajectory.duration <= int(self.constrictions.max_time) and departure_station[1].possible_connections:
             
             # choose random connection number from possible connections at departure station
             connection = random.choice(departure_station[1].possible_connections)
@@ -100,15 +114,14 @@ class Randomize:
             duration_candidate = trajectory.duration + self.connections[connection].duration
 
             # add station to trajectory if it fits within 120 mins
-            if duration_candidate <= 120:
+            if duration_candidate <= self.constrictions.max_time:
                 self.update_trajectory(duration_candidate, connection, destination_station[0], trajectory)
 
                 # update departure station to the current station
                 departure_station = destination_station
-            elif duration_candidate > 120 and not unique:
+            elif duration_candidate > self.constrictions.max_time and not unique:
                 break
 
-        print(trajectory)
         return trajectory
 
     def reset_used_connections(self) -> None:
@@ -132,14 +145,14 @@ class Randomize:
             file.write("score\n")
 
     def make_solution(self, write_output: bool) -> Solution | Output:
-        """ Creates a solution of max. 7 trajectories. """
+        """ Creates a solution of with the maximum amount of trajectories. """
 
         self.reset_used_connections()
 
         trajectories = set()
         is_valid = False
 
-        for _ in range(7):
+        for _ in range(int(self.constrictions.max_trajectories)):
             # make random trajectory
             current_trajectory = self.make_trajectory()
 

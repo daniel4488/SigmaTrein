@@ -42,7 +42,7 @@ if __name__ == "__main__":
     railNL = RailNL(dataset=args.dataset)
 
     # initialise random algorithm
-    randomize = Randomize(railNL.stations, railNL.connections)
+    randomize = Randomize(args.dataset, railNL.stations, railNL.connections)
 
     # make baseline
     randomize.make_baseline(verbose=args.verbose)
