@@ -10,10 +10,10 @@ class DataInfo:
     Usage:
     DataInfo.dataset.property
     dataset in {"holland", "nationaal"}
-    property in {"number_of_connections",
-                 "number_of_stations",
+    property in {"total_connections",
+                 "total_stations",
                  "max_trajectories",
-                 "max_trajectory_length"}
+                 "max_time"}
     """
 
     holland: DatasetInfo = DatasetInfo(dataset="holland")
