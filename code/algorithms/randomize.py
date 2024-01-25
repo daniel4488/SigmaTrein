@@ -67,8 +67,9 @@ class Randomize:
         trajectory.duration = duration
         trajectory.add_connection_number(connection)
 
-    def make_trajectory(self) -> Trajectory:
-        """ Generates a randomly chosen trajectory. """
+    def make_trajectory(self, unique: bool = False) -> Trajectory:
+        """ Generates a randomly chosen trajectory. If unique is True,
+            then all connections can only be selected once. """
         
         self.repopulate_possible_connections_for_all_stations()
 
@@ -92,7 +93,8 @@ class Randomize:
             destination_station = self.get_station(departure_station[0], connection)
 
             # remove created connection from destination and departure station's possible connections
-            self.update_connections(connection, departure_station[1], destination_station[1])
+            if unique:
+                self.update_connections(connection, departure_station[1], destination_station[1])
 
             # update total duration of the trajectory
             duration_candidate = trajectory.duration + self.connections[connection].duration
@@ -169,7 +171,7 @@ class Randomize:
 
         self.prepare_csv_file()
 
-        number_of_simulations = 100
+        number_of_simulations = 1
 
         for _ in range(number_of_simulations):
             self.make_solution(write_output=True)
