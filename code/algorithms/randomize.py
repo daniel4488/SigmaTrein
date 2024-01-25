@@ -16,7 +16,7 @@ class Randomize:
         """ Initiates the random algorithm. """
 
         # make algorithm pseudo random
-        # random.seed(324488)
+        random.seed(324488)
         # random.seed(1309)
         # random.seed(239094)
         # random.seed(2024)
@@ -105,7 +105,10 @@ class Randomize:
 
                 # update departure station to the current station
                 departure_station = destination_station
+            elif duration_candidate > 120 and not unique:
+                break
 
+        print(trajectory)
         return trajectory
 
     def reset_used_connections(self) -> None:
@@ -171,7 +174,7 @@ class Randomize:
 
         self.prepare_csv_file()
 
-        number_of_simulations = 1
+        number_of_simulations = 10000
 
         for _ in range(number_of_simulations):
             self.make_solution(write_output=True)
