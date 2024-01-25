@@ -17,10 +17,10 @@ class SimulatedAnnealing(HillClimber):
         super().__init__(dataset=dataset)
 
         # starting temperature
-        self.start_temperature: float = 1.0
+        self.start_temperature: float = 10
 
         # current temperature
-        self.temperature: float = 1.0
+        self.temperature: float = 10
 
     def update_temperature(self) -> None:
         """
@@ -37,7 +37,7 @@ class SimulatedAnnealing(HillClimber):
         *
         """
         print(f"total iter: {self.iterations}") if self.verbose else None
-        # self.temperature = max(self.temperature - self.start_temperature / self.iterations, 1e-4)
+        self.temperature = max(self.temperature - self.start_temperature / self.iterations, 1e-4)
 
         # Exponential would look like this:
         # alpha = 0.99
@@ -46,7 +46,7 @@ class SimulatedAnnealing(HillClimber):
         # where alpha can be any value below 1 but above 0
 
         # Square root
-        self.temperature = np.sqrt(self.temperature)
+        # self.temperature = np.sqrt(self.temperature)
 
     def check_score(self, new_solution: Solution) -> bool:
         """ Override this function from hill climber. """
@@ -60,7 +60,7 @@ class SimulatedAnnealing(HillClimber):
             print(f"New score: {new_score}")
 
         # calculate the acceptance probability of the change
-        delta = (self.score - new_score) / 70
+        delta = -(self.score - new_score)
         print(f"delta: {delta}") if self.verbose else None
         print(f"temperature: {self.temperature}") if self.verbose else None
         print(f"x: {-delta / self.temperature}") if self.verbose else None
