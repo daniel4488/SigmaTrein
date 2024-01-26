@@ -1,3 +1,5 @@
+import random
+
 class Station:
     """ Class representing a train station. """
 
@@ -23,6 +25,13 @@ class Station:
         """ Remove a possible connection from the list. """
         self.possible_connections.remove(connection_number)
 
+    def return_random_connection(self):
+        return random.choice(self.possible_connections)
+
+    def return_possible_connections(self) -> list[int]:
+        return self.possible_connections
+
     def __str__(self) -> str:
         """ Gives the string representation. """
         return self.station_name
+

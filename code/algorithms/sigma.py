@@ -132,7 +132,14 @@ class Sigma:
         while trajectory.duration <= 180 and departure_station[1].possible_connections:
             
             # choose random connection number from possible connections at departure station
-            connection = random.choice(departure_station[1].possible_connections)
+            #connection = departure_station[1].return_random_connection()
+
+            possible_connections = departure_station[1].return_possible_connections()
+
+            
+            # find the connection with the lowest weight using a lambda function
+            connection = min(possible_connections, key=lambda connection: self.connections[connection].weight)
+
 
             # get destination station from chosen connection 
             destination_station = self.get_station(departure_station[0], connection)
@@ -147,6 +154,8 @@ class Sigma:
             if duration_candidate <= 180:
                 self.update_trajectory(duration_candidate, connection, destination_station[0], trajectory)
 
+                # New
+                self.connections[connection].weight += 1
                 # update departure station to the current station
                 departure_station = destination_station
 
@@ -154,6 +163,8 @@ class Sigma:
     
     def reset_used_connections(self) -> None:
         self.used_connections.clear()
+        for _, connection_object in self.connections.items():
+            connection_object.reset_weight()
 
     def choose_station(self, stations: list[str]) -> tuple[str, Station]:
         """ Chooses a random station from the given list and returns a list
@@ -194,7 +205,7 @@ class Sigma:
         trajectories = set()
         is_valid = False
         highest_score = 0 
-        iterations = 1
+        iterations = 10000
         i = 0
         for _ in range(iterations):
             print(i)

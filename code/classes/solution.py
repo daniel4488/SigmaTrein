@@ -3,7 +3,7 @@ from code.classes.railNL import RailNL
 
 
 class Solution:
-    def __init__(self, trajectories: list[Trajectory], is_valid: bool, verbose: bool = True):
+    def __init__(self, trajectories: list[Trajectory], is_valid: bool, verbose: bool = False):
         self.verbose: bool = verbose
         self.is_valid: bool = is_valid
         self.trajectories: list[Trajectory] = trajectories
@@ -47,13 +47,21 @@ class Solution:
         else:
             return len(self.trajectories) <= 20 and new_trajectory.duration <= 180
         
+
+
+    
+        
     def remove_double_connections(self):
-        for i, trajectory in enumerate(self.trajectories):
+
+        # sort the list using the custom lambda function
+        sorted_trajectories = sorted(self.trajectories, key= lambda trajectory: trajectory.duration)
+
+        for i, trajectory in enumerate(sorted_trajectories):
             
             connections = list(trajectory.connections)
 
             used_connections = set()
-            for j, other_trajectory in enumerate(self.trajectories):
+            for j, other_trajectory in enumerate(sorted_trajectories):
                 for connection in other_trajectory.connections:
                     if i != j:
                         used_connections.add(connection)
