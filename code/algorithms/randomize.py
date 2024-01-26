@@ -35,7 +35,7 @@ class Randomize:
     def set_constrictions(self, dataset: str) -> DatasetInfo:
         """ Sets the restrictions on trajectories for the chosen dataset. """
 
-        data_info = DataInfo()
+        data_info = DataInfo
         
         if dataset == "holland":
             return data_info.holland
