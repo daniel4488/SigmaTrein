@@ -7,6 +7,7 @@ class Connection:
         self.station_1: str = station_1
         self.station_2: str = station_2
         self.duration: float = duration
+        self.weight: int = 0
 
     def get_destination_station(self, departure_station: str) -> str:
         """ Given one station, returns the other end of the connection. """
@@ -16,3 +17,6 @@ class Connection:
             return self.station_1
         else:
             return ""
+    
+    def reset_weight(self):
+        self.weight = 0
