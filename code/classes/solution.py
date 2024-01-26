@@ -11,6 +11,7 @@ class Solution:
             self.remove_double_connections()
         self.score: float = self.calculate_score()
         self.write_score()
+        print(self.__class__.__module__)
 
     def calculate_score(self) -> float:
         """

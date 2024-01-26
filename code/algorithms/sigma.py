@@ -207,7 +207,7 @@ class Sigma:
         trajectories = set()
         is_valid = False
         highest_score = 0 
-        iterations = 300000
+        iterations = 1
         i = 0
         for _ in range(iterations):
             print(i)

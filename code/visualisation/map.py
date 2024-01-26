@@ -24,7 +24,9 @@ class PlotlyLoad(Load):
                         ]
         self.edges: dict[tuple[str, str], list[str]] = {}
 
-        print(nx.dijkstra_path(self.G, source="Den Helder", target="Dordrecht", weight="distance"))
+        self.verbose: bool = False
+
+        # print(nx.dijkstra_path(self.G, source="Den Helder", target="Dordrecht", weight="distance"))
 
     def draw_graph(self, solution: Solution | Output) -> None:
 
@@ -71,7 +73,7 @@ class PlotlyLoad(Load):
 
         edge_traces = []
         for edge, trajectory_colors in self.edges.items():
-            print(edge)
+            print(edge) if self.verbose else None
             if len(trajectory_colors) == 1:
                 edge_trace = go.Scattermapbox(
                     lon=[], lat=[],
@@ -126,8 +128,8 @@ class PlotlyLoad(Load):
 
                     source_vector += orthogonal_vector * 0.004 * double_edge_count
                     destination_vector += orthogonal_vector * 0.004 * double_edge_count
-                    print(f"source vector: {source_vector}")
-                    print(f"destination vector: {destination_vector}")
+                    print(f"source vector: {source_vector}") if self.verbose else None
+                    print(f"destination vector: {destination_vector}") if self.verbose else None
 
                     x0 = source_vector[0]
                     y0 = source_vector[1]
