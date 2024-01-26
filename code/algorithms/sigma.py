@@ -199,13 +199,15 @@ class Sigma:
         trajectory.add_connection_number(connection)
     
     def run(self, write_output = True):
+
+        random.seed(27012001)
         
         self.reset_used_connections()
 
         trajectories = set()
         is_valid = False
         highest_score = 0 
-        iterations = 10000
+        iterations = 300000
         i = 0
         for _ in range(iterations):
             print(i)

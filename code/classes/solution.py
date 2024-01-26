@@ -3,12 +3,12 @@ from code.classes.railNL import RailNL
 
 
 class Solution:
-    def __init__(self, trajectories: list[Trajectory], is_valid: bool, verbose: bool = False):
+    def __init__(self, trajectories: list[Trajectory], is_valid: bool, verbose: bool = False) -> None:
         self.verbose: bool = verbose
         self.is_valid: bool = is_valid
         self.trajectories: list[Trajectory] = trajectories
         if self.is_valid:
-          self.remove_double_connections()
+            self.remove_double_connections()
         self.score: float = self.calculate_score()
         self.write_score()
 
@@ -46,15 +46,11 @@ class Solution:
             return len(self.trajectories) <= 7 and new_trajectory.duration <= 120
         else:
             return len(self.trajectories) <= 20 and new_trajectory.duration <= 180
-        
 
-
-    
-        
     def remove_double_connections(self):
 
         # sort the list using the custom lambda function
-        sorted_trajectories = sorted(self.trajectories, key= lambda trajectory: trajectory.duration)
+        sorted_trajectories = sorted(self.trajectories, key=lambda trajectory: trajectory.duration)
 
         for i, trajectory in enumerate(sorted_trajectories):
             
@@ -69,23 +65,22 @@ class Solution:
             for k in range(1, len(connections) + 1):
                 if connections[-k] in used_connections:
                     trajectory.connections.remove(connections[-k])
+                    trajectory.duration -= RailNL.CONNECTIONS[connections[-k]].duration
                     connections[-k] = 0
                     trajectory.stations.pop()
                 else:
                     break
 
             if trajectory.connections:
-                
                 for l in range(0, len(connections)):
                     if connections[l] in used_connections:
                         trajectory.connections.remove(connections[l])
+                        trajectory.duration -= RailNL.CONNECTIONS[connections[l]].duration
                         trajectory.stations.pop(0)
                     else:
                         break
 
-            
             if not trajectory.connections:
-    
                 self.trajectories.remove(trajectory)
             
             

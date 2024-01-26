@@ -32,7 +32,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run the main function of the RailNL case.")
 
     # add dataset command line argument with default value
-    parser.add_argument("--dataset", "-d", default="holland", type=valid_dataset)
+    parser.add_argument("--dataset", "-d", default="nationaal", type=valid_dataset)
 
     # add verbose command line argument
     parser.add_argument("--verbose", "-v", default=False, type=valid_verbose)

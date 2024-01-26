@@ -9,6 +9,8 @@ class RailNL:
 
     DATASET: str = "none"
 
+    CONNECTIONS: dict[int, Connection] = None
+
     def __init__(self, dataset: str) -> None:
         """ Creates a RailNL object. """
 
@@ -27,6 +29,9 @@ class RailNL:
 
         # loads connections
         self.load_connections()
+
+        # global connections
+        RailNL.CONNECTIONS = self.connections
 
     def load_stations(self) -> None:
         """ Converts the station data to Station classes. """

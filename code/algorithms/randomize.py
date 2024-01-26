@@ -18,7 +18,7 @@ class Randomize:
         """ Initiates the random algorithm. """
 
         # make algorithm pseudo random
-        random.seed(324488)
+        # random.seed(324488)
         # random.seed(1309)
         # random.seed(239094)
         # random.seed(2024)
