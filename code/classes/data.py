@@ -18,3 +18,6 @@ class DataInfo:
 
     holland: DatasetInfo = DatasetInfo(dataset="holland")
     nationaal: DatasetInfo = DatasetInfo(dataset="nationaal")
+
+    def __init__(self) -> None:
+        raise RuntimeError("DataInfo class is static and should not be instantiated.")

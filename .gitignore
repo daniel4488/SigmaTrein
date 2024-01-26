@@ -176,7 +176,7 @@ data/scores/
 code/visualisation/baseline.svg
 
 # Output CSV file
-output.csv
+/output.csv
 
 # Temporary files
 .tmp/
