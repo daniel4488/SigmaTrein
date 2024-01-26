@@ -17,7 +17,7 @@ class HillClimber:
     def __init__(self, dataset: str):
         self.verbose = False
         self.railNL = RailNL(dataset=dataset)
-        self.randomize = Randomize(self.railNL.stations, self.railNL.connections)
+        self.randomize = Randomize(dataset, self.railNL.stations, self.railNL.connections)
         self.solution: Solution = None
         self.trajectories: list[Trajectory] = None
         self.score: int = None
@@ -50,6 +50,8 @@ class HillClimber:
         self.trajectories.append(new_trajectory)
         # save new set of trajectories in new solution object
         new_solution.trajectories = set(self.trajectories)
+        # update score of solution to new score
+        self.solution.score = new_solution.calculate_score()
 
     def check_score(self, new_solution: Solution):
         """ Checks and accepts better solutions than the current one. """
@@ -104,7 +106,7 @@ class HillClimber:
         self.make_first_solution()
         self.prepare_csv_file()
 
-        for iteration in range(iterations):
+        for _ in range(iterations):
             self.new_solution(mutations)
 
             # write score to csv file
@@ -115,7 +117,7 @@ class HillClimber:
 
         new_solution = copy.deepcopy(self.solution)
 
-        for mutation in range(mutations):
+        for _ in range(mutations):
             # choose random trajectory
             trajectory = self.choose_trajectory()
             # delete trajectory
@@ -127,7 +129,7 @@ class HillClimber:
 
         # if score is not better, mutate trajectory
         if not self.check_score(new_solution):
-            for mutation in range(mutations):
+            for _ in range(mutations):
                 # try a new trajectory
                 self.mutate_trajectory(trajectory, new_solution)
                 # check score
