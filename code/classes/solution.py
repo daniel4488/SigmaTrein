@@ -3,15 +3,20 @@ from code.classes.railNL import RailNL
 
 
 class Solution:
-    def __init__(self, trajectories: list[Trajectory], is_valid: bool, verbose: bool = False) -> None:
+    def __init__(
+            self,
+            trajectories: list[Trajectory],
+            is_valid: bool,
+            origin: str = "",
+            verbose: bool = False
+    ) -> None:
         self.verbose: bool = verbose
         self.is_valid: bool = is_valid
         self.trajectories: list[Trajectory] = trajectories
-        if self.is_valid:
+        if origin == "Sigma" and self.is_valid:
             self.remove_double_connections()
         self.score: float = self.calculate_score()
         self.write_score()
-        print(self.__class__.__module__)
 
     def calculate_score(self) -> float:
         """

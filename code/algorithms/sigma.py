@@ -237,7 +237,7 @@ class Sigma:
             # create solution instance
             # if write_output:
             # else:
-            solution = Solution(trajectories, is_valid)
+            solution = Solution(trajectories, is_valid, self.__class__.__name__)
 
             if solution.score > highest_score:
                 highest_score = solution.score
