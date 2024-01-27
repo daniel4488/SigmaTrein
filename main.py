@@ -4,49 +4,65 @@ from code.visualisation.plot_single_track import PlotlyLoad
 from code.visualisation.baseline import visualize_baseline, visualize_iterations_to_score
 
 import argparse
+import textwrap
 
 
 if __name__ == "__main__":
 
     description = r'''
-                                     (@@@)     (@@@@@)
-                               (@@)     (@@@@@@@)        (@@@@@@@)
-                         (@@@@@@@)   (@@@@@)       (@@@@@@@@@@@)
-                    (@@@)     (@@@@@@@)   (@@@@@@)             (@@@)
-               (@@@@@@)    (@@@@@@)                (@)
-           (@@@)  (@@@@)           (@@)
-        (@@)              (@@@)
-       .-.
-       ] [    .-.      _    .-----.
-     ."   """"   """""" """"| .--`
-    (:--:--:--:--:--:--:--:-| [___    .------------------------.
-     |C&O  :  :  :  :  :  : [_9_] |'='|.----------------------.|
-    /|.___________________________|___|'--.___.--.___.--.___.-'|
-   / ||_.--.______.--.______.--._ |---\'--\-.-/==\-.-/==\-.-/-'/--
-  /__;^=(==)======(==)======(==)=^~^^^ ^^^^(-)^^^^(-)^^^^(-)^^^ aac
-~~~^~~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~
+                                             (@@@)     (@@@@@)
+                                       (@@)     (@@@@@@@)        (@@@@@@@)
+                                 (@@@@@@@)   (@@@@@)       (@@@@@@@@@@@)
+                            (@@@)     (@@@@@@@)   (@@@@@@)             (@@@)
+                       (@@@@@@)    (@@@@@@)                (@)
+                   (@@@)  (@@@@)           (@@)
+                (@@)              (@@@)
+               .-.
+               ] [    .-.      _    .-----.
+             ."   """"   """""" """"| .--`
+            (:--:--:--:--:--:--:--:-| [___    .------------------------.
+             |C&O  :  :  :  :  :  : [_9_] |'='|.----------------------.|
+            /|.___________________________|___|'--.___.--.___.--.___.-'|
+           / ||_.--.______.--.______.--._ |---\'--\-.-/==\-.-/==\-.-/-'/--
+          /__;^=(==)======(==)======(==)=^~^^^ ^^^^(-)^^^^(-)^^^^(-)^^^ aac
+        ~~~^~~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~
+        
+                    /$$$$$$  /$$                                  
+                   /$$__  $$|__/                                  
+                  | $$  \__/ /$$  /$$$$$$  /$$$$$$/$$$$   /$$$$$$ 
+                  |  $$$$$$ | $$ /$$__  $$| $$_  $$_  $$ |____  $$
+                   \____  $$| $$| $$  \ $$| $$ \ $$ \ $$  /$$$$$$$
+                   /$$  \ $$| $$| $$  | $$| $$ | $$ | $$ /$$__  $$
+                  |  $$$$$$/| $$|  $$$$$$$| $$ | $$ | $$|  $$$$$$$
+                   \______/ |__/ \____  $$|__/ |__/ |__/ \_______/
+                                 /$$  \ $$                        
+                                |  $$$$$$/                        
+                                 \______/                         
+        '''
 
-            /$$$$$$  /$$                                  
-           /$$__  $$|__/                                  
-          | $$  \__/ /$$  /$$$$$$  /$$$$$$/$$$$   /$$$$$$ 
-          |  $$$$$$ | $$ /$$__  $$| $$_  $$_  $$ |____  $$
-           \____  $$| $$| $$  \ $$| $$ \ $$ \ $$  /$$$$$$$
-           /$$  \ $$| $$| $$  | $$| $$ | $$ | $$ /$$__  $$
-          |  $$$$$$/| $$|  $$$$$$$| $$ | $$ | $$|  $$$$$$$
-           \______/ |__/ \____  $$|__/ |__/ |__/ \_______/
-                         /$$  \ $$                        
-                        |  $$$$$$/                        
-                         \______/                         
-'''
+    epilog = "Authors: Daniël Frijns, Timo Nijkamp & Roos van der Neut"
 
     # initialise parser
-    parser = argparse.ArgumentParser(description=description, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description=textwrap.dedent(description),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=epilog
+    )
 
     # add dataset command line argument with default value
-    parser.add_argument("--dataset", "-d", default="nationaal", choices=["holland", "nationaal"])
+    parser.add_argument(
+        "--dataset", "-d",
+        default="nationaal",
+        choices=["holland", "nationaal"],
+        help="sets the dataset to be used, defaults to nationaal"
+    )
 
     # add verbose command line argument
-    parser.add_argument("--verbose", "-v", default=False, type=bool, nargs="?", const=True)
+    parser.add_argument(
+        "--verbose", "-v",
+        action="store_true",
+        help="prints detailed debugging statements"
+    )
 
     # parse the command line argument
     args = parser.parse_args()
