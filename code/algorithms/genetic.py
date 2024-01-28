@@ -11,7 +11,10 @@ import random
 import copy
 import os
 
+
 class Genetic:
+    """ Class describing the genetic algorithm. """
+
     def __init__(self, dataset: str):
         self.dataset = dataset
         self.railNL = RailNL(dataset=dataset)
@@ -21,31 +24,27 @@ class Genetic:
         self.score: int = None
         self.iterations: int = None
         self.verbose = False
-    
-#_______________________________Genetic algorithm________________________________#
-        
+
+#__________________________________Genetic algorithm_________________________________#
     def generate_parent(self):
         return self.randomize.make_solution(False)
-    
+
     def fitness(self, solution: Solution) -> int:
         return solution.score
-    
-    def generate_children(self, parent: Solution, size: int) -> list[Solution]:
-        # creat an empty list where children can be stored
-        children = set()
-        
-        # create a size amount of children
-        for i in range(size):
 
+    def generate_children(self, parent: Solution, size: int) -> list[Solution]:
+        # create an empty list where children can be stored
+        children = set()
+
+        # create a size amount of children
+        for _ in range(size):
             self.solution = copy.deepcopy(parent)
             self.trajectories = list(parent.trajectories)
             self.score = parent.score
-            # print(f"old score {hill_climber_child.score}")
 
             self.new_solution(2)
             children.add(self.solution)
-            # print(f"new score {hill_climber_child.score}")
-        
+
         return children
 
     def run(self):
@@ -75,7 +74,7 @@ class Genetic:
 
                 # generate a population of children based on parent
                 children: list[Solution] = self.generate_children(parent, 20000)
-                
+
                 # iterate over all children 
                 for child in children:
                     # count for iterations
@@ -92,7 +91,7 @@ class Genetic:
                         parent = child
                         # keep track of the highest score found
                         highest_score_child = child.score
-            
+
             # check the highest score found in this tree and compare it to the most succesful tree
             if highest_score_child > all_time_highest_score_child:
                 all_time_highest_score_child = highest_score_child
@@ -128,7 +127,6 @@ class Genetic:
         """ Checks and accepts better solutions than the current one. """
 
         new_score = new_solution.calculate_score()
-        
 
         if self.verbose:
             print(f"Old score: {self.score}")
@@ -142,7 +140,6 @@ class Genetic:
             # update score of solution to improved score
             self.solution.score = new_score
 
-            
             if self.verbose:
                  print(f"Accepted {new_score}")
             return True

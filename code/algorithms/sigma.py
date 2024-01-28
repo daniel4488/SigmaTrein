@@ -114,7 +114,7 @@ class Sigma:
             trajectory.duration += connections.pop()
 
             for station in stations:
-                trajectory.add_station_to_trajectory(station)
+                trajectory.add_station(station)
 
             for connection in connections:
                 trajectory.add_connection_number(connection)
@@ -125,7 +125,7 @@ class Sigma:
             departure_station = self.choose_station(list(self.stations.keys()))
 
             # add departure station to the trajectory
-            trajectory.add_station_to_trajectory(departure_station[0])
+            trajectory.add_station(departure_station[0])
 
         # add stations to trajectory as long as its duration is less than 120 mins,
         # and there are still possible connections
@@ -194,7 +194,7 @@ class Sigma:
         """ Adds new connection and station to the given trajectory, and
             updates its total time. """
 
-        trajectory.add_station_to_trajectory(station)
+        trajectory.add_station(station)
         trajectory.duration = duration
         trajectory.add_connection_number(connection)
     

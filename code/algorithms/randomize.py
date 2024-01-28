@@ -77,14 +77,14 @@ class Randomize:
         """ Adds new connection and station to the given trajectory, and
             updates its total time. """
 
-        trajectory.add_station_to_trajectory(station)
+        trajectory.add_station(station)
         trajectory.duration = duration
         trajectory.add_connection_number(connection)
 
     def make_trajectory(self, unique: bool = False) -> Trajectory:
         """ Generates a randomly chosen trajectory. If unique is True,
             then all connections can only be selected once. """
-        
+
         self.repopulate_possible_connections_for_all_stations()
 
         # initialize empty trajectory
@@ -94,7 +94,7 @@ class Randomize:
         departure_station = self.choose_station(list(self.stations.keys()))
 
         # add departure station to the trajectory
-        trajectory.add_station_to_trajectory(departure_station[0])
+        trajectory.add_station(departure_station[0])
 
         # add stations to trajectory as long as its duration is less than 120 mins,
         # and there are still possible connections

@@ -57,7 +57,7 @@ class LessRandom:
         random_departure_station_object = self.stations[random_departure_station]
 
         # add departure station to the trajectory
-        random_trajectory.add_station_to_trajectory(random_departure_station)
+        random_trajectory.add_station(random_departure_station)
 
         # add stations to trajectory as long as its duration is less than 120 mins,
         # and there are still possible connections
@@ -82,7 +82,7 @@ class LessRandom:
             # add station to trajectory if it fits within 120 mins
             if duration_candidate <= 120:
                 # add station to trajectory
-                random_trajectory.add_station_to_trajectory(random_destination_station)
+                random_trajectory.add_station(random_destination_station)
 
                 # promote candidate
                 random_trajectory.duration = duration_candidate

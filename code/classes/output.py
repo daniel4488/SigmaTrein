@@ -10,13 +10,15 @@ class Output(Solution):
     Output extents the solution class by writing an output file.
     """
 
-    def __init__(self, trajectories: set[Trajectory], is_valid: bool, verbose: bool = False) -> None:
-        """ Creates an instance of an Output object. """
+    def __init__(self, trajectories: set[Trajectory], is_valid: bool,
+                 verbose: bool = False) -> None:
+
         super().__init__(trajectories, is_valid, verbose)
         self.write_output()
 
     def write_output(self) -> None:
         """ Generates output file "output.csv". """
+
         # open a CSV file for writing
         with open("output.csv", "w", newline="") as csvfile:
             # create a CSV writer object

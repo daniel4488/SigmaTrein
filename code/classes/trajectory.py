@@ -1,20 +1,29 @@
 
 class Trajectory:
-    """ Represents the route of a train. """
+    """
+    Class describing the route of a train.
+    Trajectory object contains a float which is the duration of the whole
+    trajectory, a list with the station names it travels accross, and a list
+    of the connections corresponding to this.
+    """
+
     def __init__(self) -> None:
-        """ Creates a Trajectory object. """
+
         self.duration: float = 0.0
         self.stations: list[str] = []
         self.connections: list = []
 
-    def add_station_to_trajectory(self, station: str) -> None:
-        """ Adds a station / connection to the trajectory. """
+    def add_station(self, station: str) -> None:
+        """ Adds station to trajectory. """
+
         self.stations.append(station)
 
     def add_connection_number(self, connection_number: int) -> None:
-        """ Add a station number to the trajectory. """
+        """ Adds connection number to trajectory. """
+
         self.connections.append(connection_number)
 
     def __str__(self) -> str:
-        """ String representation of a Trajectory. """
+        """ String representation of a trajectory. """
+
         return "[" + ", ".join(map(str, self.stations)) + "]"

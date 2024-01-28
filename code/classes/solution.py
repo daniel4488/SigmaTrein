@@ -3,13 +3,16 @@ from code.classes.railNL import RailNL
 
 
 class Solution:
-    def __init__(
-            self,
-            trajectories: list[Trajectory],
-            is_valid: bool,
-            origin: str = "",
-            verbose: bool = False
-    ) -> None:
+    """
+    Class describing all information containing a solution.
+    Solution object contains a boolean describing if it is a valid
+    solution, a list with the trajectory objects, and the score of the
+    solution.
+    """
+
+    def __init__(self, trajectories: list[Trajectory], is_valid: bool,
+                 origin: str = "", verbose: bool = False) -> None:
+
         self.verbose: bool = verbose
         self.is_valid: bool = is_valid
         self.trajectories: list[Trajectory] = trajectories
@@ -25,41 +28,57 @@ class Solution:
         T: number of trajectories
         Min: number of minutes used in all trajectories
         """
+
         T = len(self.trajectories)
+
+        # initialize empty variables
         used_connections = set()
         Min = 0
+
+        # count total connections and duration
         for traject in self.trajectories:
             used_connections.update(traject.connections)
             Min += traject.duration
-        assert RailNL.NUMBER_OF_CONNECTIONS != -1
-        p = len(used_connections) / RailNL.NUMBER_OF_CONNECTIONS
 
+        assert RailNL.NUMBER_OF_CONNECTIONS != -1
+
+        # calculate score
+        p = len(used_connections) / RailNL.NUMBER_OF_CONNECTIONS
         K = p * 10000 - (T * 100 + Min)
+
+        # print score variables if verbose is True
         if self.verbose:
             print(f"T = {T}")
             print(f"Min = {Min}")
             print(f"p = {p}")
+
         return K
 
     def write_score(self) -> None:
+        """ Write score to csv file. """
+
         with open("data/scores/random.csv", "a") as file:
             file.write(str(self.score))
             file.write("\n")
 
     def check_is_valid(self, new_trajectory: Trajectory):
+        """ Check if solution meets all restrictions. """
 
         if RailNL.DATASET == "holland":
-            return len(self.trajectories) <= 7 and new_trajectory.duration <= 120
+            return len(self.trajectories) <= 7 and \
+                   new_trajectory.duration <= 120
         else:
-            return len(self.trajectories) <= 20 and new_trajectory.duration <= 180
+            return len(self.trajectories) <= 20 and \
+                   new_trajectory.duration <= 180
 
     def remove_double_connections(self):
 
         # sort the list using the custom lambda function
-        sorted_trajectories = sorted(self.trajectories, key=lambda trajectory: trajectory.duration)
+        sorted_trajectories = sorted(self.trajectories,
+                                     key=lambda trajectory: trajectory.duration)
 
         for i, trajectory in enumerate(sorted_trajectories):
-            
+
             connections = list(trajectory.connections)
 
             used_connections = set()
@@ -67,7 +86,7 @@ class Solution:
                 for connection in other_trajectory.connections:
                     if i != j:
                         used_connections.add(connection)
- 
+
             for k in range(1, len(connections) + 1):
                 if connections[-k] in used_connections:
                     trajectory.connections.remove(connections[-k])
@@ -88,12 +107,3 @@ class Solution:
 
             if not trajectory.connections:
                 self.trajectories.remove(trajectory)
-            
-            
-
-                    
-            
-
-                 
-                    
-
