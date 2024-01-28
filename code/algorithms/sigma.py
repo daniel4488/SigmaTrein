@@ -11,7 +11,7 @@ import copy
 import os
 
 class Sigma:
-    def __init__(self):
+    def __init__(self, dataset: str):
         # initialize a list with pre-fixed routes that start of a trajectory
         self.standard_trajectories = [["Maastricht", "Sittard", "Heerlen", "Sittard", "Roermond", "Weert", "Eindhoven"],
                                        ["Venlo", "Helmond", "Eindhoven"], ["Vlissingen", "Roosendaal"],
