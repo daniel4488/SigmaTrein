@@ -12,10 +12,11 @@ import os
 
 
 class Randomize:
-    """ Algorithm to generate a randomly chosen trajectory. """
+    """
+    Algorithm to generate a randomly chosen trajectory.
+    """
 
     def __init__(self, dataset: str) -> None:
-        """ Initiates the random algorithm. """
 
         # make algorithm pseudo random
         # random.seed(324488)
@@ -38,23 +39,23 @@ class Randomize:
         """ Sets the restrictions on trajectories for the chosen dataset. """
 
         data_info = DataInfo
-        
+
         if dataset == "holland":
             return data_info.holland
         elif dataset == "nationaal":
             return data_info.nationaal
-        
 
     def choose_station(self, stations: list[str]) -> tuple[str, Station]:
-        """ Chooses a random station from the given list and returns a list
-            with its name and object. """
+        """ Returns a list with the name and object of a randomly chosen
+            station. """
 
         name = random.choice(stations)
         station = self.stations[name]
         return name, station
 
     def get_station(self, start: str, connection: int) -> tuple[str, Station]:
-        """ Returns list with station name and object from given connection number. """
+        """ Returns list with station name and object from given connection
+            number. """
 
         name = self.connections[connection].get_destination_station(start)
         station = self.stations[name]
@@ -67,7 +68,8 @@ class Randomize:
             self.stations[station].repopulate_possible_connections()
 
     @staticmethod
-    def update_connections(connection: int, departure: Station, destination: Station) -> None:
+    def update_connections(connection: int, departure: Station,
+                           destination: Station) -> None:
         """ Removes a made connection from the possible connections of the
             departure station, as well as from the destination station. """
 
@@ -75,7 +77,8 @@ class Randomize:
         destination.remove_possible_connection(connection)
 
     @staticmethod
-    def update_trajectory(duration: float, connection: int, station: str, trajectory: Trajectory) -> None:
+    def update_trajectory(duration: float, connection: int, station: str,
+                          trajectory: Trajectory) -> None:
         """ Adds new connection and station to the given trajectory, and
             updates its total time. """
 
@@ -89,39 +92,47 @@ class Randomize:
 
         self.repopulate_possible_connections_for_all_stations()
 
-        # initialize empty trajectory
         trajectory = Trajectory()
-        
+
         # choose a random station to depart from
         departure_station = self.choose_station(list(self.stations.keys()))
 
         # add departure station to the trajectory
         trajectory.add_station(departure_station[0])
 
-        # add stations to trajectory as long as its duration is less than 120 mins,
-        # and there are still possible connections
-        while trajectory.duration <= int(self.constrictions.max_time) and departure_station[1].possible_connections:
-            
-            # choose random connection number from possible connections at departure station
-            connection = random.choice(departure_station[1].possible_connections)
+        # add randomly chosen connections and stations to trajectory as long as
+        # restrictions are still met
+        while trajectory.duration <= int(self.constrictions.max_time) and \
+                departure_station[1].possible_connections:
 
-            # get destination station from chosen connection 
-            destination_station = self.get_station(departure_station[0], connection)
+            # choose random connection number from possible connections at
+            # departure station
+            connection = random.choice(departure_station[1].
+                                       possible_connections)
 
-            # remove created connection from destination and departure station's possible connections
+            # get destination station from chosen connection
+            destination_station = self.get_station(departure_station[0],
+                                                   connection)
+
+            # remove created connection from destination and departure stations
+            # possible connections
             if unique:
-                self.update_connections(connection, departure_station[1], destination_station[1])
+                self.update_connections(connection, departure_station[1],
+                                        destination_station[1])
 
             # update total duration of the trajectory
-            duration_candidate = trajectory.duration + self.connections[connection].duration
+            duration_candidate = trajectory.duration + \
+                self.connections[connection].duration
 
-            # add station to trajectory if it fits within 120 mins
+            # add station to trajectory if it fits within time restriction
             if duration_candidate <= self.constrictions.max_time:
-                self.update_trajectory(duration_candidate, connection, destination_station[0], trajectory)
+                self.update_trajectory(duration_candidate, connection,
+                                       destination_station[0], trajectory)
 
                 # update departure station to the current station
                 departure_station = destination_station
-            elif duration_candidate > self.constrictions.max_time and not unique:
+            elif duration_candidate > self.constrictions.max_time and not \
+                    unique:
                 break
 
         return trajectory
@@ -131,6 +142,8 @@ class Randomize:
 
     @staticmethod
     def clear_scores_file() -> None:
+        """ Clears the csv file from all old data. """
+
         file_path = "data/scores/random.csv"
 
         if os.path.exists(file_path):
@@ -138,6 +151,9 @@ class Randomize:
             os.remove(file_path)
 
     def prepare_csv_file(self) -> None:
+        """ Prepares the csv file for new data, or creates file
+            if it does not exist yet. """
+
         self.clear_scores_file()
 
         if not (os.path.exists("data/scores") and os.path.isdir("data/scores")):
@@ -193,5 +209,3 @@ class Randomize:
 
         for _ in range(number_of_simulations):
             self.make_solution(write_output=True)
-
-   

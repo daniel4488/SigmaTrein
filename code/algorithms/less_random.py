@@ -11,6 +11,7 @@ import os
 
 class LessRandom:
     def __init__(self, dataset: str):
+
         railNL = RailNL(dataset=dataset)
         self.stations: dict[str, Station] = railNL.stations
         self.connections: dict[int, Connection] = railNL.connections
@@ -19,7 +20,6 @@ class LessRandom:
         self.preferred_departure_copy = []
 
         self.used_connections: set = set()
-        # self.population = self.generate_population(5)
 
     def generate_solution(self, solution: Solution):
         """
@@ -33,26 +33,27 @@ class LessRandom:
 
     def generate_population(self, size: int):
         return [self.generate_solution() for _ in range(size)]
-    
+
     def fitness(self, solution: Solution) -> int:
         return solution.score
 
     def repopulate_possible_connections_for_all_stations(self) -> None:
         """ Prepare for the generation of a new trajectory. """
+
         for station in self.stations:
             self.stations[station].repopulate_possible_connections()
 
     def repopulate_preferred_departure_stations(self) -> None:
         self.preferred_departure_copy = self.preferred_departure[:]
-         
+
     def make_random_trajectory(self) -> Trajectory:
         """ Generates a randomly chosen trajectory. """
-        
+
         self.repopulate_possible_connections_for_all_stations()
 
         # initialize empty trajectory
         random_trajectory = Trajectory()
-        
+
         # choose a random station to depart from
         random_departure_station = self.preferred_departure_copy.pop(0)
         random_departure_station_object = self.stations[random_departure_station]
@@ -63,10 +64,9 @@ class LessRandom:
         # add stations to trajectory as long as its duration is less than 120 mins,
         # and there are still possible connections
         while random_trajectory.duration <= 120 and random_departure_station_object.possible_connections:
-            
+
             # choose random connection number from possible connections at departure station
             random_connection = random.choice(random_departure_station_object.possible_connections)
-            
 
             # get name of destination station from chosen connection 
             random_destination_station = self.connections[random_connection].get_destination_station(random_departure_station)
@@ -96,7 +96,7 @@ class LessRandom:
 
         # create trajectory list of stations
         return random_trajectory
-    
+
     def reset_used_connections(self) -> None:
         self.used_connections.clear()
 
@@ -137,10 +137,10 @@ class LessRandom:
                 is_valid = True
                 print(is_valid)
                 break
-            
+
         solution = Solution(trajectories, is_valid)
         score = solution.score
-            
+
         return score
 
     def run(self, iterations: int, verbose: bool) -> None:
