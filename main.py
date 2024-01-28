@@ -64,6 +64,13 @@ if __name__ == "__main__":
         help="prints detailed debugging statements"
     )
 
+    # add algorithm as positional command line argument
+    parser.add_argument(
+        "algorithm",
+        choices=["randomize", "less_random", "hill_climber", "simulated_annealing", "genetic", "sigma"],
+        help="choose an algorithm to run"
+    )
+
     # parse the command line argument
     args = parser.parse_args()
 
