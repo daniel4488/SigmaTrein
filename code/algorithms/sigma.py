@@ -198,7 +198,7 @@ class Sigma:
         trajectory.duration = duration
         trajectory.add_connection_number(connection)
     
-    def run(self, write_output = True):
+    def run(self, iterations: int, verbose: bool):
 
         random.seed(27012001)
         
@@ -207,7 +207,7 @@ class Sigma:
         trajectories = set()
         is_valid = False
         highest_score = 0 
-        iterations = 1
+        # iterations = 1
         i = 0
         for _ in range(iterations):
             print(i)

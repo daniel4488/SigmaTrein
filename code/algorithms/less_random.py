@@ -143,14 +143,13 @@ class LessRandom:
             
         return score
 
-    def run(self) -> None:
+    def run(self, iterations: int, verbose: bool) -> None:
 
         self.prepare_csv_file()
 
-        number_of_simulations = 10000
         highest_score = 0
 
-        for _ in range(number_of_simulations):
+        for _ in range(iterations):
             self.repopulate_preferred_departure_stations()
             score = self.make_random_solution()
 
