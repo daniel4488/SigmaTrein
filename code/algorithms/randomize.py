@@ -14,7 +14,7 @@ import os
 class Randomize:
     """ Algorithm to generate a randomly chosen trajectory. """
 
-    def __init__(self, dataset: str, stations: dict[str, Station], connections: dict[int, Connection]) -> None:
+    def __init__(self, dataset: str) -> None:
         """ Initiates the random algorithm. """
 
         # make algorithm pseudo random
@@ -23,8 +23,10 @@ class Randomize:
         # random.seed(239094)
         # random.seed(2024)
 
-        self.stations: dict[str, Station] = stations
-        self.connections: dict[int, Connection] = connections
+        railNL = RailNL(dataset=dataset)
+
+        self.stations: dict[str, Station] = railNL.stations
+        self.connections: dict[int, Connection] = railNL.connections
         self.constrictions: DatasetInfo = self.set_constrictions(dataset)
 
         self.used_connections: set[int] = set()

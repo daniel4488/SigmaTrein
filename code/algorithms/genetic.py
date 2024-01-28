@@ -18,11 +18,11 @@ class Genetic:
     def __init__(self, dataset: str):
         self.dataset = dataset
         self.railNL = RailNL(dataset=dataset)
-        self.randomize = Randomize(dataset, self.railNL.stations, self.railNL.connections)
+        self.randomize = Randomize(dataset)
         self.solution: Solution = None
         self.trajectories: list[Trajectory] = None
         self.score: int = None
-        self.iterations: int = None
+        self.iterations: int = None  # not used
         self.verbose = False
 
 #__________________________________Genetic algorithm_________________________________#
@@ -47,7 +47,7 @@ class Genetic:
 
         return children
 
-    def run(self):
+    def run(self, iterations: int, verbose: bool):
         random.seed(123)
         self.prepare_csv_file()
 

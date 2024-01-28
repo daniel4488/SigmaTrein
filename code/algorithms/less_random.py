@@ -10,9 +10,10 @@ import os
 
 
 class LessRandom:
-    def __init__(self, stations: dict[str, Station], connections: dict[int, Connection]):
-        self.stations = stations
-        self.connections = connections
+    def __init__(self, dataset: str):
+        railNL = RailNL(dataset=dataset)
+        self.stations: dict[str, Station] = railNL.stations
+        self.connections: dict[int, Connection] = railNL.connections
 
         self.preferred_departure = ["Den Helder", "Dordrecht", "Hoorn", "Schiphol Airport", "Gouda", "Heemstede-Aerdenhout", "Schiphol Airport"]
         self.preferred_departure_copy = []
@@ -142,14 +143,13 @@ class LessRandom:
             
         return score
 
-    def run(self) -> None:
+    def run(self, iterations: int, verbose: bool) -> None:
 
         self.prepare_csv_file()
 
-        number_of_simulations = 10000
         highest_score = 0
 
-        for _ in range(number_of_simulations):
+        for _ in range(iterations):
             self.repopulate_preferred_departure_stations()
             score = self.make_random_solution()
 

@@ -41,13 +41,13 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # hill climber
-    sigma = Sigma()
+    sigma = Sigma(dataset="nationaal")
 
 
 
     railNL = RailNL(dataset = args.dataset)
 
-    solution = sigma.run()
+    solution = sigma.run(iterations=1, verbose=args.verbose)
 
     # csv file
     # data = "data/scores/genetic.csv"

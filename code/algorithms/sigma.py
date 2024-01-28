@@ -11,7 +11,7 @@ import copy
 import os
 
 class Sigma:
-    def __init__(self):
+    def __init__(self, dataset: str):
         # initialize a list with pre-fixed routes that start of a trajectory
         self.standard_trajectories = [["Maastricht", "Sittard", "Heerlen", "Sittard", "Roermond", "Weert", "Eindhoven"],
                                        ["Venlo", "Helmond", "Eindhoven"], ["Vlissingen", "Roosendaal"],
@@ -198,7 +198,7 @@ class Sigma:
         trajectory.duration = duration
         trajectory.add_connection_number(connection)
     
-    def run(self, write_output = True):
+    def run(self, iterations: int, verbose: bool):
 
         random.seed(27012001)
         
@@ -207,7 +207,7 @@ class Sigma:
         trajectories = set()
         is_valid = False
         highest_score = 0 
-        iterations = 1
+        # iterations = 1
         i = 0
         for _ in range(iterations):
             print(i)

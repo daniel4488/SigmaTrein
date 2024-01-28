@@ -43,7 +43,7 @@ if __name__ == "__main__":
     genetic = Genetic(args.dataset)
 
     # run hill climber
-    genetic.run()
+    genetic.run(iterations=-1, verbose=False)
 
     # csv file
     data = "data/scores/genetic.csv"
