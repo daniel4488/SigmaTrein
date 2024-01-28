@@ -10,9 +10,10 @@ import os
 
 
 class LessRandom:
-    def __init__(self, stations: dict[str, Station], connections: dict[int, Connection]):
-        self.stations = stations
-        self.connections = connections
+    def __init__(self, dataset: str):
+        railNL = RailNL(dataset=dataset)
+        self.stations: dict[str, Station] = railNL.stations
+        self.connections: dict[int, Connection] = railNL.connections
 
         self.preferred_departure = ["Den Helder", "Dordrecht", "Hoorn", "Schiphol Airport", "Gouda", "Heemstede-Aerdenhout", "Schiphol Airport"]
         self.preferred_departure_copy = []
