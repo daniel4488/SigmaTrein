@@ -34,7 +34,7 @@ class HillClimber:
         """ Creates a solution with the random algorithm to
             begin the Hill Climber algorithm. """
 
-        self.solution = self.randomize.make_solution(write_output=False)
+        self.solution = self.randomize.run(iterations=1, visualize=False, write_output=False)
         self.score = self.solution.score
         self.trajectories = list(self.solution.trajectories)
 

@@ -13,7 +13,7 @@ class Baseline(Randomize):
         self.prepare_csv_file()
 
         for _ in range(iterations):
-            self.make_solution(write_output=True)
+            super().run(iterations=1, visualize=False, verbose=verbose, write_output=True)
 
         if visualize:
             # csv

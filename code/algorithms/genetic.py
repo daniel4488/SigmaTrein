@@ -6,6 +6,8 @@ from code.classes.output import Output
 from code.classes.railNL import RailNL
 from code.algorithms.randomize import Randomize
 from code.algorithms.hill_climber import HillClimber
+from code.functions.to_snake_case import to_snake_case
+from code.visualisation.baseline import visualize_iterations_to_score
 
 import random
 import copy
@@ -24,10 +26,11 @@ class Genetic:
         self.score: int = None
         self.iterations: int = None  # not used
         self.verbose = False
+        self.scores_path: str = f"data/scores/{to_snake_case(self.__class__.__name__)}.csv"
 
 #__________________________________Genetic algorithm_________________________________#
     def generate_parent(self):
-        return self.randomize.make_solution(False)
+        return self.randomize.run(iterations=1, visualize=False, write_output=False)
 
     def fitness(self, solution: Solution) -> int:
         return solution.score
@@ -47,8 +50,8 @@ class Genetic:
 
         return children
 
-    def run(self, iterations: int, verbose: bool):
-        random.seed(123)
+    def run(self, iterations: int, visualize: bool, verbose: bool):
+        # random.seed(123)
         self.prepare_csv_file()
 
         # set all parameters to zero
@@ -97,6 +100,9 @@ class Genetic:
                 all_time_highest_score_child = highest_score_child
 
         print(all_time_highest_score_child)
+
+        if visualize:
+            visualize_iterations_to_score(data=self.scores_path)
 
 #__________________________________Hill Climber__________________________________#
 
