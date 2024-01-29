@@ -56,7 +56,7 @@ class HillClimber:
         """ Mutates a trajectory and the new solution. """
 
         # create new random trajectory
-        new_trajectory = self.randomize.make_trajectory()
+        new_trajectory = self.randomize.make_trajectory(unique=False)
         self.trajectories.append(new_trajectory)
 
         # save new set of trajectories in new solution object

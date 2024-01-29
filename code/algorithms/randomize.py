@@ -11,7 +11,6 @@ from code.classes.write_file import ScoreFile
 
 import random
 import os
-import copy
 
 
 class Randomize:
@@ -43,8 +42,9 @@ class Randomize:
         self.preferred_departure_nationaal = ["Den Helder", "Dordrecht", "Hoorn", "Enschede", "Venlo", "Maastricht", "Heerlen", "Vlissingen", "Lelystad Centrum", "Groningen", "Leeuwarden", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Amsterdam Centraal", "Amsterdam Centraal", "Amsterdam Centraal", "Amsterdam Centraal"]
 
         self.preferred_departure_copy = []
-        
-        self.prefixed = True
+
+        self.trajectory_count = 0
+
         self.used_connections: set[int] = set()
         self.solution: dict[int, list[str]] = {}
 
@@ -82,14 +82,6 @@ class Randomize:
         for station in self.stations:
             self.stations[station].repopulate_possible_connections()
 
-    def repopulate_preferred_departure_stations(self):
-
-        if self.dataset == "holland":
-            self.preferred_departure_copy = copy.deepcopy(self.preferred_departure_holland)
-        else:
-            self.preferred_departure_copy = copy.deepcopy(self.preferred_departure_nationaal)
-            print(self.preferred_departure_copy)
-
     @staticmethod
     def update_connections(connection: int, departure: Station,
                            destination: Station) -> None:
@@ -123,17 +115,11 @@ class Randomize:
         return departure_station
     
     def choose_prefixed_departure_station(self, trajectory: Trajectory) -> set [str, Station]:
-        if self.dataset == "holland":
-            name = self.preferred_departure_copy.pop(0)
-            station = self.stations[name]
-            trajectory.add_station(name)
-            return name, station
-        
-        if self.dataset == "nationaal":
-            name = self.preferred_departure_copy.pop(0)
-            station = self.stations[name]
-            trajectory.add_station(name)
-            return name, station
+        index = self.trajectory_count % self.constrictions.max_trajectories
+        name = eval(f"self.preferred_departure_{self.dataset}[{index}]")
+        station = self.stations[name]
+        trajectory.add_station(name)
+        return name, station
 
     def make_trajectory(self, unique: bool = False, prefixed: bool = True) -> Trajectory:
         # add randomly chosen connections and stations to trajectory as long as
@@ -142,7 +128,6 @@ class Randomize:
         self.repopulate_possible_connections_for_all_stations()
 
         trajectory = Trajectory()
-        self.prefixed = prefixed
 
         if prefixed:
             departure_station = self.choose_prefixed_departure_station(trajectory)
@@ -182,6 +167,9 @@ class Randomize:
                     unique:
                 break
 
+        # increment trajectory counter
+        self.trajectory_count += 1
+
         return trajectory
 
     def reset_used_connections(self) -> None:
@@ -213,9 +201,6 @@ class Randomize:
         """ Creates a solution of with the maximum amount of trajectories. """
 
         self.reset_used_connections()
-
-        if self.prefixed:
-            self.repopulate_preferred_departure_stations()
 
         trajectories = set()
         is_valid = False
