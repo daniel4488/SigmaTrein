@@ -14,6 +14,10 @@ import os
 class Randomize:
     """
     Algorithm to generate a randomly chosen trajectory.
+    Random starts with a dictionary with all station names and objects, a
+    dictionary with all connection numbers and objects, the constrictions
+    belonging to the used dataset. Moreover, it keeps track of the connections
+    it has made, and the current solution.
     """
 
     def __init__(self, dataset: str) -> None:
