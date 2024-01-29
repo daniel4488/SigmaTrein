@@ -117,17 +117,14 @@ class Genetic(HillClimber):
         self.trajectories.remove(trajectory)
         # save new set of trajectories in new solution object
         new_solution.trajectories = set(self.trajectories)
-        
 
     def mutate_trajectory(self, trajectory: Trajectory, new_solution: Solution):
         """ Mutates a trajectory and the new solution. """
 
-        
         new_trajectory = self.randomize.make_trajectory()
         self.trajectories.append(new_trajectory)
         # save new set of trajectories in new solution object
         new_solution.trajectories = set(self.trajectories)
-
 
     def new_solution(self, mutations: int) -> Solution:
         """ Creates a new solution with the given amount of mutations. """
