@@ -1,12 +1,14 @@
 from code.classes.solution import Solution
 from code.algorithms.hill_climber import HillClimber
 from code.visualisation.baseline import visualize_iterations_to_score
+from code.visualisation.map_class import MapVisualization
+from code.classes.output import Output
 
 import random
 import copy
 
 
-class Genetic(HillClimber):
+class Genetic(HillClimber, MapVisualization):
     """
     Class describing the genetic algorithm.
     """
@@ -15,6 +17,8 @@ class Genetic(HillClimber):
 
         # call initializer of super class
         super().__init__(dataset=dataset)
+
+        self.dataset = dataset
 
     def generate_parent(self):
         """ Create random starting solution. """
@@ -44,7 +48,7 @@ class Genetic(HillClimber):
         self.score_file.prepare_file()
 
         # set all parameters to zero
-        all_time_highest_score_child = 0
+        all_time_highest_score = 0
 
         for _ in range(repetitions):
             # highest_score = 0
@@ -80,14 +84,18 @@ class Genetic(HillClimber):
                             parent = child
                             # keep track of the highest score found
                             highest_score_child = child.score
+
+                            solution = Solution(child.trajectories, True, self.__class__.__name__)
+
             except KeyboardInterrupt:
                 pass
 
             # check the highest score found in this tree and compare it to the most successful tree
-            if highest_score_child > all_time_highest_score_child:
-                all_time_highest_score_child = highest_score_child
+            if highest_score_child > all_time_highest_score:
+                all_time_highest_score = highest_score_child
+                all_time_highest_score_child_solution = solution
 
-        print(all_time_highest_score_child)
-
+        Output(all_time_highest_score_child_solution.trajectories, is_valid = True)
         if visualize:
+            self.visualize(solution=all_time_highest_score_child_solution)
             visualize_iterations_to_score(data=self.scores_path)

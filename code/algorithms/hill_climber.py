@@ -1,16 +1,19 @@
 from code.classes.trajectory import Trajectory
 from code.classes.solution import Solution
+from code.classes.output import Output
 from code.classes.railNL import RailNL
 from code.classes.write_file import ScoreFile
 from code.algorithms.randomize import Randomize
+from code.visualisation.map_class import MapVisualization
 from code.functions.to_snake_case import to_snake_case
 from code.visualisation.baseline import visualize_iterations_to_score
+
 
 import random
 import copy
 
 
-class HillClimber:
+class HillClimber(MapVisualization):
     """
     Algorithm following the Hill Climber technique.
     Hill Climber starts with data from a RailNL object and an initial random
@@ -20,6 +23,7 @@ class HillClimber:
     """
 
     def __init__(self, dataset: str):
+        self.dataset = dataset
         self.verbose = False
         self.railNL = RailNL(dataset=dataset)
         self.randomize = Randomize(dataset)
@@ -66,7 +70,7 @@ class HillClimber:
             if they result in a higher score. """
 
         new_score = new_solution.calculate_score()
-
+    
         # prints old and new scores if verbose is True
         if self.verbose:
             print(f"Old score: {self.score}")
@@ -100,13 +104,17 @@ class HillClimber:
             for _ in range(iterations):
                 self.new_solution(mutations)
                 self.score_file.write_score(self.score)
+
+
         except KeyboardInterrupt:
             pass
 
         if visualize:
+            Output(self.solution.trajectories, True)
             visualize_iterations_to_score(data=self.scores_path)
+            self.visualize(solution=self.solution)
 
-    def new_solution(self, mutations: int) -> Solution:
+    def new_solution(self, mutations: int):
         """ Creates a new solution with the given amount of mutations. """
 
         new_solution = copy.deepcopy(self.solution)

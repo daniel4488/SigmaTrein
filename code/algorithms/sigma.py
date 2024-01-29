@@ -6,7 +6,7 @@ from code.visualisation.map_class import MapVisualization
 from code.algorithms.advanced_random import AdvancedRandom
 from code.classes.railNL import RailNL
 from code.classes.write_file import ScoreFile
-from code.visualisation.baseline import visualize_baseline
+from code.visualisation.baseline import visualize_baseline, visualize_iterations_to_score
 
 import random
 import copy
@@ -20,6 +20,7 @@ class Sigma(MapVisualization, AdvancedRandom):
         self.railNL = RailNL(dataset=dataset)
 
         self.score_file = ScoreFile("sigma.csv")
+        self.highest_score_file = ScoreFile("sigma_highest.csv")
 
         # initialize a list with pre-fixed routes that start of a trajectory
         self.standard_trajectories = [["Maastricht", "Sittard", "Heerlen", "Sittard", "Roermond", "Weert", "Eindhoven"],
@@ -169,6 +170,8 @@ class Sigma(MapVisualization, AdvancedRandom):
                 highest_score = solution.score
                 highest_score_solution = solution
 
+            self.highest_score_file.write_score(highest_score)
+
             if self.verbose:
                 print(f"Score: {solution.score}")
 
@@ -184,5 +187,5 @@ class Sigma(MapVisualization, AdvancedRandom):
 
         if visualize:
             self.visualize(solution=highest_score_solution)
+            visualize_iterations_to_score("data/scores/sigma_highest.csv")
             visualize_baseline("data/scores/sigma.csv")
-
