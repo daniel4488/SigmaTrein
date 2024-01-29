@@ -63,7 +63,6 @@ class HillClimber:
         new_solution.trajectories = set(self.trajectories)
 
         # update score of solution to new score
-        self.solution.score = new_solution.calculate_score()
 
     def check_score(self, new_solution: Solution):
         """ Checks scores of new solutions, and accepts mutations
@@ -127,3 +126,5 @@ class HillClimber:
             for _ in range(mutations):
                 self.mutate_trajectory(trajectory, new_solution)
                 self.check_score(new_solution)
+        else:
+            self.solution.score = new_solution.calculate_score()

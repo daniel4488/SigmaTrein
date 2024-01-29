@@ -103,55 +103,29 @@ class Genetic(HillClimber):
         if visualize:
             visualize_iterations_to_score(data=self.scores_path)
 
-#__________________________________Hill Climber__________________________________#
+    # def new_solution(self, mutations: int) -> Solution:
+    #     """ Creates a new solution with the given amount of mutations. """
 
-    def choose_trajectory(self):
-        """ Selects random trajectory from current solution. """
+    #     new_solution = copy.deepcopy(self.solution)
+    #     for _ in range(mutations):
+    #         # choose random trajectory
+    #         trajectory = self.choose_trajectory()
+    #         # delete trajectory
+    #         self.delete_trajectory(trajectory, new_solution)
 
-        trajectory = random.choice(self.trajectories)
-        return trajectory
-    
-    def delete_trajectory(self, trajectory: Trajectory, new_solution: Solution):
-        """ Deletes a trajectory. """
+    #         # if there are no more trajectories to mutate or delete, stop loop
+    #         if not self.trajectories:
+    #             break
 
-        self.trajectories.remove(trajectory)
-        # save new set of trajectories in new solution object
-        new_solution.trajectories = set(self.trajectories)
-        
-
-    def mutate_trajectory(self, trajectory: Trajectory, new_solution: Solution):
-        """ Mutates a trajectory and the new solution. """
-
-        
-        new_trajectory = self.randomize.make_trajectory()
-        self.trajectories.append(new_trajectory)
-        # save new set of trajectories in new solution object
-        new_solution.trajectories = set(self.trajectories)
-
-
-    def new_solution(self, mutations: int) -> Solution:
-        """ Creates a new solution with the given amount of mutations. """
-
-        new_solution = copy.deepcopy(self.solution)
-        for _ in range(mutations):
-            # choose random trajectory
-            trajectory = self.choose_trajectory()
-            # delete trajectory
-            self.delete_trajectory(trajectory, new_solution)
-
-            # if there are no more trajectories to mutate or delete, stop loop
-            if not self.trajectories:
-                break
-
-        # if score is not better, mutate trajectory
-        if not self.check_score(new_solution):
-            for _ in range(mutations):
-                # try a new trajectory
-                self.mutate_trajectory(trajectory, new_solution)
-                # check score
-                self.check_score(new_solution)
-        else:
-            self.solution.score = new_solution.calculate_score()
+    #     # if score is not better, mutate trajectory
+    #     if not self.check_score(new_solution):
+    #         for _ in range(mutations):
+    #             # try a new trajectory
+    #             self.mutate_trajectory(trajectory, new_solution)
+    #             # check score
+    #             self.check_score(new_solution)
+    #     else:
+    #         self.solution.score = new_solution.calculate_score()
 
 
 #__________________________________File writing__________________________________#
