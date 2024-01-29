@@ -30,24 +30,31 @@ class Randomize:
         # random.seed(239094)
         # random.seed(2024)
 
+        # set dataset 
         self.dataset = dataset
 
+        # set dictionary for all stations and connections
         railNL = RailNL(dataset=dataset)
-
         self.stations: dict[str, Station] = railNL.stations
         self.connections: dict[int, Connection] = railNL.connections
+        
+        # set constrictions
         self.constrictions: DatasetInfo = self.set_constrictions(dataset)
 
+        # set preferred first departure stations
         self.preferred_departure_holland = ["Den Helder", "Dordrecht", "Hoorn", "Schiphol Airport", "Gouda", "Heemstede-Aerdenhout", "Schiphol Airport"]
         self.preferred_departure_nationaal = ["Den Helder", "Dordrecht", "Hoorn", "Enschede", "Venlo", "Maastricht", "Heerlen", "Vlissingen", "Lelystad Centrum", "Groningen", "Leeuwarden", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Amsterdam Centraal", "Amsterdam Centraal", "Amsterdam Centraal", "Amsterdam Centraal"]
 
-        self.preferred_departure_copy = []
-
+        # variable for keeping track of amount of made trajectory
         self.trajectory_count = 0
 
+        # variable for keeping track of used connections
         self.used_connections: set[int] = set()
+
+        # stores a solution
         self.solution: dict[int, list[str]] = {}
 
+        # False for no print statements, true for print statements
         self.verbose: bool = False
 
     def set_constrictions(self, dataset: str) -> DatasetInfo:

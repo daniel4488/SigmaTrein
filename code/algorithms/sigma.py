@@ -24,6 +24,7 @@ class Sigma(MapVisualization, AdvancedRandom):
                                        , ["Zwolle", "Assen", "Groningen", "Leeuwarden", "Heerenveen", "Steenwijk", "Zwolle"]]
         
         # initialize a list with the corresponding connection numbers
+        #  in each list the last number represents the trajectory duration
         self.standard_trajectories_connections = [[76, 77, 77, 78, 79, 80, 91], 
                                                   [81, 82, 39], [75, 63], [71, 36], 
                                                   [88, 72, 17], [73, 14],
@@ -39,9 +40,13 @@ class Sigma(MapVisualization, AdvancedRandom):
         # indicate that we do not want print statements
         self.verbose = False
 
+        # load connections excluding the ones already used by the standard trajectories
         self.load_special_connections()
         
     def load_special_connections(self):
+        """ Converts leftover connections data to Connection classes and
+            loads them into the connections dictionary. """
+        
         with open("data/nationaal/sigmanationaal.csv", "r") as file:
             # remove header
             _ = file.readline()
@@ -70,10 +75,16 @@ class Sigma(MapVisualization, AdvancedRandom):
                 trajectory_number += 1
 
     def choose_predetermined_first_departure_station(self, trajectory: Trajectory):
+        """ Choose a first predeparture station from the standard list if that list is still populated,
+        else choose a random first departure station. """
 
+        # if self.standard_trajectories still has standard trajectories left
         if self.standard_trajectories_copy:
-            stations: list[str] = self.standard_trajectories_copy.pop(0)
-            connections: list[int] = self.standard_trajectories_connections_copy.pop(0)
+            # select the last lists from standard stations
+            stations: list[str] = self.standard_trajectories_copy.pop()
+            # select the last lists from standard connections  
+            connections: list[int] = self.standard_trajectories_connections_copy.pop()
+            # 
             trajectory.duration += connections.pop()
 
             for station in stations:
@@ -143,11 +154,12 @@ class Sigma(MapVisualization, AdvancedRandom):
             # create solution instance
             # if write_output:
             # else:
+            
             solution = Solution(trajectories, is_valid, self.__class__.__name__)
 
             if solution.score > highest_score:
                 highest_score = solution.score
-                highest_score_solution = Output(trajectories, is_valid)
+                highest_score_solution = solution
 
             if self.verbose:
                 print(f"Score: {solution.score}")
@@ -160,6 +172,7 @@ class Sigma(MapVisualization, AdvancedRandom):
             is_valid = False
 
         print(highest_score) if self.verbose else None
+        Output(highest_score_solution.trajectories, is_valid)
 
         if visualize:
             self.visualize(solution=highest_score_solution)
