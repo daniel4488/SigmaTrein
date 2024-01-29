@@ -1,15 +1,12 @@
-from code.classes.railNL import RailNL
-# from code.algorithms.randomize import Randomize
-from code.visualisation.plot_single_track import PlotlyLoad
-from code.visualisation.baseline import visualize_baseline, visualize_iterations_to_score
 from code.functions.to_camel_case import to_camel_case
+from code.classes.data import DataInfo
 
 import argparse
 import textwrap
 
 
 def valid_iterations(arg: str) -> int:
-    """ Function to check if the given verbose argument is correct. """
+    """ Function to check if the given iterations argument is correct. """
 
     if not arg.isdigit():
         raise argparse.ArgumentTypeError("please enter an integer number as iterations")
@@ -18,6 +15,16 @@ def valid_iterations(arg: str) -> int:
         raise argparse.ArgumentTypeError("iterations can only be larger than zero")
 
     return int(arg)
+
+
+def valid_mutations(arg: str) -> int:
+    """ Function to check if the given mutations argument is correct. """
+
+    if not arg.isdigit():
+        raise argparse.ArgumentTypeError("please enter an integer number as mutation")
+
+    if int(arg) > getattr(DataInfo, "dataset").max_trajectories:
+        raise argparse.ArgumentTypeError("mutations cannot be larger than number of trajectories")
 
 
 if __name__ == "__main__":
@@ -108,11 +115,22 @@ if __name__ == "__main__":
     parser.add_argument(
         "--iterations", "-i",
         type=valid_iterations,
-        help="manually specify the number of iterations"
+        help="manually specify the number of iterations, default is 1"
+    )
+
+    # add optional argument for mutations in hill climber
+    parser.add_argument(
+        "--mutations",
+        type=valid_mutations,
+        help="specify number of mutations made at each hill climber iteration"
     )
 
     # parse the command line argument
     args = parser.parse_args()
+
+    # iterations argument cannot be set on random algorithm
+    if args.iterations is not None and args.algorithm == "randomize":
+        parser.error("setting iterations for randomize has no effect")
 
     # set default arguments for iterations argument
     if args.iterations is None:
