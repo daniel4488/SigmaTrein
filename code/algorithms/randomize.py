@@ -199,13 +199,3 @@ class Randomize:
                 print()
 
         return solution
-
-    def make_baseline(self, verbose: bool = False) -> None:
-        self.verbose = verbose
-
-        self.prepare_csv_file()
-
-        number_of_simulations = 10000
-
-        for _ in range(number_of_simulations):
-            self.make_solution(write_output=True)

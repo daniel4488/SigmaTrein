@@ -69,13 +69,17 @@ if __name__ == "__main__":
     # add algorithm as positional command line argument
     parser.add_argument(
         "algorithm",
-        choices=["randomize", "less_random", "hill_climber", "simulated_annealing", "genetic", "sigma"],
+        choices=[
+            "randomize", "less_random",
+            "hill_climber", "simulated_annealing",
+            "genetic", "sigma", "baseline"
+        ],
         help="choose an algorithm to run"
     )
 
     # add no-visualize as optional command line argument
     parser.add_argument(
-        "no-visualization",
+        "no_visualization",
         action="store_false",
         help="turns off automatically showing the visual"
     )
@@ -93,7 +97,7 @@ if __name__ == "__main__":
     exec(f"{args.algorithm} = {algorithm_class}('{args.dataset}')")
 
     # run chosen algorithm
-    exec(f"{args.algorithm}.make_baseline(verbose={args.verbose})")
+    exec(f"{args.algorithm}.run(iterations={10000}, visualize={args.no_visualization}, verbose={args.verbose})")
 
     # make baseline
     # randomize.make_baseline(verbose=args.verbose)
