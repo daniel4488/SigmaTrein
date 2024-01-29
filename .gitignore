@@ -183,3 +183,6 @@ code/visualisation/baseline.svg
 
 # Profiler output from cProfile
 *.prof
+
+# Backup folder
+.bak/
