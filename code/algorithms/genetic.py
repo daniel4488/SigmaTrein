@@ -1,12 +1,5 @@
-from code.classes.trajectory import Trajectory
-from code.classes.station import Station
-from code.classes.connection import Connection
 from code.classes.solution import Solution
-from code.classes.output import Output
-from code.classes.railNL import RailNL
-from code.algorithms.randomize import Randomize
 from code.algorithms.hill_climber import HillClimber
-from code.functions.to_snake_case import to_snake_case
 from code.visualisation.baseline import visualize_iterations_to_score
 
 import random
@@ -24,7 +17,6 @@ class Genetic(HillClimber):
         # call initializer of super class
         super().__init__(dataset=dataset)
 
-#__________________________________Genetic algorithm_________________________________#
     def generate_parent(self):
         """ Create random starting solution. """
 
@@ -55,7 +47,7 @@ class Genetic(HillClimber):
 
     def run(self, iterations: int, visualize: bool, repititions: int = 1, verbose: bool = True):
         random.seed(123)
-        self.prepare_csv_file()
+        self.score_file.prepare_file()
 
         # set all parameters to zero
         all_time_highest_score_child = 0
@@ -83,7 +75,7 @@ class Genetic(HillClimber):
                 # iterate over all children 
                 for child in children:
                     # write score of child
-                    self.write_score(child.score)
+                    self.score_file.write_score(child.score)
                     # if this childs score is higher than till now highest child score
 
                     if child.score > highest_score_child:
@@ -102,30 +94,3 @@ class Genetic(HillClimber):
 
         if visualize:
             visualize_iterations_to_score(data=self.scores_path)
-
-    
-
-#__________________________________File writing__________________________________#
-    
-    def write_score(self, score) -> None:
-            with open("data/scores/genetic.csv", "a") as file:
-                file.write(str(score))
-                file.write("\n")
-
-    @staticmethod
-    def clear_scores_file() -> None:
-        file_path = "data/scores/genetic.csv"
-
-        if os.path.exists(file_path):
-            input("WARNING scores file will be deleted.")
-            os.remove(file_path)
-
-    def prepare_csv_file(self) -> None:
-        self.clear_scores_file()
-
-        if not (os.path.exists("data/scores") and os.path.isdir("data/scores")):
-            os.mkdir("data/scores")
-
-        with open("data/scores/genetic.csv", "w") as file:
-            file.write("score\n")
-   

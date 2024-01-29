@@ -62,8 +62,6 @@ class HillClimber:
         # save new set of trajectories in new solution object
         new_solution.trajectories = set(self.trajectories)
 
-        # update score of solution to new score
-
     def check_score(self, new_solution: Solution):
         """ Checks scores of new solutions, and accepts mutations
             if they result in a higher score. """
