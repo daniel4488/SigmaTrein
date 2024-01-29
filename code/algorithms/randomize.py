@@ -7,6 +7,7 @@ from code.classes.railNL import RailNL
 from code.classes.data import DataInfo
 from code.classes.dataset_info import DatasetInfo
 from code.visualisation.map import PlotlyLoad
+from code.classes.write_file import ScoreFile
 
 import random
 import os
@@ -211,3 +212,18 @@ class Randomize:
             plot_device.draw_graph(solution)
 
         return solution
+
+    def create_score_file(self):
+        """ Create an empty csv file for the scores. """
+
+        score_file = ScoreFile("random.csv")
+        score_file.prepare_file()
+
+    def make_baseline(self, simulations: int = 10000, verbose: bool = False) -> None:
+        self.verbose = verbose
+
+        #self.prepare_csv_file()
+        self.create_score_file()
+
+        for _ in range(simulations):
+            self.make_solution(write_output=True)

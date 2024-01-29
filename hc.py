@@ -43,7 +43,7 @@ if __name__ == "__main__":
     hc = HillClimber(args.dataset)
 
     # run hill climber
-    hc.run(iterations=300000, visualize=True, verbose=args.verbose)
+    hc.run(iterations=30000, visualize=True, verbose=args.verbose)
 
     # csv file
     # data = "data/scores/hill_climber.csv"

@@ -14,6 +14,8 @@ def read_score_file(data: str):
 
 
 def visualize_baseline(data: str) -> None:
+    """ Plots the scores from the given data against their occurence. """
+
     # get scores from csv file
     scores = read_score_file(data)
 
@@ -38,6 +40,8 @@ def visualize_baseline(data: str) -> None:
 
 
 def visualize_iterations_to_score(data: str) -> None:
+    """ Plots scores from a csv file against the iteration. """
+
     # get scores from csv file
     scores = read_score_file(data)
     algorithm = data.strip(".csv").split("/")[-1].replace("_", " ")
@@ -46,7 +50,7 @@ def visualize_iterations_to_score(data: str) -> None:
     fig = px.line(scores, x=range(len(scores)), y="score", labels={
         "x": "Iterations",
         "score": "Score"
-    },
+        },
         title=f"Scores of {len(scores)} iterations from a {algorithm} algorithm")
     # fig.update_yaxes(range=[0, 10000])
     # plt.show()
