@@ -30,6 +30,8 @@ class Randomize:
         # random.seed(239094)
         # random.seed(2024)
 
+        self.score_file = ScoreFile("baseline.csv")
+
         # set dataset 
         self.dataset = dataset
 
@@ -56,6 +58,9 @@ class Randomize:
 
         # False for no print statements, true for print statements
         self.verbose: bool = False
+
+        self.highest_score = 0
+        self.highest_score_solution: Solution = None
 
     def set_constrictions(self, dataset: str) -> DatasetInfo:
         """ Sets the restrictions on trajectories for the chosen dataset. """
@@ -184,7 +189,6 @@ class Randomize:
 
     def run(self, iterations: int, visualize: bool, verbose: bool = False, write_output: bool = True) -> Solution | Output:
         """ Creates a solution of with the maximum amount of trajectories. """
-
         self.reset_used_connections()
 
         trajectories = set()
@@ -203,12 +207,19 @@ class Randomize:
             if len(self.used_connections) == RailNL.NUMBER_OF_CONNECTIONS:
                 is_valid = True
                 break
-
+                
         # create solution instance
-        if write_output:
-            solution = Output(trajectories, is_valid)
-        else:
+        # if write_output:
+            # solution = Output(trajectories, is_valid)
+        # else:
+           
             solution = Solution(trajectories, is_valid)
+            self.score_file.write_score(solution.score)
+
+            if solution.score > self.highest_score:
+                self.highest_score = solution.score
+                self.highest_score_solution = solution
+
 
         if self.verbose:
             print(f"Score: {solution.score}")

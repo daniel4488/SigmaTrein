@@ -1,6 +1,6 @@
 from .randomize import Randomize
 from code.visualisation.baseline import visualize_baseline
-
+from code.classes.output import Output
 
 class Baseline(Randomize):
 
@@ -10,7 +10,7 @@ class Baseline(Randomize):
     def run(self, iterations: int, visualize: bool, verbose: bool = False) -> None:
         self.verbose = verbose
 
-        self.prepare_csv_file()
+        self.score_file.prepare_file()
 
         try:
             for _ in range(iterations):
@@ -20,7 +20,9 @@ class Baseline(Randomize):
 
         if visualize:
             # csv
-            data = "data/scores/random.csv"
-
+            data = "data/scores/baseline.csv"
+            Output(self.highest_score_solution.trajectories, True)
             # histogram of scores from random algorithm
             visualize_baseline(data)
+        
+
