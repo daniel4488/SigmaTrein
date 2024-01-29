@@ -1,8 +1,5 @@
 from code.classes.trajectory import Trajectory
-from code.classes.station import Station
-from code.classes.connection import Connection
 from code.classes.solution import Solution
-from code.classes.output import Output
 from code.classes.railNL import RailNL
 from code.algorithms.randomize import Randomize
 from code.functions.to_snake_case import to_snake_case
@@ -14,9 +11,16 @@ import os
 
 
 class HillClimber:
-    """ Algorithm following the Hill Climber technique. """
+    """
+    Algorithm following the Hill Climber technique.
+    Hill Climber starts with data from a RailNL object and an initial random
+    solution. Furthermore, it keeps track of the current trajectories of the
+    possible new solution, the score of the current best solution, and the
+    number of iterations.
+    """
 
     def __init__(self, dataset: str):
+
         self.verbose = False
         self.railNL = RailNL(dataset=dataset)
         self.randomize = Randomize(dataset)
@@ -111,7 +115,8 @@ class HillClimber:
             file.write(str(self.score))
             file.write("\n")
 
-    def run(self, iterations: int, visualize: bool, mutations: int = 1, verbose: bool = False):
+    def run(self, iterations: int, visualize: bool, mutations: int = 1,
+            verbose: bool = False):
         """ Runs the Hill Climber algorithm for a given amount
             of iterations and mutations. """
 
