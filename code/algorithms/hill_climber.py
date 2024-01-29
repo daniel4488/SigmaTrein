@@ -1,13 +1,13 @@
 from code.classes.trajectory import Trajectory
 from code.classes.solution import Solution
 from code.classes.railNL import RailNL
+from code.classes.write_file import ScoreFile
 from code.algorithms.randomize import Randomize
 from code.functions.to_snake_case import to_snake_case
 from code.visualisation.baseline import visualize_iterations_to_score
 
 import random
 import copy
-import os
 
 
 class HillClimber:
@@ -29,12 +29,13 @@ class HillClimber:
         self.score: int = None
         self.iterations: int = None
         self.scores_path: str = f"data/scores/{to_snake_case(self.__class__.__name__)}.csv"
+        self.score_file: ScoreFile = ScoreFile(f"{to_snake_case(self.__class__.__name__)}.csv")
 
     def make_first_solution(self):
         """ Creates a solution with the random algorithm to
             begin the Hill Climber algorithm. """
 
-        self.solution = self.randomize.make_solution(write_output=False)
+        self.solution = self.randomize.run(iterations=1, visualize=False, write_output=False)
         self.score = self.solution.score
         self.trajectories = list(self.solution.trajectories)
 
@@ -87,34 +88,6 @@ class HillClimber:
             return True
         return False
 
-    def clear_scores_file(self) -> None:
-        """ Clears the csv file from all old data. """
-
-        file_path = self.scores_path
-
-        if os.path.exists(file_path):
-            input("WARNING scores file will be deleted.")
-            os.remove(file_path)
-
-    def prepare_csv_file(self) -> None:
-        """ Prepares the csv file for new data, or creates file
-            if it does not exist yet. """
-
-        self.clear_scores_file()
-
-        if not (os.path.exists("data/scores") and os.path.isdir("data/scores")):
-            os.mkdir("data/scores")
-
-        with open(self.scores_path, "w") as file:
-            file.write("score\n")
-
-    def write_score(self) -> None:
-        """ Write a score to the csv file. """
-
-        with open(self.scores_path, "a") as file:
-            file.write(str(self.score))
-            file.write("\n")
-
     def run(self, iterations: int, visualize: bool, mutations: int = 1,
             verbose: bool = False):
         """ Runs the Hill Climber algorithm for a given amount
@@ -124,12 +97,12 @@ class HillClimber:
 
         self.iterations = iterations
         self.make_first_solution()
-        self.prepare_csv_file()
+        self.score_file.prepare_file()
 
         # create new solutions and save scores
         for _ in range(iterations):
             self.new_solution(mutations)
-            self.write_score()
+            self.score_file.write_score(self.score)
 
         if visualize:
             visualize_iterations_to_score(data=self.scores_path)
@@ -148,7 +121,7 @@ class HillClimber:
             if not self.trajectories:
                 break
 
-        # if score is not better, mutate trajectory
+        # if score is not better, create new trajectory
         if not self.check_score(new_solution):
             # create new trajectories and check their scores
             for _ in range(mutations):

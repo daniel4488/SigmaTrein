@@ -69,14 +69,19 @@ if __name__ == "__main__":
     # add algorithm as positional command line argument
     parser.add_argument(
         "algorithm",
-        choices=["randomize", "less_random", "hill_climber", "simulated_annealing", "genetic", "sigma"],
+        choices=[
+            "randomize", "less_random",
+            "hill_climber", "simulated_annealing",
+            "genetic", "sigma", "baseline"
+        ],
         help="choose an algorithm to run"
     )
 
-    # add no-visualize as optional command line argument
+    # add no-visual as optional command line argument
     parser.add_argument(
-        "no-visualization",
-        action="store_false",
+        "--no_visual",
+        action="store_true",
+        default=False,
         help="turns off automatically showing the visual"
     )
 
@@ -93,16 +98,16 @@ if __name__ == "__main__":
     exec(f"{args.algorithm} = {algorithm_class}('{args.dataset}')")
 
     # run chosen algorithm
-    exec(f"{args.algorithm}.make_baseline(verbose={args.verbose})")
+    exec(f"{args.algorithm}.run(iterations={1000}, visualize={not args.no_visual}, verbose={args.verbose})")
 
     # make baseline
     # randomize.make_baseline(verbose=args.verbose)
 
-    # csv
-    data = "data/scores/random.csv"
-
-    # histogram of scores from random algorithm
-    visualize_baseline(data)
-
-    # plot scores of iterations from random algorithm
-    visualize_iterations_to_score(data)
+    # # csv
+    # data = "data/scores/random.csv"
+    #
+    # # histogram of scores from random algorithm
+    # visualize_baseline(data)
+    #
+    # # plot scores of iterations from random algorithm
+    # visualize_iterations_to_score(data)

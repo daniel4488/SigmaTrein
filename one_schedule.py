@@ -10,10 +10,10 @@ if __name__ == "__main__":
     # Initialize raiLNL
     railNL = RailNL(dataset=dataset)
 
-    randomize = Randomize(railNL.stations, railNL.connections)
+    randomize = Randomize(dataset=dataset)
 
-    solution = randomize.make_solution(write_output=True)
+    solution = randomize.run(iterations=1, visualize=True, verbose=False, write_output=True)
 
     # Visualization
-    plot_device = PlotlyLoad(dataset=dataset)
-    plot_device.draw_graph(solution)
+    # plot_device = PlotlyLoad(dataset=dataset)
+    # plot_device.draw_graph(solution)
