@@ -3,14 +3,25 @@ from code.classes.station import Station
 from code.classes.connection import Connection
 from code.classes.data import DataInfo
 from code.classes.dataset_info import DatasetInfo
+from code.classes.railNL import RailNL
+from code.classes.solution import Solution
+from code.classes.output import Output
+from code.classes.write_file import ScoreFile
+from code.visualisation.map_class import MapVisualization
+from code.visualisation.baseline import visualize_baseline, visualize_iterations_to_score
 
 import random
 
 
-class AdvancedRandom:
+class AdvancedRandom(MapVisualization):
     def __init__(self, dataset: str):
         # set dataset
         self.dataset = dataset
+
+        self.score_file = ScoreFile("advanced.csv")
+        self.highest_score_file = ScoreFile("advanced_highest.csv")
+
+        self.railNL = RailNL(dataset=dataset)
 
         # dictionary for all stations
         self.stations: dict[str, Station] = dict()
@@ -150,3 +161,62 @@ class AdvancedRandom:
                 departure_station = destination_station
 
         return trajectory
+    
+    def run(self, iterations: int, visualize: bool, verbose: bool = False, write_output: bool = True) -> Solution | Output:
+        self.score_file.prepare_file()
+
+        
+        highest_score = 0
+        
+        i = 0
+        
+        for _ in range(iterations):
+            print(i)
+            self.reset_used_connections(RailNL.CONNECTIONS)
+            
+            trajectories = set()
+            for _ in range(20):
+                # make random trajectory
+                current_trajectory: Trajectory = self.make_trajectory(RailNL.CONNECTIONS)
+
+                # add to set of trajectories
+                trajectories.add(current_trajectory)
+
+                # add trajectory connections to used_connections
+                self.used_connections.update(current_trajectory.connections)
+            
+                if len(self.used_connections) == 89:
+                        break
+                
+            i += 1
+
+            trajectories = list(trajectories)
+            solution = Solution(trajectories, False, self.__class__.__name__)
+
+            self.score_file.write_score(solution.score)
+
+            if solution.score > highest_score:
+                highest_score = solution.score
+                highest_score_solution = solution
+
+                self.highest_score_file.write_score(highest_score)
+
+            if self.verbose:
+                print(f"Score: {solution.score}")
+
+                for trajectory in solution.trajectories:
+                    print("Stations:", end="")
+                    print(trajectory, end="")
+                    print()
+            
+        print(highest_score) if self.verbose else None
+        Output(highest_score_solution.trajectories, False)
+
+        if visualize:
+            self.visualize(solution=highest_score_solution)
+            visualize_iterations_to_score("data/scores/sigma_highest.csv")
+            visualize_baseline("data/scores/sigma.csv")
+
+if __name__ == "__main__":
+    advancedRandom = AdvancedRandom()
+    advancedRandom.run(100, True, False, True)

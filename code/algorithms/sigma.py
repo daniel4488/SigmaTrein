@@ -2,22 +2,22 @@ from code.classes.trajectory import Trajectory
 from code.classes.connection import Connection
 from code.classes.solution import Solution
 from code.classes.output import Output
-from code.visualisation.map_class import MapVisualization
 from code.algorithms.advanced_random import AdvancedRandom
-from code.classes.railNL import RailNL
 from code.classes.write_file import ScoreFile
+from code.visualisation.map_class import MapVisualization
 from code.visualisation.baseline import visualize_baseline, visualize_iterations_to_score
 
 import random
 import copy
 
 
-class Sigma(MapVisualization, AdvancedRandom):
+class Sigma(AdvancedRandom, MapVisualization):
     def __init__(self, dataset: str):
+        """
+        Description with how this algorithm works
+        """
 
         super().__init__(dataset=dataset)
-
-        self.railNL = RailNL(dataset=dataset)
 
         self.score_file = ScoreFile("sigma.csv")
         self.highest_score_file = ScoreFile("sigma_highest.csv")
@@ -124,23 +124,29 @@ class Sigma(MapVisualization, AdvancedRandom):
 
         random.seed(27012001)
         
-        self.reset_used_connections(self.special_connections)
-
+        # prepare csv file
         self.score_file.prepare_file()
 
-        trajectories = set()
+        # set a parameter that keeps track if a solution is valid
         is_valid = False
+        # set a parameter that keeps track of the highest score
         highest_score = 0 
-        
+        # set a parametere that keeps track of the amount of iterations
         i = 0
         for _ in range(iterations):
+            # print iterations
             print(i)
-            while is_valid == False:
+            # while no valid solution is valid, i.e. all connections used by trajectories
+            while not is_valid:
+                # reset used connections to make sure it can be populated again correctly
                 self.reset_used_connections(self.special_connections)
+                # repopulate the standard trajectories copy
                 self.standard_trajectories_copy = copy.deepcopy(self.standard_trajectories)
+                # repopulate the standard trajectories connections copy
                 self.standard_trajectories_connections_copy = copy.deepcopy(self.standard_trajectories_connections)
-
+                # make sure that the trajectories set is empty
                 trajectories = set()
+                # create at most 20 new trajectories 
                 for _ in range(20):
                     # make random trajectory
                     current_trajectory = self.make_sigma_trajectory()
@@ -150,17 +156,15 @@ class Sigma(MapVisualization, AdvancedRandom):
 
                     # add trajectory connections to used_connections
                     self.used_connections.update(current_trajectory.connections)
-                    # print(len(self.used_connections))
+                    # check if a solution is valid if all connections are used
                     if len(self.used_connections) == 89:
                         is_valid = True
+                        #break
+                        
 
             i += 1
             # NEW
             trajectories = list(trajectories)
-
-            # create solution instance
-            # if write_output:
-            # else:
 
             solution = Solution(trajectories, is_valid, self.__class__.__name__)
 
