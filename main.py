@@ -8,6 +8,18 @@ import argparse
 import textwrap
 
 
+def valid_iterations(arg: str) -> int:
+    """ Function to check if the given verbose argument is correct. """
+
+    if not arg.isdigit():
+        raise argparse.ArgumentTypeError("please enter an integer number as iterations")
+
+    if not int(arg) > 0:
+        raise argparse.ArgumentTypeError("iterations can only be larger than zero")
+
+    return int(arg)
+
+
 if __name__ == "__main__":
 
     description = r'''
@@ -66,27 +78,45 @@ if __name__ == "__main__":
         help="prints detailed debugging statements"
     )
 
+    # default iterations number
+    default_iterations: dict[str, int] = {
+        "randomize": 1,
+        "less_random": 10000,
+        "hill_climber": 300000,
+        "simulated_annealing": 30000,
+        "genetic": 1,
+        "sigma": 4,
+        "baseline": 100000
+    }
+
     # add algorithm as positional command line argument
     parser.add_argument(
         "algorithm",
-        choices=[
-            "randomize", "less_random",
-            "hill_climber", "simulated_annealing",
-            "genetic", "sigma", "baseline"
-        ],
+        choices=list(default_iterations.keys()),
         help="choose an algorithm to run"
     )
 
     # add no-visual as optional command line argument
     parser.add_argument(
-        "--no_visual",
+        "--visual_off",
         action="store_true",
         default=False,
         help="turns off automatically showing the visual"
     )
 
+    # add iterations flag as optional command line argument
+    parser.add_argument(
+        "--iterations", "-i",
+        type=valid_iterations,
+        help="manually specify the number of iterations"
+    )
+
     # parse the command line argument
     args = parser.parse_args()
+
+    # set default arguments for iterations argument
+    if args.iterations is None:
+        args.iterations = default_iterations[args.algorithm]
 
     # class name of algorithm
     algorithm_class = to_camel_case(args.algorithm)
@@ -98,16 +128,4 @@ if __name__ == "__main__":
     exec(f"{args.algorithm} = {algorithm_class}('{args.dataset}')")
 
     # run chosen algorithm
-    exec(f"{args.algorithm}.run(iterations={1000}, visualize={not args.no_visual}, verbose={args.verbose})")
-
-    # make baseline
-    # randomize.make_baseline(verbose=args.verbose)
-
-    # # csv
-    # data = "data/scores/random.csv"
-    #
-    # # histogram of scores from random algorithm
-    # visualize_baseline(data)
-    #
-    # # plot scores of iterations from random algorithm
-    # visualize_iterations_to_score(data)
+    exec(f"{args.algorithm}.run(iterations={args.iterations}, visualize={not args.visual_off}, verbose={args.verbose})")
