@@ -35,7 +35,7 @@ class Station:
 
         self.possible_connections.remove(connection_number)
 
-    def return_random_connection(self):
+    def return_random_connection(self) -> int:
         """ Returns a randomly chosen connection from the possible
             connections. """
 

@@ -103,30 +103,7 @@ class Genetic(HillClimber):
         if visualize:
             visualize_iterations_to_score(data=self.scores_path)
 
-    # def new_solution(self, mutations: int) -> Solution:
-    #     """ Creates a new solution with the given amount of mutations. """
-
-    #     new_solution = copy.deepcopy(self.solution)
-    #     for _ in range(mutations):
-    #         # choose random trajectory
-    #         trajectory = self.choose_trajectory()
-    #         # delete trajectory
-    #         self.delete_trajectory(trajectory, new_solution)
-
-    #         # if there are no more trajectories to mutate or delete, stop loop
-    #         if not self.trajectories:
-    #             break
-
-    #     # if score is not better, mutate trajectory
-    #     if not self.check_score(new_solution):
-    #         for _ in range(mutations):
-    #             # try a new trajectory
-    #             self.mutate_trajectory(trajectory, new_solution)
-    #             # check score
-    #             self.check_score(new_solution)
-    #     else:
-    #         self.solution.score = new_solution.calculate_score()
-
+    
 
 #__________________________________File writing__________________________________#
     

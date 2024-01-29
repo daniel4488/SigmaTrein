@@ -33,7 +33,7 @@ class Solution:
 
         # initialize empty variables
         used_connections = set()
-        Min = 0
+        Min = 0.0
 
         # count total connections and duration
         for traject in self.trajectories:
@@ -61,7 +61,7 @@ class Solution:
             file.write(str(self.score))
             file.write("\n")
 
-    def check_is_valid(self, new_trajectory: Trajectory):
+    def check_is_valid(self, new_trajectory: Trajectory) -> bool:
         """ Check if solution meets all restrictions. """
 
         if RailNL.DATASET == "holland":
@@ -71,9 +71,11 @@ class Solution:
             return len(self.trajectories) <= 20 and \
                    new_trajectory.duration <= 180
 
-    def remove_double_connections(self):
+    def remove_double_connections(self) -> None:
+        """ Removes double connections if they are found at the end or beginning
+            of a trajectory. """
 
-        # sort the list using the custom lambda function
+        # sort trajectories using the custom lambda function
         sorted_trajectories = sorted(self.trajectories,
                                      key=lambda trajectory: trajectory.duration)
 
