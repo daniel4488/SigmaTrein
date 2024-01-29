@@ -24,6 +24,6 @@ class Connection:
         else:
             return ""
 
-    def reset_weight(self):
+    def reset_weight(self) -> None:
 
         self.weight = 0

@@ -14,7 +14,7 @@ class RailNL:
 
     DATASET: str = "none"
 
-    CONNECTIONS: dict[int, Connection] = None
+    CONNECTIONS: dict[int, Connection] = {}
 
     def __init__(self, dataset: str) -> None:
 
