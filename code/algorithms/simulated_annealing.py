@@ -1,7 +1,6 @@
 from .hill_climber import HillClimber
 from ..classes.solution import Solution
 
-import math
 import random
 import numpy as np
 
@@ -11,15 +10,18 @@ def sigmoid(x: float) -> float:
 
 
 class SimulatedAnnealing(HillClimber):
+    """
+    Algorithm following the Simulated Annealing allgorithm, using the Hill Climber class.
+    Simmulated Annealing starts with all information from its super class Hill Climber,
+    with a float for the starting temperature, and a float for the current temperature.
+    """
 
     def __init__(self, dataset: str) -> None:
+
         # call initializer of super class
         super().__init__(dataset=dataset)
 
-        # starting temperature
         self.start_temperature: float = 10
-
-        # current temperature
         self.temperature: float = 10
 
     def update_temperature(self) -> None:
@@ -28,7 +30,7 @@ class SimulatedAnnealing(HillClimber):
         Temperature will become zero after all iterations passed to the run()
         method have passed.
 
-        Hill climber needs to keep track of number of iterations
+        Hill Climber needs to keep track of number of iterations.
 
         Cooling down schemes:
         *   Linear
@@ -36,7 +38,10 @@ class SimulatedAnnealing(HillClimber):
         *   Geometric decaying
         *
         """
+
+        # print number of iterations if verbose is True
         print(f"total iter: {self.iterations}") if self.verbose else None
+
         self.temperature = max(self.temperature - self.start_temperature / self.iterations, 1e-4)
 
         # Exponential would look like this:
@@ -49,7 +54,7 @@ class SimulatedAnnealing(HillClimber):
         # self.temperature = np.sqrt(self.temperature)
 
     def check_score(self, new_solution: Solution) -> bool:
-        """ Override this function from hill climber. """
+        """ Override this function from Hill Climber. """
 
         new_score = new_solution.calculate_score()
 
