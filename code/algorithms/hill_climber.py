@@ -148,7 +148,7 @@ class HillClimber:
             if not self.trajectories:
                 break
 
-        # if score is not better, mutate trajectory
+        # if score is not better, create new trajectory
         if not self.check_score(new_solution):
             # create new trajectories and check their scores
             for _ in range(mutations):

@@ -12,27 +12,31 @@ import copy
 import os
 
 
-class Genetic:
-    """ Class describing the genetic algorithm. """
+class Genetic(HillClimber):
+    """
+    Class describing the genetic algorithm.
+    """
 
     def __init__(self, dataset: str):
-        self.dataset = dataset
-        self.railNL = RailNL(dataset=dataset)
-        self.randomize = Randomize(dataset)
-        self.solution: Solution = None
-        self.trajectories: list[Trajectory] = None
-        self.score: int = None
-        self.iterations: int = None  # not used
-        self.verbose = False
+
+        # call initializer of super class
+        super().__init__(dataset=dataset)
 
 #__________________________________Genetic algorithm_________________________________#
     def generate_parent(self):
+        """ Create random starting solution. """
+
         return self.randomize.make_solution(False)
 
     def fitness(self, solution: Solution) -> int:
+        """ Return score of given solution. """
+
         return solution.score
 
-    def generate_children(self, parent: Solution, size: int) -> list[Solution]:
+    def generate_children(self, parent: Solution, size: int, mutations: int = 2) -> list[Solution]:
+        """ Return set of new solutions, created with the Hill Climber alogirthm
+            from the parent solution. """
+
         # create an empty list where children can be stored
         children = set()
 
@@ -42,23 +46,22 @@ class Genetic:
             self.trajectories = list(parent.trajectories)
             self.score = parent.score
 
-            self.new_solution(2)
+            self.new_solution(mutations)
             children.add(self.solution)
 
         return children
 
-    def run(self, iterations: int, verbose: bool):
+    def run(self, iterations: int, repititions: int = 1, verbose: bool = True):
         random.seed(123)
         self.prepare_csv_file()
 
         # set all parameters to zero
         all_time_highest_score_child = 0
-        iterations = 0
 
-        for _ in range(1):
+        for _ in range(repititions):
             # highest_score = 0
 
-            # generate parent
+            # generate parent solution
             parent = self.generate_parent()
 
             # set new_highest_score to True
@@ -73,17 +76,14 @@ class Genetic:
                 new_highest_score = False
 
                 # generate a population of children based on parent
-                children: list[Solution] = self.generate_children(parent, 20000)
+                children: list[Solution] = self.generate_children(parent, 2000)
 
                 # iterate over all children 
                 for child in children:
-                    # count for iterations
-                    iterations += 1
-                    # print iteration
-                    print(iterations)
                     # write score of child
                     self.write_score(child.score)
                     # if this childs score is higher than till now highest child score
+
                     if child.score > highest_score_child:
                         # set new_highest_score found to True
                         new_highest_score = True
@@ -123,32 +123,9 @@ class Genetic:
         # save new set of trajectories in new solution object
         new_solution.trajectories = set(self.trajectories)
 
-    def check_score(self, new_solution: Solution):
-        """ Checks and accepts better solutions than the current one. """
 
-        new_score = new_solution.calculate_score()
-
-        if self.verbose:
-            print(f"Old score: {self.score}")
-            print(f"New score: {new_score}")
-
-        if new_score > self.score:
-            # change trajectories of solution to improved trajectories
-            self.solution.trajectories = new_solution.trajectories
-            # change score to new score
-            self.score = new_score
-            # update score of solution to improved score
-            self.solution.score = new_score
-
-            if self.verbose:
-                 print(f"Accepted {new_score}")
-            return True
-        else:
-            return False
-    
     def new_solution(self, mutations: int) -> Solution:
         """ Creates a new solution with the given amount of mutations. """
-
 
         new_solution = copy.deepcopy(self.solution)
         for _ in range(mutations):
@@ -170,7 +147,7 @@ class Genetic:
                 self.check_score(new_solution)
         else:
             self.solution.score = new_solution.calculate_score()
-    
+
 
 #__________________________________File writing__________________________________#
     
@@ -178,7 +155,7 @@ class Genetic:
             with open("data/scores/genetic.csv", "a") as file:
                 file.write(str(score))
                 file.write("\n")
-    
+
     @staticmethod
     def clear_scores_file() -> None:
         file_path = "data/scores/genetic.csv"
@@ -195,21 +172,4 @@ class Genetic:
 
         with open("data/scores/genetic.csv", "w") as file:
             file.write("score\n")
-
-                
-
-
-
-
-            
-
-            
-
-
-            
-
-
-
-        
-         
-    
+   
