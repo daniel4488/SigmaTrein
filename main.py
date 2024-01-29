@@ -20,11 +20,10 @@ def valid_iterations(arg: str) -> int:
 def valid_mutations(arg: str) -> int:
     """ Function to check if the given mutations argument is correct. """
 
-    if not arg.isdigit():
-        raise argparse.ArgumentTypeError("please enter an integer number as mutation")
+    if not arg.isdigit() or arg == "0":
+        raise argparse.ArgumentTypeError("please enter a strictly positive integer number as mutation")
 
-    if int(arg) > getattr(DataInfo, "dataset").max_trajectories:
-        raise argparse.ArgumentTypeError("mutations cannot be larger than number of trajectories")
+    return int(arg)
 
 
 if __name__ == "__main__":
@@ -132,9 +131,29 @@ if __name__ == "__main__":
     if args.iterations is not None and args.algorithm == "randomize":
         parser.error("setting iterations for randomize has no effect")
 
+    # mutations option is only compatible with hill climber algorithm
+    if args.mutations and args.algorithm != "hill_climber":
+        parser.error("--mutations can only be set in combination with hill_climber algorithm")
+
+    # mutations cannot be larger than the number of trajectories
+    if args.mutations and args.mutations > getattr(DataInfo, args.dataset).max_trajectories:
+        raise argparse.ArgumentTypeError("mutations cannot be larger than the number of trajectories")
+
     # set default arguments for iterations argument
     if args.iterations is None:
         args.iterations = default_iterations[args.algorithm]
+
+    # handle special run case with mutations option on hill climber
+    if args.mutations:
+        from code.algorithms.hill_climber import HillClimber
+        hill_climber = HillClimber(dataset=args.dataset)
+        hill_climber.run(
+            iterations=args.iterations,
+            visualize=(not args.visual_off),
+            mutations=args.mutations,
+            verbose=args.verbose
+        )
+        exit(0)
 
     # class name of algorithm
     algorithm_class = to_camel_case(args.algorithm)
