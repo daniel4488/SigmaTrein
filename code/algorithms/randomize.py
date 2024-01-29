@@ -11,6 +11,7 @@ from code.classes.write_file import ScoreFile
 
 import random
 import os
+import copy
 
 
 class Randomize:
@@ -38,6 +39,12 @@ class Randomize:
         self.connections: dict[int, Connection] = railNL.connections
         self.constrictions: DatasetInfo = self.set_constrictions(dataset)
 
+        self.preferred_departure_holland = ["Den Helder", "Dordrecht", "Hoorn", "Schiphol Airport", "Gouda", "Heemstede-Aerdenhout", "Schiphol Airport"]
+        self.preferred_departure_nationaal = ["Den Helder", "Dordrecht", "Hoorn", "Enschede", "Venlo", "Maastricht", "Heerlen", "Vlissingen", "Lelystad Centrum", "Groningen", "Leeuwarden", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Amsterdam Centraal", "Amsterdam Centraal", "Amsterdam Centraal", "Amsterdam Centraal"]
+
+        self.preferred_departure_copy = []
+        
+        self.prefixed = True
         self.used_connections: set[int] = set()
         self.solution: dict[int, list[str]] = {}
 
@@ -75,6 +82,14 @@ class Randomize:
         for station in self.stations:
             self.stations[station].repopulate_possible_connections()
 
+    def repopulate_preferred_departure_stations(self):
+
+        if self.dataset == "holland":
+            self.preferred_departure_copy = copy.deepcopy(self.preferred_departure_holland)
+        else:
+            self.preferred_departure_copy = copy.deepcopy(self.preferred_departure_nationaal)
+            print(self.preferred_departure_copy)
+
     @staticmethod
     def update_connections(connection: int, departure: Station,
                            destination: Station) -> None:
@@ -94,13 +109,10 @@ class Randomize:
         trajectory.duration = duration
         trajectory.add_connection_number(connection)
 
-    def make_trajectory(self, unique: bool = False) -> Trajectory:
+    def choose_departure_station(self, trajectory: Trajectory) -> set[str, Station]:
         """ Generates a randomly chosen trajectory. If unique is True,
             then all connections can only be selected once. """
 
-        self.repopulate_possible_connections_for_all_stations()
-
-        trajectory = Trajectory()
 
         # choose a random station to depart from
         departure_station = self.choose_station(list(self.stations.keys()))
@@ -108,8 +120,35 @@ class Randomize:
         # add departure station to the trajectory
         trajectory.add_station(departure_station[0])
 
+        return departure_station
+    
+    def choose_prefixed_departure_station(self, trajectory: Trajectory) -> set [str, Station]:
+        if self.dataset == "holland":
+            name = self.preferred_departure_copy.pop(0)
+            station = self.stations[name]
+            trajectory.add_station(name)
+            return name, station
+        
+        if self.dataset == "nationaal":
+            name = self.preferred_departure_copy.pop(0)
+            station = self.stations[name]
+            trajectory.add_station(name)
+            return name, station
+
+    def make_trajectory(self, unique: bool = False, prefixed: bool = True) -> Trajectory:
         # add randomly chosen connections and stations to trajectory as long as
         # restrictions are still met
+
+        self.repopulate_possible_connections_for_all_stations()
+
+        trajectory = Trajectory()
+        self.prefixed = prefixed
+
+        if prefixed:
+            departure_station = self.choose_prefixed_departure_station(trajectory)
+        else:
+            departure_station = self.choose_departure_station(trajectory)
+
         while trajectory.duration <= int(self.constrictions.max_time) and \
                 departure_station[1].possible_connections:
 
@@ -175,6 +214,9 @@ class Randomize:
 
         self.reset_used_connections()
 
+        if self.prefixed:
+            self.repopulate_preferred_departure_stations()
+
         trajectories = set()
         is_valid = False
 
@@ -218,12 +260,3 @@ class Randomize:
 
         score_file = ScoreFile("random.csv")
         score_file.prepare_file()
-
-    def make_baseline(self, simulations: int = 10000, verbose: bool = False) -> None:
-        self.verbose = verbose
-
-        #self.prepare_csv_file()
-        self.create_score_file()
-
-        for _ in range(simulations):
-            self.make_solution(write_output=True)
