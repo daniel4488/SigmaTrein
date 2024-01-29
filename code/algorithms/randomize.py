@@ -182,28 +182,6 @@ class Randomize:
     def reset_used_connections(self) -> None:
         self.used_connections.clear()
 
-    @staticmethod
-    def clear_scores_file() -> None:
-        """ Clears the csv file from all old data. """
-
-        file_path = "data/scores/random.csv"
-
-        if os.path.exists(file_path):
-            input("WARNING scores file will be deleted.")
-            os.remove(file_path)
-
-    def prepare_csv_file(self) -> None:
-        """ Prepares the csv file for new data, or creates file
-            if it does not exist yet. """
-
-        self.clear_scores_file()
-
-        if not (os.path.exists("data/scores") and os.path.isdir("data/scores")):
-            os.mkdir("data/scores")
-
-        with open("data/scores/random.csv", "w") as file:
-            file.write("score\n")
-
     def run(self, iterations: int, visualize: bool, verbose: bool = False, write_output: bool = True) -> Solution | Output:
         """ Creates a solution of with the maximum amount of trajectories. """
 
@@ -246,9 +224,3 @@ class Randomize:
             plot_device.draw_graph(solution)
 
         return solution
-
-    def create_score_file(self):
-        """ Create an empty csv file for the scores. """
-
-        score_file = ScoreFile("random.csv")
-        score_file.prepare_file()
