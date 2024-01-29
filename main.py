@@ -73,6 +73,13 @@ if __name__ == "__main__":
         help="choose an algorithm to run"
     )
 
+    # add no-visualize as optional command line argument
+    parser.add_argument(
+        "no-visualization",
+        action="store_false",
+        help="turns off automatically showing the visual"
+    )
+
     # parse the command line argument
     args = parser.parse_args()
 

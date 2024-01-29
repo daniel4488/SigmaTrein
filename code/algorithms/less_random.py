@@ -4,13 +4,15 @@ from code.classes.connection import Connection
 from code.classes.solution import Solution
 from code.classes.output import Output
 from code.classes.railNL import RailNL
+from code.visualisation.map_class import MapVisualization
 
 import random
 import os
 
 
-class LessRandom:
+class LessRandom(MapVisualization):
     def __init__(self, dataset: str):
+        self.dataset = dataset
 
         railNL = RailNL(dataset=dataset)
         self.stations: dict[str, Station] = railNL.stations
@@ -139,11 +141,11 @@ class LessRandom:
                 break
 
         solution = Solution(trajectories, is_valid)
-        score = solution.score
+        # score = solution.score
 
-        return score
+        return solution
 
-    def run(self, iterations: int, verbose: bool) -> None:
+    def run(self, iterations: int, visualize: bool, verbose: bool) -> None:
 
         self.prepare_csv_file()
 
@@ -151,9 +153,12 @@ class LessRandom:
 
         for _ in range(iterations):
             self.repopulate_preferred_departure_stations()
-            score = self.make_random_solution()
+            solution = self.make_random_solution()
 
-            if score > highest_score:
-                highest_score = score
+            if solution.score > highest_score:
+                highest_score = solution.score
 
         print(highest_score)
+
+        if visualize:
+            self.visualize(solution=solution)

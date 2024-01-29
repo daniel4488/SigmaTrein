@@ -17,4 +17,4 @@ from code.algorithms.less_random import LessRandom
 dataset = "holland"
 
 less_random = LessRandom(dataset=dataset)
-less_random.run(iterations=10000, verbose=False)
+less_random.run(iterations=10000, visualize=True, verbose=False)

@@ -5,13 +5,18 @@ from code.classes.solution import Solution
 from code.classes.output import Output
 from code.classes.railNL import RailNL
 from code.algorithms.randomize import Randomize
+from code.visualisation.map_class import MapVisualization
 
 import random
 import copy
 import os
 
-class Sigma:
+
+class Sigma(MapVisualization):
     def __init__(self, dataset: str):
+        # set dataset
+        self.dataset = dataset
+
         # initialize a list with pre-fixed routes that start of a trajectory
         self.standard_trajectories = [["Maastricht", "Sittard", "Heerlen", "Sittard", "Roermond", "Weert", "Eindhoven"],
                                        ["Venlo", "Helmond", "Eindhoven"], ["Vlissingen", "Roosendaal"],
@@ -198,7 +203,7 @@ class Sigma:
         trajectory.duration = duration
         trajectory.add_connection_number(connection)
     
-    def run(self, iterations: int, verbose: bool):
+    def run(self, iterations: int, visualize: bool, verbose: bool):
 
         random.seed(27012001)
         
@@ -256,6 +261,10 @@ class Sigma:
 
         
         print(highest_score)
+
+        if visualize:
+            self.visualize(solution=highest_score_solution)
+
         return highest_score_solution
 
     # def make_baseline(self, verbose: bool = False) -> None:

@@ -40,10 +40,10 @@ if __name__ == "__main__":
     sa = SimulatedAnnealing(args.dataset)
 
     # run simulated annealing
-    sa.run(iterations=10000, verbose=args.verbose)
+    sa.run(iterations=10000, visualize=True, verbose=args.verbose)
 
     # csv file
-    data = "data/scores/hill_climber.csv"
-
-    # visualize
-    visualize_iterations_to_score(data=data)
+    # data = "data/scores/hill_climber.csv"
+    #
+    # # visualize
+    # visualize_iterations_to_score(data=data)

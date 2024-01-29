@@ -47,7 +47,7 @@ if __name__ == "__main__":
 
     railNL = RailNL(dataset = args.dataset)
 
-    solution = sigma.run(iterations=1, verbose=args.verbose)
+    solution = sigma.run(iterations=1, visualize=True, verbose=args.verbose)
 
     # csv file
     # data = "data/scores/genetic.csv"
@@ -56,5 +56,5 @@ if __name__ == "__main__":
     # visualize_iterations_to_score(data=data)
 
     # Visualization
-    plot_device = PlotlyLoad(dataset=args.dataset)
-    plot_device.draw_graph(solution)
+    # plot_device = PlotlyLoad(dataset=args.dataset)
+    # plot_device.draw_graph(solution)

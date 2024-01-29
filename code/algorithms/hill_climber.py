@@ -5,6 +5,8 @@ from code.classes.solution import Solution
 from code.classes.output import Output
 from code.classes.railNL import RailNL
 from code.algorithms.randomize import Randomize
+from code.functions.to_snake_case import to_snake_case
+from code.visualisation.baseline import visualize_iterations_to_score
 
 import random
 import copy
@@ -17,11 +19,12 @@ class HillClimber:
     def __init__(self, dataset: str):
         self.verbose = False
         self.railNL = RailNL(dataset=dataset)
-        self.randomize = Randomize(dataset, self.railNL.stations, self.railNL.connections)
+        self.randomize = Randomize(dataset)
         self.solution: Solution = None
         self.trajectories: list[Trajectory] = None
         self.score: int = None
         self.iterations: int = None
+        self.scores_path: str = f"data/scores/{to_snake_case(self.__class__.__name__)}.csv"
 
     def make_first_solution(self):
         """ Creates a solution with the random algorithm to
@@ -80,11 +83,10 @@ class HillClimber:
             return True
         return False
 
-    @staticmethod
-    def clear_scores_file() -> None:
+    def clear_scores_file(self) -> None:
         """ Clears the csv file from all old data. """
 
-        file_path = "data/scores/hill_climber.csv"
+        file_path = self.scores_path
 
         if os.path.exists(file_path):
             input("WARNING scores file will be deleted.")
@@ -99,17 +101,17 @@ class HillClimber:
         if not (os.path.exists("data/scores") and os.path.isdir("data/scores")):
             os.mkdir("data/scores")
 
-        with open("data/scores/hill_climber.csv", "w") as file:
+        with open(self.scores_path, "w") as file:
             file.write("score\n")
 
     def write_score(self) -> None:
         """ Write a score to the csv file. """
 
-        with open("data/scores/hill_climber.csv", "a") as file:
+        with open(self.scores_path, "a") as file:
             file.write(str(self.score))
             file.write("\n")
 
-    def run(self, iterations: int, mutations: int = 1, verbose: bool = False):
+    def run(self, iterations: int, visualize: bool, mutations: int = 1, verbose: bool = False):
         """ Runs the Hill Climber algorithm for a given amount
             of iterations and mutations. """
 
@@ -123,6 +125,9 @@ class HillClimber:
         for _ in range(iterations):
             self.new_solution(mutations)
             self.write_score()
+
+        if visualize:
+            visualize_iterations_to_score(data=self.scores_path)
 
     def new_solution(self, mutations: int) -> Solution:
         """ Creates a new solution with the given amount of mutations. """

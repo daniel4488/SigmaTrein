@@ -40,12 +40,14 @@ def visualize_baseline(data: str) -> None:
 def visualize_iterations_to_score(data: str) -> None:
     # get scores from csv file
     scores = read_score_file(data)
+    algorithm = data.strip(".csv").split("/")[-1].replace("_", " ")
 
     # create graph
-    fig = px.line(scores, x = range(len(scores)), y = 'score', labels = {
-                  'x': 'Iterations',
-                  'score': 'Score'},
-                  title = f'Scores of {len(scores)} iterations from a random algorithm')
+    fig = px.line(scores, x=range(len(scores)), y="score", labels={
+        "x": "Iterations",
+        "score": "Score"
+    },
+        title=f"Scores of {len(scores)} iterations from a {algorithm} algorithm")
     # fig.update_yaxes(range=[0, 10000])
     # plt.show()
     if not os.path.exists(".tmp"):
