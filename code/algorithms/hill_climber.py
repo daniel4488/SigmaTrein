@@ -111,14 +111,19 @@ class HillClimber(MapVisualization):
         self.iterations = iterations
         self.make_first_solution()
         self.score_file.prepare_file()
+
+        # set a parametere that keeps track of the amount of iterations  
         i = 0
 
         # create new solutions and save scores
         try:
             for _ in range(iterations):
+                # print iterations
                 if i % 10000 == 0:
                     print(f"{i} iterations")
+
                 self.new_solution(mutations)
+
                 self.score_file.write_score(self.score)
                 i += 1
 
