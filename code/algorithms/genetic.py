@@ -57,28 +57,31 @@ class Genetic(HillClimber):
             # set highest_score_child to zero
             highest_score_child = 0
 
-            # run a while loop until no child with a higher score has been found
-            # i.e. till children generate better children run this loop
-            while new_highest_score:
-                # set new_highest_score to False
-                new_highest_score = False
+            try:
+                # run a while loop until no child with a higher score has been found
+                # i.e. till children generate better children run this loop
+                while new_highest_score:
+                    # set new_highest_score to False
+                    new_highest_score = False
 
-                # generate a population of children based on parent
-                children: set[Solution] = self.generate_children(parent, number_of_children)
+                    # generate a population of children based on parent
+                    children: set[Solution] = self.generate_children(parent, number_of_children)
 
-                # iterate over all children 
-                for child in children:
-                    # write score of child
-                    self.score_file.write_score(child.score)
-                    # if this child's score is higher than till now highest child score
+                    # iterate over all children
+                    for child in children:
+                        # write score of child
+                        self.score_file.write_score(child.score)
+                        # if this child's score is higher than till now highest child score
 
-                    if child.score > highest_score_child:
-                        # set new_highest_score found to True
-                        new_highest_score = True
-                        # the child with the highest score becomes the new parent
-                        parent = child
-                        # keep track of the highest score found
-                        highest_score_child = child.score
+                        if child.score > highest_score_child:
+                            # set new_highest_score found to True
+                            new_highest_score = True
+                            # the child with the highest score becomes the new parent
+                            parent = child
+                            # keep track of the highest score found
+                            highest_score_child = child.score
+            except KeyboardInterrupt:
+                pass
 
             # check the highest score found in this tree and compare it to the most successful tree
             if highest_score_child > all_time_highest_score_child:
