@@ -77,8 +77,6 @@ class Sigma(AdvancedRandom, MapVisualization):
     def make_sigma_trajectory(self) -> Trajectory:
         """ Generates a randomly chosen trajectory. """
 
-        self.repopulate_possible_connections_for_all_stations()
-
         # initialize empty trajectory
         trajectory = Trajectory()
 
@@ -105,7 +103,7 @@ class Sigma(AdvancedRandom, MapVisualization):
             # while no valid solution is valid, i.e. all connections used by trajectories
             while not is_valid:
                 # reset used connections to make sure it can be populated again correctly
-                self.reset_used_connections(self.connections)
+                self.reset_used_connections()
                 # repopulate the standard trajectories copy
                 self.standard_trajectories_copy = copy.deepcopy(self.standard_trajectories)
                 # repopulate the standard trajectories connections copy
