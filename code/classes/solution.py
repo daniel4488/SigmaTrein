@@ -1,5 +1,6 @@
 from code.classes.trajectory import Trajectory
 from code.classes.railNL import RailNL
+from collections import deque
 
 
 class Solution:
@@ -15,7 +16,7 @@ class Solution:
 
         self.verbose: bool = verbose
         self.is_valid: bool = is_valid
-        self.trajectories: list[Trajectory] = trajectories
+        self.trajectories: deque[Trajectory] = deque(trajectories)
         if origin == "Sigma" and self.is_valid:
             self.remove_double_connections()
         self.score: float = self.calculate_score()
@@ -75,37 +76,59 @@ class Solution:
         """ Removes double connections if they are found at the end or beginning
             of a trajectory. """
 
-        # sort trajectories using the custom lambda function
+        # sort trajectories on duration using a custom lambda function
         sorted_trajectories = sorted(self.trajectories,
                                      key=lambda trajectory: trajectory.duration)
-
+        
+        # iterate over all trajectories in a solution
         for i, trajectory in enumerate(sorted_trajectories):
 
+            # put all connections from current trajectory we are looking at in a list
             connections = list(trajectory.connections)
 
+            # create an empty set to be populated with al other used connections
+            #  in a solution
             used_connections = set()
+            # look at all used connections by the other trajectories
             for j, other_trajectory in enumerate(sorted_trajectories):
-                for connection in other_trajectory.connections:
-                    if i != j:
-                        used_connections.add(connection)
+                if i != j:
+                    # add used connections to set
+                    used_connections.update(other_trajectory.connections)
 
+            # start looking at the end of current trajectory for double connections
             for k in range(1, len(connections) + 1):
+                # if double connection found at the end remove it
                 if connections[-k] in used_connections:
+                    # remove connection from current trajectory
                     trajectory.connections.remove(connections[-k])
+                    # update duration of trajectory
                     trajectory.duration -= RailNL.CONNECTIONS[connections[-k]].duration
-                    connections[-k] = 0
+                    # set the removed connection in the list to -1 to indicate that this
+                    #  connection has been removed
+                    connections[-k] = -1
+                    # remove station from the trajectory where the connection lead to
                     trajectory.stations.pop()
                 else:
+                    # break the for loop if the end was not a double connection
                     break
 
+            # if there are still connections left in the current trajectory
             if trajectory.connections:
+                # start looking at the other end of current trajectory for double connections
                 for l in range(0, len(connections)):
+                    # # if double connection found at the end remove it
                     if connections[l] in used_connections:
+                        # remove connection from current trajectory
                         trajectory.connections.remove(connections[l])
+                        # update duration of trajecto
                         trajectory.duration -= RailNL.CONNECTIONS[connections[l]].duration
+                        # remove station from the trajectory where the connection lead to
                         trajectory.stations.pop(0)
                     else:
+                        # break the for loop if the end was not a double connection
                         break
 
+            # if there are no connections left in the current trajectory
             if not trajectory.connections:
+                # remove trajectory
                 self.trajectories.remove(trajectory)
