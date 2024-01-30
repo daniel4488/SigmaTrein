@@ -56,7 +56,7 @@ def visualize_iterations_to_score(data: str) -> None:
     # plt.show()
     if not os.path.exists(".tmp"):
         os.mkdir(".tmp")
-    fig.write_html(".tmp/iter_to_score.html", auto_open=True)
+    fig.write_html(".tmp/iter_to_score.html", auto_open=False)
 
 
 if __name__ == "__main__":

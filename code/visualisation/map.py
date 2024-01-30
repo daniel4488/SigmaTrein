@@ -296,7 +296,7 @@ class PlotlyLoad(Load):
 
         # Add track info
         fig.add_annotation(
-            text=f"<b>Traject:</b> {traject}<br><b>Total time:</b> {traject_total_time}",
+            text=f"<b>Traject:</b> [traject] <br><b>Total time:</b> {traject_total_time}",
             align="left",
             xref="paper",
             yref="paper",
@@ -328,7 +328,7 @@ class PlotlyLoad(Load):
 
         if not os.path.exists(".tmp"):
             os.mkdir(".tmp")
-        fig.write_html(".tmp/single_track.html", auto_open=True)
+        fig.write_html(".tmp/single_track.html", auto_open=False)
 
 # Mapbox
 # latitude = y = north degrees
