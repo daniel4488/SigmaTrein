@@ -1,83 +1,65 @@
 import networkx as nx
-from pyvis.network import Network
 
 
 class Load:
+    """
+    Class used to create the background of the visualisation picture. It
+    creates a node on the coordinates of every station, and edges between
+    nodes that have an existing connection.
+    """
 
     def __init__(self, dataset: str) -> None:
-        # set dataset
+
         self.DATASET = dataset
 
-        # Initiate empty undirected graph
+        # initiate empty undirected graph
         self.G: nx.Graph = nx.Graph()
 
-        # Add nodes to the graph
+        # add nodes and edges to the graph
         self.add_nodes()
-
-        # Add edges to the graph
         self.add_edges()
 
-        # Visualize graph
-        # self.draw_graph()
-
     def add_nodes(self) -> None:
+        """ Adds the coordinates to the graph as nodes. """
 
-        # Open StationsHolland.csv
         with open(f"data/{self.DATASET}/Stations{self.DATASET.capitalize()}.csv", "r") as file:
-            # Remove header
+            # remove header
             _ = file.readline()
 
-            # Iterate over rest of the file
             for line in file:
-                # Remove newline character at the end
+                # strip and split lines on comma
                 line = line.strip()
-
-                # Split line based on a comma
                 station, y, x = line.split(",")
 
-                # Station has attributes y and x
+                # station has attributes y and x
                 station_attr = {
                     "y": float(y),
                     "x": float(x)
                 }
 
-                # Add node to the graph
+                # add node to the graph
                 self.G.add_node(station, **station_attr)
 
     def add_edges(self) -> None:
+        """ Adds the connections between nodes to the graph as edges. """
 
-        # Open ConnectiesHolland.csv
         with open(f"data/{self.DATASET}/Connecties{self.DATASET.capitalize()}.csv", "r") as file:
-            # Remove header
+            # remove header
             _ = file.readline()
 
             for line in file:
-                # Remove newline character
+                # strip and split lines on comma
                 line = line.strip()
-
-                # Split line
                 station1, station2, distance = line.split(",")
 
-                # Edges attributes
+                # edge had attributes distance and title
                 edge_attr = {
                     "distance": int(distance.strip(".0")),
                     "title": distance
                 }
 
-                # Add edge to graph
+                # add edge to graph
                 self.G.add_edge(station1, station2, **edge_attr)
-
-    # def draw_graph(self) -> None:
-    #
-    #     # pos = nx.kamada_kawai_layout(self.G)
-    #     #
-    #     # nx.draw_networkx(G=self.G, pos=pos)
-    #     # plt.show()
-    #     # plt.savefig("output.png")
-    #
-    #     net = Network()
-    #     net.from_nx(self.G)
-    #     net.save_graph("networkx-pyvis.html")
 
 
 if __name__ == "__main__":

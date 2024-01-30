@@ -5,15 +5,14 @@ import random
 import numpy as np
 
 
-def sigmoid(x: float) -> float:
-    return 1 / (1 + np.exp(-x))
-
-
 class SimulatedAnnealing(HillClimber):
     """
-    Algorithm following the Simulated Annealing allgorithm, using the Hill Climber class.
-    Simmulated Annealing starts with all information from its super class Hill Climber,
-    with a float for the starting temperature, and a float for the current temperature.
+    Algorithm following the Simulated Annealing allgorithm.
+
+    {uitleg algorithm}
+
+    SimulatedAnnealing takes the HillClimber class as a parent. Furthermore it has a
+    float for the starting temperature, and a float for the current temperature.
     """
 
     def __init__(self, dataset: str, start_temperature: float = 10, cooling_scheme: str = "linear", alpha: float = 0.99) -> None:
@@ -24,11 +23,11 @@ class SimulatedAnnealing(HillClimber):
         self.start_temperature: float = start_temperature
         self.temperature: float = start_temperature
 
+        # multiple cooling scheme techniques
         schemes = {"linear", "exponential", "constant", "root"}
         assert cooling_scheme in schemes
 
         self.cooling_scheme = cooling_scheme
-
         self.alpha = alpha
 
     def update_temperature(self) -> None:
@@ -37,13 +36,11 @@ class SimulatedAnnealing(HillClimber):
         Temperature will become zero after all iterations passed to the run()
         method have passed.
 
-        Hill Climber needs to keep track of number of iterations.
-
         Cooling down schemes:
         *   Linear
         *   Exponential
-        *   Geometric decaying
-        *
+        *   Constant
+        *   Root
         """
 
         # print number of iterations if verbose is True
@@ -59,40 +56,25 @@ class SimulatedAnnealing(HillClimber):
             case "constant":
                 pass
 
-
-
-        # Exponential would look like this:
-        # alpha = 0.99
-        # self.temperature = self.temperature * alpha
-
-        # where alpha can be any value below 1 but above 0
-
-        # Square root
-        # self.temperature = np.sqrt(self.temperature)
-
     def check_score(self, new_solution: Solution) -> bool:
         """ Override this function from Hill Climber. """
 
         new_score = new_solution.calculate_score()
 
-        print() if self.verbose else None
-
         if self.verbose:
             print(f"Old score: {self.score}")
             print(f"New score: {new_score}")
 
-        # if self.score < 1e-3:
-        #     scale_correction = 1
-        # else:
-        #     scale_correction = self.score
-
         # calculate the acceptance probability of the change
         delta = (self.score - new_score)
-        print(f"delta: {delta}") if self.verbose else None
-        print(f"temperature: {self.temperature}") if self.verbose else None
-        print(f"x: {-delta / self.temperature}") if self.verbose else None
+
+        if self.verbose:
+            print(f"delta: {delta}")
+            print(f"temperature: {self.temperature}")
+            print(f"x: {-delta / self.temperature}")
+
         probability = np.exp(np.longdouble(-delta / self.temperature))
-        # probability = sigmoid(x=-delta)
+
         print(f"probability: {probability}") if self.verbose else None
 
         # NOTE: Keep in mind that if we want to maximize the value, we use:
@@ -106,10 +88,7 @@ class SimulatedAnnealing(HillClimber):
 
         # accept new state if random number is below probability
         if rand < probability:
-            # change trajectories of solution to improved trajectories
             self.solution.trajectories = new_solution.trajectories
-
-            # change score to new score
             self.score = new_score
 
             if self.verbose:

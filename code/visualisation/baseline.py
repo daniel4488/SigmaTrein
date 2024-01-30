@@ -7,7 +7,8 @@ import os
 
 
 def read_score_file(data: str):
-    # data = pd.read_csv("data/scores/random.csv")
+    """ Returns the data from a csv file without the headers. """
+
     data = pd.read_csv(data)
     data.head()
     return data
@@ -52,8 +53,7 @@ def visualize_iterations_to_score(data: str, auto_open: bool) -> None:
         "score": "Score"
         },
         title=f"Scores of {len(scores)} iterations from a {algorithm} algorithm")
-    # fig.update_yaxes(range=[0, 10000])
-    # plt.show()
+
     if not os.path.exists(".tmp"):
         os.mkdir(".tmp")
     fig.write_html(".tmp/iter_to_score.html", auto_open=auto_open)

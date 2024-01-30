@@ -14,14 +14,14 @@ class Baseline(Randomize, MapVisualization):
         self.highest_score = 0
         self.highest_score_solution: Solution = None
 
-    def run(self, iterations: int, visualize: bool, verbose: bool = False, auto_open: bool = False) -> None:
+    def run(self, iterations: int, visualize: bool, verbose: bool = False, auto_open: bool = False, unique: bool = True, prefixed: bool = False) -> None:
         self.verbose = verbose
 
         self.score_file.prepare_file()
 
         try:
             for _ in range(iterations):
-                solution = super().run(iterations=1, visualize=False, verbose=verbose, write_output=True, auto_open=auto_open)
+                solution = super().run(iterations=1, visualize=False, verbose=verbose, write_output=True, auto_open=auto_open, unique=unique, prefixed=prefixed)
                 self.score_file.write_score(solution.score)
 
                 if solution.score > self.highest_score:
