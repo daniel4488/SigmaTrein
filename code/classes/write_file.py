@@ -14,7 +14,7 @@ class ScoreFile():
         """ Clears the csv file from all old data. """
 
         if os.path.exists(self.file_path):
-            input("WARNING scores file will be deleted.")
+            # input("WARNING scores file will be deleted.")
             os.remove(self.file_path)
 
     def prepare_file(self) -> None:
