@@ -1,18 +1,15 @@
 from code.classes.trajectory import Trajectory
 from code.classes.station import Station
 from code.classes.connection import Connection
-from code.classes.solution import Solution
-from code.classes.output import Output
-from code.classes.railNL import RailNL
 from code.classes.data import DataInfo
 from code.classes.dataset_info import DatasetInfo
 
 import random
-import os
+
 
 class AdvancedRandom:
     def __init__(self, dataset: str):
-         # set dataset
+        # set dataset
         self.dataset = dataset
 
         self.stations: dict[str, Station] = dict()
@@ -42,7 +39,8 @@ class AdvancedRandom:
                 # create station object
                 self.stations[station] = Station(station, float(x), float(y))
 
-    def set_constrictions(self, dataset: str) -> DatasetInfo:
+    @staticmethod
+    def set_constrictions(dataset: str) -> DatasetInfo:
         """ Sets the restrictions on trajectories for the chosen dataset. """
 
         data_info = DataInfo
@@ -109,26 +107,21 @@ class AdvancedRandom:
 
     def make_trajectory(self, trajectory: Trajectory, departure_station: tuple[str, Station], connections: dict[int, Connection]) -> Trajectory:
         """ Generates a randomly chosen trajectory. """
-        
 
-
-        # choose the firste departure station
+        # choose the first departure station
         # departure_station = self.choose_first_departure_station(trajectory)
 
         # add stations to trajectory as long as its duration is less than 120 mins,
         # and there are still possible connections
-        # while trajectory.duration <= exec(f"DataInfo.{self.dataset}.max_time") and departure_station[1].possible_connections:
         while departure_station[1].possible_connections:
             
             # choose random connection number from possible connections at departure station
-            #connection = departure_station[1].return_random_connection()
+            # connection = departure_station[1].return_random_connection()
 
             possible_connections = departure_station[1].return_possible_connections()
-
             
             # find the connection with the lowest weight using a lambda function
             connection = min(possible_connections, key=lambda connection: connections[connection].weight)
-
 
             # get destination station from chosen connection 
             destination_station = self.get_station(departure_station[0], connection, connections)
@@ -149,6 +142,3 @@ class AdvancedRandom:
                 departure_station = destination_station
 
         return trajectory
-
-    
-        
