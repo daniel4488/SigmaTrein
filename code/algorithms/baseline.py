@@ -12,8 +12,11 @@ class Baseline(Randomize):
 
         self.prepare_csv_file()
 
-        for _ in range(iterations):
-            super().run(iterations=1, visualize=False, verbose=verbose, write_output=True)
+        try:
+            for _ in range(iterations):
+                super().run(iterations=1, visualize=False, verbose=verbose, write_output=True)
+        except KeyboardInterrupt:
+            pass
 
         if visualize:
             # csv

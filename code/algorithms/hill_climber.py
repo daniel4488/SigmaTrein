@@ -20,7 +20,6 @@ class HillClimber:
     """
 
     def __init__(self, dataset: str):
-
         self.verbose = False
         self.railNL = RailNL(dataset=dataset)
         self.randomize = Randomize(dataset)
@@ -97,9 +96,12 @@ class HillClimber:
         self.score_file.prepare_file()
 
         # create new solutions and save scores
-        for _ in range(iterations):
-            self.new_solution(mutations)
-            self.score_file.write_score(self.score)
+        try:
+            for _ in range(iterations):
+                self.new_solution(mutations)
+                self.score_file.write_score(self.score)
+        except KeyboardInterrupt:
+            pass
 
         if visualize:
             visualize_iterations_to_score(data=self.scores_path)
