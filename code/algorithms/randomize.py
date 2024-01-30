@@ -30,24 +30,31 @@ class Randomize:
         # random.seed(239094)
         # random.seed(2024)
 
+        # set dataset 
         self.dataset = dataset
 
+        # set dictionary for all stations and connections
         railNL = RailNL(dataset=dataset)
-
         self.stations: dict[str, Station] = railNL.stations
         self.connections: dict[int, Connection] = railNL.connections
+        
+        # set constrictions
         self.constrictions: DatasetInfo = self.set_constrictions(dataset)
 
+        # set preferred first departure stations
         self.preferred_departure_holland = ["Den Helder", "Dordrecht", "Hoorn", "Schiphol Airport", "Gouda", "Heemstede-Aerdenhout", "Schiphol Airport"]
         self.preferred_departure_nationaal = ["Den Helder", "Dordrecht", "Hoorn", "Enschede", "Venlo", "Maastricht", "Heerlen", "Vlissingen", "Lelystad Centrum", "Groningen", "Leeuwarden", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Amsterdam Centraal", "Amsterdam Centraal", "Amsterdam Centraal", "Amsterdam Centraal"]
 
-        self.preferred_departure_copy = []
-
+        # variable for keeping track of amount of made trajectory
         self.trajectory_count = 0
 
+        # variable for keeping track of used connections
         self.used_connections: set[int] = set()
+
+        # stores a solution
         self.solution: dict[int, list[str]] = {}
 
+        # False for no print statements, true for print statements
         self.verbose: bool = False
 
     def set_constrictions(self, dataset: str) -> DatasetInfo:
@@ -175,28 +182,6 @@ class Randomize:
     def reset_used_connections(self) -> None:
         self.used_connections.clear()
 
-    @staticmethod
-    def clear_scores_file() -> None:
-        """ Clears the csv file from all old data. """
-
-        file_path = "data/scores/random.csv"
-
-        if os.path.exists(file_path):
-            input("WARNING scores file will be deleted.")
-            os.remove(file_path)
-
-    def prepare_csv_file(self) -> None:
-        """ Prepares the csv file for new data, or creates file
-            if it does not exist yet. """
-
-        self.clear_scores_file()
-
-        if not (os.path.exists("data/scores") and os.path.isdir("data/scores")):
-            os.mkdir("data/scores")
-
-        with open("data/scores/random.csv", "w") as file:
-            file.write("score\n")
-
     def run(self, iterations: int, visualize: bool, verbose: bool = False, write_output: bool = True) -> Solution | Output:
         """ Creates a solution of with the maximum amount of trajectories. """
 
@@ -239,9 +224,3 @@ class Randomize:
             plot_device.draw_graph(solution)
 
         return solution
-
-    def create_score_file(self):
-        """ Create an empty csv file for the scores. """
-
-        score_file = ScoreFile("random.csv")
-        score_file.prepare_file()

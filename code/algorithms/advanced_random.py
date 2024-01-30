@@ -12,14 +12,22 @@ class AdvancedRandom:
         # set dataset
         self.dataset = dataset
 
+        # dictionary for all stations
         self.stations: dict[str, Station] = dict()
+
+        # set constrictions
         self.constrictions: DatasetInfo = self.set_constrictions(dataset)
 
+         # variable for keeping track of used connections
         self.used_connections: set[int] = set()
+        
+        # stores a solution
         self.solution: dict[int, list[str]] = {}
 
+        # False for no print statements, true for print statements
         self.verbose: bool = False
 
+        # load all stations independent of RailNL class
         self.load_stations()
 
     def load_stations(self) -> None:
