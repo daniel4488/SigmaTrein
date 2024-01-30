@@ -39,7 +39,7 @@ class Genetic(HillClimber):
 
         return children
 
-    def run(self, iterations: int, visualize: bool, repetitions: int = 1, children: int = 2000, verbose: bool = True):
+    def run(self, iterations: int, visualize: bool, repetitions: int = 1, number_of_children: int = 2000, verbose: bool = True):
         random.seed(123)
         self.score_file.prepare_file()
 
@@ -64,7 +64,7 @@ class Genetic(HillClimber):
                 new_highest_score = False
 
                 # generate a population of children based on parent
-                children: set[Solution] = self.generate_children(parent, children)
+                children: set[Solution] = self.generate_children(parent, number_of_children)
 
                 # iterate over all children 
                 for child in children:

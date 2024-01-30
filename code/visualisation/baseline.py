@@ -44,7 +44,7 @@ def visualize_iterations_to_score(data: str) -> None:
 
     # get scores from csv file
     scores = read_score_file(data)
-    algorithm = data.strip(".csv").split("/")[-1].replace("_", " ")
+    algorithm = os.path.splitext(data)[0].split("/")[-1].replace("_", " ")
 
     # create graph
     fig = px.line(scores, x=range(len(scores)), y="score", labels={
