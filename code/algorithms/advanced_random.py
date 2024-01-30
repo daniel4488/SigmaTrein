@@ -39,24 +39,22 @@ class AdvancedRandom(MapVisualization):
         self.verbose: bool = False
 
         # load all stations independent of RailNL class
-        self.load_stations()
 
-    def load_stations(self) -> None:
-        """ Converts the station data to Station classes and loads
-            them into the stations dictionary. """
+        if self.__class__.__name__ == "Sigma":
+            # load special stations in railNL class
+            self.railNL.load_special_stations()
+            # dictionary with all leftover stations
+            self.stations: dict[int, Station] = self.railNL.special_stations
+            # load special connections in railNL class
+            self.railNL.load_special_connections()
+            # dictionaries with all leftover connections when prefixed routes are layed out
+            self.connections: dict[int, Connection] = self.railNL.special_connections
+        else:
+            self.stations: dict[int, Station] = self.railNL.stations 
+            self.connections: dict[int, Connection] = self.railNL.stations
+        
 
-        # open StationsHolland.csv
-        with open(f"data/{self.dataset}/Stations{self.dataset.capitalize()}.csv", "r") as file:
-            # remove header
-            _ = file.readline()
-
-            # strip and split lines by comma's
-            for line in file:
-                line = line.strip()
-                station, y, x = line.split(",")
-
-                # create station object
-                self.stations[station] = Station(station, float(x), float(y))
+        # self.load_stations()
 
     @staticmethod
     def set_constrictions(dataset: str) -> DatasetInfo:
@@ -160,10 +158,13 @@ class AdvancedRandom(MapVisualization):
                 # update departure station to the current station
                 departure_station = destination_station
 
+        # print(trajectory.stations)
+
         return trajectory
     
     def run(self, iterations: int, visualize: bool, verbose: bool = False, write_output: bool = True, auto_open: bool = False) -> Solution | Output:
         self.score_file.prepare_file()
+        self.highest_score_file.prepare_file()
 
         
         highest_score = 0
@@ -176,11 +177,15 @@ class AdvancedRandom(MapVisualization):
             
             trajectories = set()
             for _ in range(20):
-                # make random trajectory
-                current_trajectory: Trajectory = self.make_trajectory(RailNL.CONNECTIONS)
 
-                # add to set of trajectories
-                trajectories.add(current_trajectory)
+                current_trajectory = Trajectory()
+                
+                self.repopulate_possible_connections_for_all_stations()
+
+                departure_station = self.choose_first_departure_station(current_trajectory)
+
+                # make random trajectory and add to set of trajectories
+                trajectories.add(self.make_trajectory(current_trajectory, departure_station, RailNL.CONNECTIONS))
 
                 # add trajectory connections to used_connections
                 self.used_connections.update(current_trajectory.connections)
@@ -191,15 +196,17 @@ class AdvancedRandom(MapVisualization):
             i += 1
 
             trajectories = list(trajectories)
+
             solution = Solution(trajectories, False, self.__class__.__name__)
 
             self.score_file.write_score(solution.score)
+
 
             if solution.score > highest_score:
                 highest_score = solution.score
                 highest_score_solution = solution
 
-                self.highest_score_file.write_score(highest_score)
+            self.highest_score_file.write_score(highest_score)
 
             if self.verbose:
                 print(f"Score: {solution.score}")
@@ -213,9 +220,9 @@ class AdvancedRandom(MapVisualization):
         Output(highest_score_solution.trajectories, False)
 
         if visualize:
-            self.visualize(solution=highest_score_solution)
-            visualize_iterations_to_score("data/scores/sigma_highest.csv")
-            visualize_baseline("data/scores/sigma.csv")
+            self.visualize(solution=highest_score_solution, auto_open=auto_open)
+            visualize_iterations_to_score("data/scores/advanced_highest.csv", auto_open=auto_open)
+            visualize_baseline("data/scores/advanced.csv")
 
 if __name__ == "__main__":
     advancedRandom = AdvancedRandom()
