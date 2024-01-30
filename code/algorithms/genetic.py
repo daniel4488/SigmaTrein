@@ -4,7 +4,6 @@ from code.visualisation.baseline import visualize_iterations_to_score
 
 import random
 import copy
-import os
 
 
 class Genetic(HillClimber):
@@ -22,13 +21,8 @@ class Genetic(HillClimber):
 
         return self.randomize.run(iterations=1, visualize=False, write_output=False)
 
-    def fitness(self, solution: Solution) -> int:
-        """ Return score of given solution. """
-
-        return solution.score
-
-    def generate_children(self, parent: Solution, size: int, mutations: int = 2) -> list[Solution]:
-        """ Return set of new solutions, created with the Hill Climber alogirthm
+    def generate_children(self, parent: Solution, size: int, mutations: int = 2) -> set[Solution]:
+        """ Return set of new solutions, created with the Hill Climber algorithm
             from the parent solution. """
 
         # create an empty list where children can be stored
@@ -45,14 +39,14 @@ class Genetic(HillClimber):
 
         return children
 
-    def run(self, iterations: int, visualize: bool, repititions: int = 1, verbose: bool = True):
+    def run(self, iterations: int, visualize: bool, repetitions: int = 1, children: int = 2000, verbose: bool = True):
         random.seed(123)
         self.score_file.prepare_file()
 
         # set all parameters to zero
         all_time_highest_score_child = 0
 
-        for _ in range(repititions):
+        for _ in range(repetitions):
             # highest_score = 0
 
             # generate parent solution
@@ -63,20 +57,20 @@ class Genetic(HillClimber):
             # set highest_score_child to zero
             highest_score_child = 0
 
-            # run a while loop untill no child with a higher score has been found
+            # run a while loop until no child with a higher score has been found
             # i.e. till children generate better children run this loop
-            while new_highest_score == True:
+            while new_highest_score:
                 # set new_highest_score to False
                 new_highest_score = False
 
                 # generate a population of children based on parent
-                children: list[Solution] = self.generate_children(parent, 2000)
+                children: set[Solution] = self.generate_children(parent, children)
 
                 # iterate over all children 
                 for child in children:
                     # write score of child
                     self.score_file.write_score(child.score)
-                    # if this childs score is higher than till now highest child score
+                    # if this child's score is higher than till now highest child score
 
                     if child.score > highest_score_child:
                         # set new_highest_score found to True
@@ -86,7 +80,7 @@ class Genetic(HillClimber):
                         # keep track of the highest score found
                         highest_score_child = child.score
 
-            # check the highest score found in this tree and compare it to the most succesful tree
+            # check the highest score found in this tree and compare it to the most successful tree
             if highest_score_child > all_time_highest_score_child:
                 all_time_highest_score_child = highest_score_child
 

@@ -1,24 +1,18 @@
 from code.classes.trajectory import Trajectory
-from code.classes.station import Station
 from code.classes.connection import Connection
 from code.classes.solution import Solution
 from code.classes.output import Output
-from code.classes.railNL import RailNL
-from code.algorithms.randomize import Randomize
 from code.visualisation.map_class import MapVisualization
 from code.algorithms.advanced_random import AdvancedRandom
-from code.classes.data import DataInfo
 
 import random
 import copy
-import os
 
 
 class Sigma(MapVisualization, AdvancedRandom):
     def __init__(self, dataset: str):
 
         super().__init__(dataset=dataset)
-
 
         # initialize a list with pre-fixed routes that start of a trajectory
         self.standard_trajectories = [["Maastricht", "Sittard", "Heerlen", "Sittard", "Roermond", "Weert", "Eindhoven"],
@@ -38,7 +32,6 @@ class Sigma(MapVisualization, AdvancedRandom):
 
         # dictionaries with all leftover connections when prefixed routes are layed out
         self.special_connections: dict[int, Connection] = {}
-
 
         # indicate that we do not want print statements
         self.verbose = False
@@ -72,9 +65,6 @@ class Sigma(MapVisualization, AdvancedRandom):
 
                 # increment the current trajectory number
                 trajectory_number += 1
-
-            # make number of connections / trajectories a class variable
-            # RailNL.NUMBER_OF_CONNECTIONS = trajectory_number
 
     def choose_predetermined_first_departure_station(self, trajectory: Trajectory):
 
@@ -120,7 +110,7 @@ class Sigma(MapVisualization, AdvancedRandom):
         trajectories = set()
         is_valid = False
         highest_score = 0 
-        # iterations = 1
+
         i = 0
         for _ in range(iterations):
             print(i)
@@ -156,7 +146,6 @@ class Sigma(MapVisualization, AdvancedRandom):
                 highest_score = solution.score
                 highest_score_solution = Output(trajectories, is_valid)
 
-
             if self.verbose:
                 print(f"Score: {solution.score}")
 
@@ -167,20 +156,9 @@ class Sigma(MapVisualization, AdvancedRandom):
             
             is_valid = False
 
-        
-        print(highest_score)
+        print(highest_score) if self.verbose else None
 
         if visualize:
             self.visualize(solution=highest_score_solution)
 
         return highest_score_solution
-
-    # def make_baseline(self, verbose: bool = False) -> None:
-    #     self.verbose = verbose
-
-    #     self.prepare_csv_file()
-
-    #     number_of_simulations = 100
-
-    #     for _ in range(number_of_simulations):
-    #         self.make_solution(write_output=True)
