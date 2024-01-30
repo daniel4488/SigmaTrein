@@ -16,13 +16,20 @@ class SimulatedAnnealing(HillClimber):
     with a float for the starting temperature, and a float for the current temperature.
     """
 
-    def __init__(self, dataset: str) -> None:
+    def __init__(self, dataset: str, start_temperature: float = 10, cooling_scheme: str = "linear", alpha: float = 0.99) -> None:
 
         # call initializer of super class
         super().__init__(dataset=dataset)
 
-        self.start_temperature: float = 10
-        self.temperature: float = 10
+        self.start_temperature: float = start_temperature
+        self.temperature: float = start_temperature
+
+        schemes = {"linear", "exponential", "constant", "root"}
+        assert cooling_scheme in schemes
+
+        self.cooling_scheme = cooling_scheme
+
+        self.alpha = alpha
 
     def update_temperature(self) -> None:
         """
@@ -42,7 +49,17 @@ class SimulatedAnnealing(HillClimber):
         # print number of iterations if verbose is True
         print(f"total iter: {self.iterations}") if self.verbose else None
 
-        self.temperature = max(self.temperature - self.start_temperature / self.iterations, 1e-4)
+        match self.cooling_scheme:
+            case "linear":
+                self.temperature = max(self.temperature - self.start_temperature / self.iterations, 1e-4)
+            case "exponential":
+                self.temperature *= self.alpha
+            case "root":
+                self.temperature -= np.sqrt(self.temperature)
+            case "constant":
+                pass
+
+
 
         # Exponential would look like this:
         # alpha = 0.99
@@ -63,6 +80,11 @@ class SimulatedAnnealing(HillClimber):
         if self.verbose:
             print(f"Old score: {self.score}")
             print(f"New score: {new_score}")
+
+        # if self.score < 1e-3:
+        #     scale_correction = 1
+        # else:
+        #     scale_correction = self.score
 
         # calculate the acceptance probability of the change
         delta = (self.score - new_score)
