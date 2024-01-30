@@ -154,7 +154,7 @@ class Sigma(AdvancedRandom, MapVisualization):
         i = 0
         for _ in range(iterations):
             # print iterations
-            if i % 1000 == 0:
+            if i % 10000 == 0:
                 print(f"{i} iterations")
 
             # whilst a solution is not valid, i.e. all connections used by trajectories
@@ -199,6 +199,7 @@ class Sigma(AdvancedRandom, MapVisualization):
 
             # reset is_valid parameter
             self.is_valid = False
+
             # update iterations parameter
             i += 1
 
