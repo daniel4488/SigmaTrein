@@ -3,6 +3,7 @@ from code.classes.data import DataInfo
 
 import argparse
 import textwrap
+import os
 
 
 def valid_iterations(arg: str) -> int:
@@ -24,6 +25,30 @@ def valid_mutations(arg: str) -> int:
         raise argparse.ArgumentTypeError("please enter a strictly positive integer number as mutation")
 
     return int(arg)
+
+
+def valid_temperature(arg: str) -> float:
+    """ Function to check the start temperature of simulated annealing. """
+
+    try:
+        arg_float = float(arg)
+    except ValueError:
+        raise argparse.ArgumentTypeError("start temperature needs to be a floating point number or integer")
+
+    if arg_float <= 0:
+        raise argparse.ArgumentTypeError("start temperature needs to be strictly positive")
+
+    return arg_float
+
+
+def valid_cooling_down(arg: str) -> str:
+    """ Function to check the cooling down scheme of simulated annealing. """
+    schemes = {"linear", "exponential", "constant", "root"}
+
+    if arg not in schemes:
+        raise argparse.ArgumentTypeError("cooling down scheme can only be linear, exponential, root or constant")
+
+    return arg
 
 
 if __name__ == "__main__":
@@ -124,6 +149,35 @@ if __name__ == "__main__":
         help="specify number of mutations made at each hill climber iteration"
     )
 
+    # add optional argument for simulated annealing starting temperature
+    parser.add_argument(
+        "--start_temperature",
+        type=valid_temperature,
+        help="sets the start temperature for simulated annealing"  # TODO: add default
+    )
+
+    # add optional argument simulated annealing cooling down scheme
+    parser.add_argument(
+        "--cooling_down",
+        type=valid_cooling_down,
+        help="sets the cooling down scheme for simulated annealing defaults to linear"
+    )
+
+    # add optional argument for alpha parameter of simulated annealing exponential cooling down
+    parser.add_argument(
+        "--alpha",
+        type=valid_temperature,
+        help="sets the alpha parameter for simulated annealing exponential cooling down"
+    )
+
+    # add option to turn experiment on or off
+    parser.add_argument(
+        "--experiment",
+        action="store_true",
+        default=False,
+        help="runs an experiment for the chosen algorithm, only available for hill climber and simulated annealing"
+    )
+
     # parse the command line argument
     args = parser.parse_args()
 
@@ -139,9 +193,29 @@ if __name__ == "__main__":
     if args.mutations and args.mutations > getattr(DataInfo, args.dataset).max_trajectories:
         raise argparse.ArgumentTypeError("mutations cannot be larger than the number of trajectories")
 
+    # start temperature option is only compatible with simulated annealing
+    if args.start_temperature and args.algorithm != "simulated_annealing":
+        parser.error("--start_temperature can only be set in combination with simulated_annealing algorithm")
+
+    # cooling down is only compatible with simulated annealing
+    if args.cooling_down and args.algorithm != "simulated_annealing":
+        parser.error("--cooling_down can only be set in combination with simulated_annealing algorithm")
+
+    # alpha + exponential cooling down + simulated annealing
+    if args.alpha and (args.algorithm != "simulated_annealing" or args.cooling_down != "exponential"):
+        parser.error("--alpha parameter is exclusive to exponential cooling down of simulated annealing")
+
+    # experiment only works with hill climber or simulated annealing
+    if args.experiment and (args.algorithm not in {"simulated_annealing", "hill_climber"}):
+        parser.error("experiment only works with simulated_annealing or hill_climber")
+
     # set default arguments for iterations argument
     if args.iterations is None:
         args.iterations = default_iterations[args.algorithm]
+
+    # experiment
+    if args.experiment:
+        os.system(f"python3 code/experiments/{args.algorithm}.py")
 
     # handle special run case with mutations option on hill climber
     if args.mutations:
@@ -151,6 +225,45 @@ if __name__ == "__main__":
             iterations=args.iterations,
             visualize=(not args.visual_off),
             mutations=args.mutations,
+            verbose=args.verbose
+        )
+        exit(0)
+
+    # handle special run case with start temperature
+    if args.start_temperature:
+        from code.algorithms.simulated_annealing import SimulatedAnnealing
+        simulated_annealing = SimulatedAnnealing(dataset=args.dataset, start_temperature=args.start_temperature)
+        simulated_annealing.run(
+            iterations=args.iterations,
+            visualize=(not args.visual_off),
+            verbose=args.verbose
+        )
+        exit(0)
+
+    # handle special run case with cooling down scheme
+    if args.cooling_down:
+        if not args.start_temperature:
+            args.start_temperature = 10
+
+        from code.algorithms.simulated_annealing import SimulatedAnnealing
+
+        if args.alpha:
+            simulated_annealing = SimulatedAnnealing(
+                dataset=args.dataset,
+                start_temperature=args.start_temperature,
+                cooling_scheme="exponential",
+                alpha=args.alpha
+            )
+        else:
+            simulated_annealing = SimulatedAnnealing(
+                dataset=args.dataset,
+                start_temperature=args.start_temperature,
+                cooling_scheme=args.cooling_down
+            )
+
+        simulated_annealing.run(
+            iterations=args.iterations,
+            visualize=(not args.visual_off),
             verbose=args.verbose
         )
         exit(0)
