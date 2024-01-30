@@ -319,7 +319,7 @@ if __name__ == "__main__":
         "verbose": args.verbose,
         "auto_open": not args.disable_auto_open
     }
-    
+
     if args.not_unique:
         kwargs["unique"] = not args.not_unique
 
@@ -329,4 +329,3 @@ if __name__ == "__main__":
     # run chosen algorithm
     # exec(f"{args.algorithm}.run(iterations={args.iterations}, visualize={not args.visual_off}, verbose={args.verbose}, auto_open={not args.disable_auto_open})")
     eval(f"{args.algorithm}").run(**kwargs)
-
