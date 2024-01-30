@@ -88,7 +88,7 @@ class AdvancedRandom(Randomize, MapVisualization):
                 departure_station = self.choose_departure_station(current_trajectory)
 
                 # make random trajectory and add to set of trajectories
-                trajectories.add(self.make_trajectory(current_trajectory, departure_station))
+                trajectories.add(self.make_advanced_trajectory(current_trajectory, departure_station))
 
                 # add trajectory connections to used_connections
                 self.used_connections.update(current_trajectory.connections)
