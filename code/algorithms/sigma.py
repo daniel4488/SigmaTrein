@@ -6,7 +6,7 @@ from code.classes.output import Output
 from code.classes.railNL import RailNL
 from code.algorithms.randomize import Randomize
 from code.visualisation.map_class import MapVisualization
-from code.algorithms.advancedRandom import AdvancedRandom
+from code.algorithms.advanced_random import AdvancedRandom
 from code.classes.data import DataInfo
 
 import random
