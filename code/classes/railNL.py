@@ -111,10 +111,10 @@ class RailNL:
             # make number of connections / trajectories a class variable
             RailNL.NUMBER_OF_CONNECTIONS = trajectory_number
 
-    def load_special_connections(self):
+    def load_special_connections(self) -> None:
         """ Converts leftover connections data to Connection classes and
             loads them into the connections dictionary. """
-        
+
         with open("data/nationaal/sigmanationaal.csv", "r") as file:
             # remove header
             _ = file.readline()

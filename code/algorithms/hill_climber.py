@@ -1,15 +1,15 @@
-from code.classes.trajectory import Trajectory
-from code.classes.solution import Solution
+from code.algorithms.randomize import Randomize
 from code.classes.output import Output
 from code.classes.railNL import RailNL
+from code.classes.solution import Solution
+from code.classes.trajectory import Trajectory
 from code.classes.write_file import ScoreFile
-from code.algorithms.randomize import Randomize
-from code.visualisation.map_class import MapVisualization
 from code.functions.to_snake_case import to_snake_case
 from code.visualisation.baseline import visualize_iterations_to_score
+from code.visualisation.map_class import MapVisualization
 
-import random
 import copy
+import random
 
 
 class HillClimber(MapVisualization):
@@ -34,11 +34,14 @@ class HillClimber(MapVisualization):
         self.verbose = False
         self.railNL = RailNL(dataset=dataset)
         self.randomize = Randomize(dataset)
+
+        # variables to keep track of current solution
         self.solution: Solution = None
         self.trajectories: list[Trajectory] = None
         self.score: int = None
         self.iterations: int = None
 
+        # initialize score file
         self.scores_path: str = f"data/scores/{to_snake_case(self.__class__.__name__)}.csv"
         self.score_file: ScoreFile = ScoreFile(f"{to_snake_case(self.__class__.__name__)}.csv")
 
