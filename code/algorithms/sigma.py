@@ -203,7 +203,7 @@ class Sigma(AdvancedRandom, MapVisualization):
             i += 1
 
         # Create proper output for the highest solution found
-        Output(highest_score_solution.trajectories, is_valid)
+        Output(highest_score_solution.trajectories, self.is_valid)
 
         # visualize results
         if visualize:
