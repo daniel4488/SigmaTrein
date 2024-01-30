@@ -84,7 +84,7 @@ class AdvancedRandom(Randomize, MapVisualization):
 
                 # increase weight of connection
                 self.connections[connection].weight += 1
-                
+
                 # update departure station to the current station
                 departure_station = destination_station
 
@@ -107,63 +107,66 @@ class AdvancedRandom(Randomize, MapVisualization):
 
         # set a parametere that keeps track of the amount of iterations
         i = 0
+        
+        try:
+            for _ in range(iterations):
+                # print iterations
+                if i % 10000 == 0:
+                    print(f"{i} iterations")
 
-        for _ in range(iterations):
-            # print iterations
-            if i % 10000 == 0:
-                print(f"{i} iterations")
+                # reset all used connections by previous solution
+                self.reset_used_connections_and_weight()
 
-            # reset all used connections by previous solution
-            self.reset_used_connections_and_weight()
+                # create empty set for the trajectories
+                trajectories = set()
 
-            # create empty set for the trajectories
-            trajectories = set()
+                # loop for the maximum amount of trajectories
+                for _ in range(int(self.constrictions.max_trajectories)):
+                    # initialize trajectory
+                    current_trajectory = Trajectory()
 
-            # loop for the maximum amount of trajectories
-            for _ in range(int(self.constrictions.max_trajectories)):
-                # initialize trajectory
-                current_trajectory = Trajectory()
+                    # set departure station according to random procedure
+                    departure_station = self.choose_departure_station(current_trajectory)
 
-                # set departure station according to random procedure
-                departure_station = self.choose_departure_station(current_trajectory)
+                    # make advanced trajectory and add to set of trajectories
+                    trajectories.add(self.make_advanced_trajectory
+                                     (current_trajectory, departure_station))
 
-                # make advanced trajectory and add to set of trajectories
-                trajectories.add(self.make_advanced_trajectory
-                                 (current_trajectory, departure_station))
+                    # add trajectory connections to used_connections
+                    self.used_connections.update(current_trajectory.connections)
 
-                # add trajectory connections to used_connections
-                self.used_connections.update(current_trajectory.connections)
+                    # check if a solution is valid if all connections are used
+                    if len(self.used_connections) == RailNL.NUMBER_OF_CONNECTIONS:
+                        break
+                
+                # Convert trajectories set to list for it to maintain order
+                trajectories = list(trajectories)
 
-                # check if a solution is valid if all connections are used
-                if len(self.used_connections) == RailNL.NUMBER_OF_CONNECTIONS:
-                    break
-            
-            # Convert trajectories set to list for it to maintain order
-            trajectories = list(trajectories)
+                # create the solution object
+                solution = Solution(trajectories, False, self.__class__.__name__)
 
-            # create the solution object
-            solution = Solution(trajectories, False, self.__class__.__name__)
+                # write the score to a csv file
+                self.score_file.write_score(solution.score)
+                
+                # check if a new highest score has been found
+                if solution.score > highest_score:
+                    highest_score = solution.score
+                    highest_score_solution = solution
 
-            # write the score to a csv file
-            self.score_file.write_score(solution.score)
-            
-            # check if a new highest score has been found
-            if solution.score > highest_score:
-                highest_score = solution.score
-                highest_score_solution = solution
+                # write current highest score to the highest score file
+                self.highest_score_file.write_score(highest_score)
 
-            # write current highest score to the highest score file
-            self.highest_score_file.write_score(highest_score)
+                # print statements
+                if self.verbose:
+                    print(f"Score: {solution.score}")
 
-            # print statements
-            if self.verbose:
-                print(f"Score: {solution.score}")
+                    for trajectory in solution.trajectories:
+                        print("Stations:", end="")
+                        print(trajectory, end="")
 
-                for trajectory in solution.trajectories:
-                    print("Stations:", end="")
-                    print(trajectory, end="")
-
-                print(highest_score)
+                    print(highest_score)
+        except KeyboardInterrupt:
+            pass
 
             # update iterations parameter
             i += 1

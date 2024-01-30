@@ -153,6 +153,7 @@ class Sigma(AdvancedRandom, MapVisualization):
 
         # set a parametere that keeps track of the amount of iterations
         i = 0
+<<<<<<< HEAD
 
         for _ in range(iterations):
             # print iterations
@@ -164,46 +165,54 @@ class Sigma(AdvancedRandom, MapVisualization):
             while not self.is_valid:
                 # reset all used connections by previous solution
                 self.reset_used_connections_and_weight()
+=======
+        try:
+            for _ in range(iterations):
+                # print iterations
+                if i % 10000 == 0:
+                    print(f"{i} iterations")
 
-                # repopulate the standard routes lists
-                self.standard_stations_copy = copy.deepcopy(self.standard_stations)
-                self.standard_connections_copy = copy.deepcopy(self.standard_connections)
+                # whilst a solution is not valid, i.e. all connections used by trajectories
+                # keep looking for a valid solution
+                while not self.is_valid:
+                    # rest all used connections by previous solution
+                    self.reset_used_connections()
+>>>>>>> d361830d1c72e4c4f703b11d6365dce38bd6e729
 
-                # create a solution consisting of a set of trajectories
-                trajectories = self.create_solution()
-            
-            # Convert trajectories set to list for it to maintain order
-            trajectories = list(trajectories)
+                    # repopulate the standard routes lists
+                    self.standard_stations_copy = copy.deepcopy(self.standard_stations)
+                    self.standard_connections_copy = copy.deepcopy(self.standard_connections)
 
-            # create a solution, where it will strip double connections
-            solution = Solution(trajectories, self.is_valid, self.__class__.__name__)
+                    # create a solution consisting of a set of trajectories
+                    trajectories = self.create_solution()
 
-            # write the score after removing double connections to csv file
-            self.score_file.write_score(solution.score)
+                # Convert trajectories set to list for it to maintain order
+                trajectories = list(trajectories)
 
-            # check if a new highest score has been found
-            if solution.score > highest_score:
-                highest_score = solution.score
-                highest_score_solution = solution
+                # create a solution, where it will strip double connections
+                solution = Solution(trajectories, self.is_valid, self.__class__.__name__)
 
-            # write current highest score to the highest score file
-            self.highest_score_file.write_score(highest_score)
+                # write the score after removing double connections to csv file
+                self.score_file.write_score(solution.score)
 
-            # print statements
-            if self.verbose:
-                print(f"Score: {solution.score}")
+                # check if a new highest score has been found
+                if solution.score > highest_score:
+                    highest_score = solution.score
+                    highest_score_solution = solution
 
-                for trajectory in solution.trajectories:
-                    print("Stations:", end="")
-                    print(trajectory, end="")
-                    print()
-                print(highest_score)
+                # write current highest score to the highest score file
+                self.highest_score_file.write_score(highest_score)
 
-            # reset is_valid parameter
-            self.is_valid = False
+                # print statements
+                if self.verbose:
+                    print(f"Score: {solution.score}")
 
-            # update iterations parameter
-            i += 1
+                # reset is_valid parameter
+                self.is_valid = False
+                # update iterations parameter
+                i += 1
+        except KeyboardInterrupt:
+            pass
 
         # Create proper output for the highest solution found
         Output(highest_score_solution.trajectories, self.is_valid)

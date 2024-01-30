@@ -78,7 +78,7 @@ Apart from this README, the command line application offers a help interface tha
 - sigma
 - simulated_annealing
 
-After the process has finished, one or more windows will be opened, showing the outcomes of the chosen algorithm.
+After the process has finished, one or more windows will be opened, showing the outcomes of the chosen algorithm. The output files can be found in a folder called ```output``` within the project's directory.
 
 In addition to the mandatory option ```algorithm``` there is a whole list of optional arguments that can be used when desired.
 
@@ -97,6 +97,25 @@ In addition to the mandatory option ```algorithm``` there is a whole list of opt
 | --alpha               | sets the alpha parameter of the exponential cooling down scheme                                   | float in (0, 1)                             | 0.99                       |
 | --not_unique          | allows the random algorithm to choose a connection multiple times within a single trajectory      |                                             |                            |
 | --prefixed            | restricts the random algorithm to choose a starting station from a list of preferred stations     |                                             |                            |
+
+### Default Iterations
+For each algorithm an appropriate number of ```iterations``` has been set by default. If the ```iterations``` have not been adjusted, this will be used as configuration.
+
+| **algorithm**       | **iterations** |
+|---------------------|----------------|
+| advanced_random     | 1000           |
+| baseline            | 100000         |
+| genetic             | 2              |
+| hill_climber        | 300000         |
+| randomize           | 1              |
+| sigma               | 1000           |
+| simulated_annealing | 100000         |
+
+# Computation Time
+The Apollo 11 space shuttle has sent people to the moon using a board computer with 4 KB of memory. But this was in 1969 and now we are running this project with 16 GB of RAM. However, there are still limitations in what a computer can do within a restricted amount of time.
+
+We have measured and extrapolated for each algorithm how long it would take to run some number of iterations depending on the ```algorithm```. The results are shown in the table below. The number of iterations have been rounded. Any parameters for the algorithms will have the default configuration in this test.
+
 
 
 # Experiments
