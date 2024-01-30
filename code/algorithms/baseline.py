@@ -7,6 +7,9 @@ from code.visualisation.map_class import MapVisualization
 
 
 class Baseline(Randomize, MapVisualization):
+    """
+    Class to create a baseline from our random algorithm.
+    """
 
     def __init__(self, dataset: str) -> None:
         super().__init__(dataset=dataset)
@@ -34,9 +37,7 @@ class Baseline(Randomize, MapVisualization):
         Output(self.highest_score_solution.trajectories, True)
 
         if visualize:
-            # csv
             data = "data/scores/baseline.csv"
-
             # map
             self.visualize(solution=self.highest_score_solution, auto_open=auto_open)
 

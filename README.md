@@ -14,6 +14,25 @@ $$ K = p \cdot 10,000 - (T \cdot 100 - Min) $$
 where $p$ is the fraction included connections of the total connections, $T$ is the number of trajectories, and $Min$ is the sum of total duration of all trajectories.
 This formula gives us score $K$, which needs to be maximised.
 
+# Algorithms
+
+### Randomize
+The random algorithm chooses a random starting station. From there it randomly chooses a possible connection. From this next station onward, the same is done, until the maximum time of a trajectory is reached. In this way, a solution of multiple trajectories is made.
+
+Our random algorithm can be made less random by setting two booleans to True. The first boolean is ```unique```. When ```unique=True```, our random algorithm only chooses a connection once in the same trajectory. The second boolean is ```prefixed```. When ```prefixed=True```, the algorithm will start at some priorly chosen stations, and run from there.
+
+### Hill Climber
+The Hill Climber algorithm starts by creating a solution from our random algorithm. Thereafter, it starts deleting a chosen number of trajectories, and checks if these solutions return better scores. If not, it makes random new solutions for every deleted trajectory. A solution with a higher score than the current one is accepted as the new current solution. This process is repeated for a given amount of iterations.
+
+### Simulated Annealing
+
+
+### Genetic
+The Genetic algorithm creates a parent solution from our random algorithm. Then it creates new solutions, called children, by mutating the parent solution using the our Hill Climber algorithm. Next, it takes the child with the highest score, and that one becomes the new parent solution. This process is repeated till there are no higher scores found. The algorithm can be repeated multiple times, this means that it automatically starts again with a whole new random solution.
+
+### Sigma
+The Sigma algorithm is an algorithm that we created ourselves. The algorithm gets a few predetermined consecutive stations and connections. These are fixed pieces where some trajectories must start with. From there on out it fills up every trajectory with randomly chosen connections.
+
 # Usage
 Before running the ```main.py```, all packages in the ```requirements.txt``` must be installed in Python3. This can be done in one step by running in your Terminal: \
 ``` pip install -r requirements.txt ```
@@ -30,8 +49,6 @@ The exponential cooling down scheme has a parameter alpha that is in (0, 1).
 The experiments can be executed with main.py. <br>
 For hill_climber: ``` python3 main.py hill_climber --experiment ``` <br>
 For simulated_annealing: ``` python3 main.py simualted_annealing --experiment ```
-
-# Structure
 
 # Authors
 Daniël Frijns () \
