@@ -18,6 +18,18 @@ This formula gives us score $K$, which needs to be maximised.
 Before running the ```main.py```, all packages in the ```requirements.txt``` must be installed in Python3. This can be done in one step by running in your Terminal: \
 ``` pip install -r requirements.txt ```
 
+# Experiments
+Experiments are available for the algorithms hill_climber and simulated_annealing. 
+The hill climber has a parameter mutations, this means how many changes are made at each iteration.
+Each hill climber change is replacing a trajectory. This means mutations is an integer inbetween 1 and 7, endpoints included.
+
+Simulated annealing has always a starting temperature (> 0) that can be adjusted.
+The algorithm has a cooling down scheme that could be linear, exponential, root or constant.
+The exponential cooling down scheme has a parameter alpha that is in (0, 1).
+
+The experiments can be executed with main.py. 
+For example: ``` python3 main.py hill_climber --experiment ```.
+
 # Structure
 
 # Authors
