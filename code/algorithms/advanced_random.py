@@ -26,11 +26,10 @@ class AdvancedRandom(Randomize, MapVisualization):
         for _, connection_object in self.connections.items():
             connection_object.reset_weight()
 
-    def make_trajectory(self, trajectory: Trajectory, departure_station: tuple[str, Station], connections: dict[int, Connection]) -> Trajectory:
+    def make_advanced_trajectory(self, trajectory: Trajectory, departure_station: tuple[str, Station]) -> Trajectory:
         """ Generates a randomly chosen trajectory. """
 
         self.repopulate_possible_connections_for_all_stations()
-
 
         # choose the first departure station
         # departure_station = self.choose_first_departure_station(trajectory)
@@ -38,14 +37,13 @@ class AdvancedRandom(Randomize, MapVisualization):
         # add stations to trajectory as long as its duration is less than 120 mins,
         # and there are still possible connections
         while departure_station[1].possible_connections:
-            
             # choose random connection number from possible connections at departure station
             # connection = departure_station[1].return_random_connection()
 
             possible_connections = departure_station[1].return_possible_connections()
             
             # find the connection with the lowest weight using a lambda function
-            connection = min(possible_connections, key=lambda connection: connections[connection].weight)
+            connection = min(possible_connections, key=lambda connection: self.connections[connection].weight)
 
             # get destination station from chosen connection 
             destination_station = self.get_station(departure_station[0], connection)
@@ -54,14 +52,14 @@ class AdvancedRandom(Randomize, MapVisualization):
             self.update_connections(connection, departure_station[1], destination_station[1])
 
             # update total duration of the trajectory
-            duration_candidate = trajectory.duration + connections[connection].duration
+            duration_candidate = trajectory.duration + self.connections[connection].duration
 
             # add station to trajectory if it fits within 120 mins
             if duration_candidate <= self.constrictions.max_time:
                 self.update_trajectory(duration_candidate, connection, destination_station[0], trajectory)
 
                 # New
-                connections[connection].weight += 1
+                self.connections[connection].weight += 1
                 # update departure station to the current station
                 departure_station = destination_station
 
@@ -90,7 +88,7 @@ class AdvancedRandom(Randomize, MapVisualization):
                 departure_station = self.choose_departure_station(current_trajectory)
 
                 # make random trajectory and add to set of trajectories
-                trajectories.add(self.make_trajectory(current_trajectory, departure_station, RailNL.CONNECTIONS))
+                trajectories.add(self.make_trajectory(current_trajectory, departure_station))
 
                 # add trajectory connections to used_connections
                 self.used_connections.update(current_trajectory.connections)

@@ -82,9 +82,9 @@ class Sigma(AdvancedRandom, MapVisualization):
         # initialize empty trajectory
         trajectory = Trajectory()
 
-        departure_station = self.choose_departure_station(trajectory)
+        departure_station = self.choose_predetermined_first_departure_station(trajectory)
         
-        return self.make_trajectory(trajectory, departure_station, self.connections)
+        return self.make_advanced_trajectory(trajectory, departure_station)
     
     def run(self, iterations: int, visualize: bool, verbose: bool, auto_open: bool):
         
