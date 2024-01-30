@@ -50,7 +50,7 @@ class Sigma(AdvancedRandom, MapVisualization):
         self.standard_stations_copy = []
         self.standard_connections_copy = []
 
-    def choose_departure_station(self, trajectory: Trajectory):
+    def choose_predetermined_first_departure_station(self, trajectory: Trajectory):
         """ Prefixed list of stations and connections are added to a trajectory,
             from there a random connection to a departure station is chosen. The
             departure station is returned. """

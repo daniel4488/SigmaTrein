@@ -93,7 +93,7 @@ class AdvancedRandom(Randomize, MapVisualization):
                 # add trajectory connections to used_connections
                 self.used_connections.update(current_trajectory.connections)
             
-                if len(self.used_connections) == 89:
+                if len(self.used_connections) == 90:
                         break
                 
             i += 1

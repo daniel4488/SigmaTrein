@@ -21,6 +21,9 @@ The random algorithm chooses a random starting station. From there it randomly c
 
 Our random algorithm can be made less random by setting two booleans to True. The first boolean is ```unique```. When ```unique=True```, our random algorithm only chooses a connection once in the same trajectory. The second boolean is ```prefixed```. When ```prefixed=True```, the algorithm will start at some priorly chosen stations, and run from there.
 
+### Advanced Randomize
+The advanced randomize algorithm gets steered by a simple heuristic. It chooses a random departure station and then chooses the connection which has been used the least in a particular solution. For example if a solution consists of 19 trajectories, it keeps track of how many times each connection has been used within these 19 trajectories. If a 20th trajectory is made it will then depart from a random station and chooses from it's possible connections which has been used the least by the other 19 trajectories. 
+
 ### Hill Climber
 The Hill Climber algorithm starts by creating a solution from our random algorithm. Thereafter, it starts deleting a chosen number of trajectories, and checks if these solutions return better scores. If not, it makes random new solutions for every deleted trajectory. A solution with a higher score than the current one is accepted as the new current solution. This process is repeated for a given amount of iterations.
 
@@ -31,7 +34,7 @@ The Hill Climber algorithm starts by creating a solution from our random algorit
 The Genetic algorithm creates a parent solution from our random algorithm. Then it creates new solutions, called children, by mutating the parent solution using the our Hill Climber algorithm. Next, it takes the child with the highest score, and that one becomes the new parent solution. This process is repeated till there are no higher scores found. The algorithm can be repeated multiple times, this means that it automatically starts again with a whole new random solution.
 
 ### Sigma
-The Sigma algorithm is an algorithm that we created ourselves. The algorithm gets a few predetermined consecutive stations and connections. These are fixed pieces where some trajectories must start with. From there on out it fills up every trajectory with randomly chosen connections.
+The Sigma algorithm is an algorithm that we created ourselves. The algorithm gets a few predetermined consecutive stations and connections. These are fixed routes where some trajectories must start with. A trajectory is then made starting either from a predetermined station or a random one. After the first departure has been chosen the algorithm starts choosing its path with the advanced randomize algorithm. Once it has found a valid solution, meaning that all connections have been used by the trajectories, a heuristic starts looking at what connections can be removed from the trajectories. Starting with the shortest trajectory, it checks if both ends of the trajectory have connections that are used by other trajectories as well. If this is the case it removes these connections. It stops checking if both ends are not double connections anymore, or the whole trajectory has been removed due to all connections being double connections. In that case the whole trajectory gets removed from the final solution. 
 
 # Usage
 Before running the ```main.py```, all packages in the ```requirements.txt``` must be installed in Python3. This can be done in one step by running in your Terminal: \
