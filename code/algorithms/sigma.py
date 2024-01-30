@@ -4,6 +4,7 @@ from code.classes.solution import Solution
 from code.classes.output import Output
 from code.visualisation.map_class import MapVisualization
 from code.algorithms.advanced_random import AdvancedRandom
+from code.classes.railNL import RailNL
 
 import random
 import copy
@@ -13,6 +14,8 @@ class Sigma(MapVisualization, AdvancedRandom):
     def __init__(self, dataset: str):
 
         super().__init__(dataset=dataset)
+
+        self.railNL = RailNL(dataset=dataset)
 
         # initialize a list with pre-fixed routes that start of a trajectory
         self.standard_trajectories = [["Maastricht", "Sittard", "Heerlen", "Sittard", "Roermond", "Weert", "Eindhoven"],
