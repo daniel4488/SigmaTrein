@@ -1,5 +1,6 @@
 from code.classes.trajectory import Trajectory
 from code.classes.railNL import RailNL
+from collections import deque
 
 
 class Solution:
@@ -15,7 +16,7 @@ class Solution:
 
         self.verbose: bool = verbose
         self.is_valid: bool = is_valid
-        self.trajectories: list[Trajectory] = trajectories
+        self.trajectories: deque[Trajectory] = deque(trajectories)
         if origin == "Sigma" and self.is_valid:
             self.remove_double_connections()
         self.score: float = self.calculate_score()
