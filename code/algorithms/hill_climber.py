@@ -23,6 +23,7 @@ class HillClimber(MapVisualization):
     """
 
     def __init__(self, dataset: str):
+        random.seed(4668890)
         self.dataset = dataset
         self.verbose = False
         self.railNL = RailNL(dataset=dataset)
@@ -59,7 +60,7 @@ class HillClimber(MapVisualization):
         """ Mutates a trajectory and the new solution. """
 
         # create new random trajectory
-        new_trajectory = self.randomize.make_trajectory(unique=False)
+        new_trajectory = self.randomize.make_trajectory(unique=True, prefixed=False)
         self.trajectories.append(new_trajectory)
 
         # save new set of trajectories in new solution object
@@ -108,6 +109,8 @@ class HillClimber(MapVisualization):
 
         except KeyboardInterrupt:
             pass
+        algorithm = self.__class__.__name__
+        print(f"{algorithm} highest score: {self.score}") if self.verbose else None
 
         if visualize:
             Output(self.solution.trajectories, True)

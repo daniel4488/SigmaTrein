@@ -29,6 +29,7 @@ class Randomize:
         # random.seed(1309)
         # random.seed(239094)
         # random.seed(2024)
+        random.seed(7807719)
 
         self.score_file = ScoreFile("baseline.csv")
 
