@@ -19,7 +19,8 @@ class Baseline(Randomize, MapVisualization):
         self.highest_score_solution: Solution = None
 
     def run(self, iterations: int, visualize: bool, verbose: bool = False, auto_open: bool = False, unique: bool = True, prefixed: bool = False) -> None:
-        
+        """ Runs baseline for random algorthm. """
+
         print("Creating baseline...")
         self.verbose = verbose
 
@@ -28,6 +29,7 @@ class Baseline(Randomize, MapVisualization):
         i = 0
 
         try:
+            # create solutions and write score to score file
             for _ in range(iterations):
                 if i % 10000 == 0:
                     print(f"{i} iterations")
@@ -43,8 +45,10 @@ class Baseline(Randomize, MapVisualization):
         except KeyboardInterrupt:
             pass
 
+        # create output object
         Output(self.highest_score_solution.trajectories, True)
 
+        # create visualisation if visualize is True
         if visualize:
             data = "data/scores/baseline.csv"
             # map
