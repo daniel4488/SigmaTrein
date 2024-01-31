@@ -8,122 +8,29 @@ from code.classes.solution import Solution
 from code.classes.output import Output
 from code.classes.write_file import ScoreFile
 from code.visualisation.map_class import MapVisualization
+from code.algorithms.randomize import Randomize
 from code.visualisation.baseline import visualize_baseline, visualize_iterations_to_score
 
 import random
 
 
-class AdvancedRandom(MapVisualization):
+class AdvancedRandom(Randomize, MapVisualization):
     def __init__(self, dataset: str):
-        # set dataset
-        self.dataset = dataset
+        super().__init__(dataset=dataset)
 
         self.score_file = ScoreFile("advanced.csv")
         self.highest_score_file = ScoreFile("advanced_highest.csv")
-
-        self.railNL = RailNL(dataset=dataset)
-
-        # dictionary for all stations
-        self.stations: dict[str, Station] = dict()
-
-        # set constrictions
-        self.constrictions: DatasetInfo = self.set_constrictions(dataset)
-
-         # variable for keeping track of used connections
-        self.used_connections: set[int] = set()
-        
-        # stores a solution
-        self.solution: dict[int, list[str]] = {}
-
-        # False for no print statements, true for print statements
-        self.verbose: bool = False
-
-        # load all stations independent of RailNL class
-
-        if self.__class__.__name__ == "Sigma":
-            # load special stations in railNL class
-            self.railNL.load_special_stations()
-            # dictionary with all leftover stations
-            self.stations: dict[int, Station] = self.railNL.special_stations
-            # load special connections in railNL class
-            self.railNL.load_special_connections()
-            # dictionaries with all leftover connections when prefixed routes are layed out
-            self.connections: dict[int, Connection] = self.railNL.special_connections
-        else:
-            self.stations: dict[int, Station] = self.railNL.stations 
-            self.connections: dict[int, Connection] = self.railNL.stations
-        
-
-        # self.load_stations()
-
-    @staticmethod
-    def set_constrictions(dataset: str) -> DatasetInfo:
-        """ Sets the restrictions on trajectories for the chosen dataset. """
-
-        data_info = DataInfo
-
-        if dataset == "holland":
-            return data_info.holland
-        elif dataset == "nationaal":
-            return data_info.nationaal
-        
-    def choose_station(self, stations: list[str]) -> tuple[str, Station]:
-        """ Returns a list with the name and object of a randomly chosen
-            station. """
-
-        name = random.choice(stations)
-        station = self.stations[name]
-        return name, station
     
-    def get_station(self, start: str, connection: int, connections: dict[int, Connection]) -> tuple[str, Station]:
-        """ Returns list with station name and object from given connection
-            number. """
-
-        name = connections[connection].get_destination_station(start)
-        station = self.stations[name]
-        return name, station
-    
-    def repopulate_possible_connections_for_all_stations(self) -> None:
-        """ Prepare for the generation of a new trajectory. """
-
-        for station in self.stations:
-            self.stations[station].repopulate_possible_connections()
-
-    @staticmethod
-    def update_connections(connection: int, departure: Station,
-                           destination: Station) -> None:
-        """ Removes a made connection from the possible connections of the
-            departure station, as well as from the destination station. """
-
-        departure.remove_possible_connection(connection)
-        destination.remove_possible_connection(connection)
-
-    @staticmethod
-    def update_trajectory(duration: float, connection: int, station: str,
-                          trajectory: Trajectory) -> None:
-        """ Adds new connection and station to the given trajectory, and
-            updates its total time. """
-
-        trajectory.add_station(station)
-        trajectory.duration = duration
-        trajectory.add_connection_number(connection)
-
-    def choose_first_departure_station(self, trajectory: Trajectory):
-        # choose a random station to depart from
-        departure_station = self.choose_station(list(self.stations.keys()))
-
-        # add departure station to the trajectory
-        trajectory.add_station(departure_station[0])
-
-        return departure_station
-    
-    def reset_used_connections(self, connections: dict[int, Connection]) -> None:
+    def reset_used_connections_and_weight(self) -> None:
         self.used_connections.clear()
-        for _, connection_object in connections.items():
+        for _, connection_object in self.connections.items():
             connection_object.reset_weight()
 
     def make_trajectory(self, trajectory: Trajectory, departure_station: tuple[str, Station], connections: dict[int, Connection]) -> Trajectory:
         """ Generates a randomly chosen trajectory. """
+
+        self.repopulate_possible_connections_for_all_stations()
+
 
         # choose the first departure station
         # departure_station = self.choose_first_departure_station(trajectory)
@@ -141,7 +48,7 @@ class AdvancedRandom(MapVisualization):
             connection = min(possible_connections, key=lambda connection: connections[connection].weight)
 
             # get destination station from chosen connection 
-            destination_station = self.get_station(departure_station[0], connection, connections)
+            destination_station = self.get_station(departure_station[0], connection)
 
             # remove created connection from destination and departure station's possible connections
             self.update_connections(connection, departure_station[1], destination_station[1])
@@ -173,16 +80,14 @@ class AdvancedRandom(MapVisualization):
         
         for _ in range(iterations):
             print(i)
-            self.reset_used_connections(RailNL.CONNECTIONS)
+            self.reset_used_connections_and_weight()
             
             trajectories = set()
             for _ in range(20):
 
                 current_trajectory = Trajectory()
                 
-                self.repopulate_possible_connections_for_all_stations()
-
-                departure_station = self.choose_first_departure_station(current_trajectory)
+                departure_station = self.choose_departure_station(current_trajectory)
 
                 # make random trajectory and add to set of trajectories
                 trajectories.add(self.make_trajectory(current_trajectory, departure_station, RailNL.CONNECTIONS))

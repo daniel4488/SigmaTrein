@@ -37,9 +37,20 @@ class Randomize:
         self.verbose: bool = False
 
         # create dictionary for all stations and connections
-        railNL = RailNL(dataset=dataset)
-        self.stations: dict[str, Station] = railNL.stations
-        self.connections: dict[int, Connection] = railNL.connections
+        self.railNL = RailNL(dataset=dataset)
+
+        if self.__class__.__name__ == "Sigma":
+            # load special stations in railNL class
+            self.railNL.load_special_stations()
+            # dictionary with all leftover stations
+            self.stations: dict[int, Station] = self.railNL.special_stations
+            # load special connections in railNL class
+            self.railNL.load_special_connections()
+            # dictionaries with all leftover connections when prefixed routes are layed out
+            self.connections: dict[int, Connection] = self.railNL.special_connections
+        else:
+            self.stations: dict[int, Station] = self.railNL.stations 
+            self.connections: dict[int, Connection] = self.railNL.connections
         
         # set constrictions
         self.constrictions: DatasetInfo = self.set_constrictions(dataset)
@@ -61,7 +72,8 @@ class Randomize:
 
         # self.score_file = ScoreFile("baseline.csv")
 
-    def set_constrictions(self, dataset: str) -> DatasetInfo:
+    @staticmethod
+    def set_constrictions(dataset: str) -> DatasetInfo:
         """ Sets the restrictions on trajectories for the chosen dataset. """
 
         data_info = DataInfo
