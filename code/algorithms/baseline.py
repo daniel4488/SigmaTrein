@@ -2,6 +2,7 @@ from .randomize import Randomize
 from code.visualisation.baseline import visualize_baseline
 from code.classes.output import Output
 
+
 class Baseline(Randomize):
 
     def __init__(self, dataset: str) -> None:
@@ -24,5 +25,3 @@ class Baseline(Randomize):
             Output(self.highest_score_solution.trajectories, True)
             # histogram of scores from random algorithm
             visualize_baseline(data)
-        
-
