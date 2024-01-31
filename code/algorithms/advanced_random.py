@@ -111,7 +111,7 @@ class AdvancedRandom(Randomize, MapVisualization):
         try:
             for _ in range(iterations):
                 # print iterations
-                if i % 10000 == 0:
+                if i % 1000 == 0:
                     print(f"{i} iterations")
 
                 # reset all used connections by previous solution
@@ -165,11 +165,11 @@ class AdvancedRandom(Randomize, MapVisualization):
                         print(trajectory, end="")
 
                     print(highest_score)
+
+                # update iterations parameter
+                i += 1
         except KeyboardInterrupt:
             pass
-
-            # update iterations parameter
-            i += 1
 
         # visualize results
         if visualize:
