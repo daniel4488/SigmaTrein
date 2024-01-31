@@ -82,22 +82,22 @@ After the process has finished, one or more windows will be opened, showing the 
 
 In addition to the mandatory option ```algorithm``` there is a whole list of optional arguments that can be used when desired.
 
-| **argument**          | **description**                                                                                   | **options**                                 | **default**                |
-|-----------------------|---------------------------------------------------------------------------------------------------|---------------------------------------------|----------------------------|
-| --help, -h            | shows the manual inside the command line                                                          |                                             |                            |
-| --iterations, -i      | specifies the number of iterations for the chosen algorithm                                       | integer larger than zero                    | varying for each algorithm |
-| --dataset             | specifies the dataset                                                                             | either holland or nationaal                 | nationaal                  |
-| --verbose, -v         | shows detailed printing statements, useful for debugging purposes                                 |                                             |                            |
-| --experiment          | runs an experiment for the chosen algorithm                                                       |                                             |                            |
-| --visual_off          | does not generate the visualization                                                               |                                             |                            |
-| --disable\_auto\_open | generates the visualization but does not automatically opens it                                   |                                             |                            |
-| --mutations           | specifies the number of mutations at each hill climber iteration, only applicable to hill climber | integer larger than zero but smaller than 8 | 1                          |
-| --start_temperature   | sets the starting temperature for simulated annealing                                             | integer or float larger than zero           | 10                         |
-| --cooling_down        | sets the cooling down scheme for simulated annealing                                              | linear, exponential, root, constant         | linear                     |
-| --alpha               | sets the alpha parameter of the exponential cooling down scheme                                   | float in (0, 1)                             | 0.99                       |
-| --not_unique          | allows the random algorithm to choose a connection multiple times within a single trajectory      |                                             |                            |
-| --prefixed            | restricts the random algorithm to choose a starting station from a list of preferred stations     |                                             |                            |
-
+| **argument**          | **description**                                                                                   | **options**                                 | **default**                                                                    |
+|-----------------------|---------------------------------------------------------------------------------------------------|---------------------------------------------|--------------------------------------------------------------------------------|
+| --help, -h            | shows the manual inside the command line                                                          |                                             |                                                                                |
+| --iterations, -i      | specifies the number of iterations for the chosen algorithm                                       | integer larger than zero                    | varying for each algorithm, see section default iterations and compuation time |
+| --dataset             | specifies the dataset                                                                             | either holland or nationaal                 | nationaal                                                                      |
+| --verbose, -v         | shows detailed printing statements, useful for debugging purposes                                 |                                             |                                                                                |
+| --experiment          | runs an experiment for the chosen algorithm                                                       |                                             |                                                                                |
+| --visual_off          | does not generate the visualization                                                               |                                             |                                                                                |
+| --disable\_auto\_open | generates the visualization but does not automatically opens it                                   |                                             |                                                                                |
+| --mutations           | specifies the number of mutations at each hill climber iteration, only applicable to hill climber | integer larger than zero but smaller than 8 | 1                                                                              |
+| --start_temperature   | sets the starting temperature for simulated annealing                                             | integer or float larger than zero           | 10                                                                             |
+| --cooling_down        | sets the cooling down scheme for simulated annealing                                              | linear, exponential, root, constant         | linear                                                                         |
+| --alpha               | sets the alpha parameter of the exponential cooling down scheme                                   | float in (0, 1)                             | 0.99                                                                           |
+| --not_unique          | allows the random algorithm to choose a connection multiple times within a single trajectory      |                                             |                                                                                |
+| --prefixed            | restricts the random algorithm to choose a starting station from a list of preferred stations     |                                             |                                                                                |
+| --repetitions         | sets the equally named parameter of genetic algorithm                                             | integer larger than zero                    | 2                                                                              |
 ### Default Iterations
 For each algorithm an appropriate number of ```iterations``` has been set by default. If the ```iterations``` have not been adjusted, this will be used as configuration.
 
