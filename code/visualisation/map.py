@@ -254,6 +254,8 @@ class PlotlyLoad(Load):
             }
         )
 
-        if not os.path.exists(".tmp"):
-            os.mkdir(".tmp")
-        fig.write_html(".tmp/single_track.html", auto_open=auto_open)
+        output_dir = "output"
+
+        if not os.path.exists("output"):
+            os.mkdir("output")
+        fig.write_html("output/map.html", auto_open=auto_open)
