@@ -177,7 +177,7 @@ class PlotlyLoad(Load):
             data=[*edge_traces_gray, *edge_traces, node_trace,
                   middle_node_trace],
             layout=go.Layout(
-                title='Network graph made with Python',
+                title='Train Network Graph',
                 titlefont_size=16,
                 showlegend=False,
                 hovermode='closest',
