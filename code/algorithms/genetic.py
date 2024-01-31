@@ -12,13 +12,14 @@ class Genetic(HillClimber, MapVisualization):
     """
     Class following the genetic algorithm.
 
-    This algorithm creates a parent solution from the our random algorithm. Then
+    This algorithm creates a parent solution from our random algorithm. Then
     it creates new solutions, called children, by mutating the parent solution using
-    the Hill Climber technique. It then takes the child with the best score, and
-    that one becomes the parent solution. This process is repeated for a certain
-    amount of iterations.
+    the our Hill Climber algorithm. Next, it takes the child with the best score, and
+    that one becomes the new parent solution. This process is repeated till there are
+    no better scores found. Moreover, the algorithm can be repeated multiple times,
+    this means that it automatically starts again with a whole new random solution.
 
-    Genetic takes HillClimber class as a parent.
+    Genetic takes the HillClimber class as a parent.
     """
 
     def __init__(self, dataset: str):
@@ -101,9 +102,6 @@ class Genetic(HillClimber, MapVisualization):
                 all_time_highest_score = highest_score_child
                 all_time_highest_score_child_solution = solution
 
-        
-
+        # create visualisation if visualize is True
         if visualize:
-            Output(all_time_highest_score_child_solution.trajectories, is_valid = True)
-            self.visualize(solution=all_time_highest_score_child_solution, auto_open=auto_open)
-            visualize_iterations_to_score(data=self.scores_path, auto_open=auto_open)
+            self.create_visual(solution=all_time_highest_score_child_solution, path=self.scores_path, auto_open=auto_open)

@@ -8,7 +8,6 @@ from code.visualisation.map_class import MapVisualization
 from code.functions.to_snake_case import to_snake_case
 from code.visualisation.baseline import visualize_iterations_to_score
 
-
 import random
 import copy
 
@@ -16,6 +15,13 @@ import copy
 class HillClimber(MapVisualization):
     """
     Algorithm following the Hill Climber technique.
+
+    This algorithm starts by creating a solution from our random algorithm.
+    Thereafter it starts deleting a chosen number of trajectories, and checks
+    if these solutions return better scores. If not, it tries to make random
+    new solutions for every deleted trajectory. This process is repeated for
+    a given amount of iterations.
+
     Hill Climber starts with data from a RailNL object and an initial random
     solution. Furthermore, it keeps track of the current trajectories of the
     possible new solution, the score of the current best solution, and the
@@ -23,7 +29,7 @@ class HillClimber(MapVisualization):
     """
 
     def __init__(self, dataset: str):
-        random.seed(4668890)
+
         self.dataset = dataset
         self.verbose = False
         self.railNL = RailNL(dataset=dataset)
@@ -32,6 +38,7 @@ class HillClimber(MapVisualization):
         self.trajectories: list[Trajectory] = None
         self.score: int = None
         self.iterations: int = None
+
         self.scores_path: str = f"data/scores/{to_snake_case(self.__class__.__name__)}.csv"
         self.score_file: ScoreFile = ScoreFile(f"{to_snake_case(self.__class__.__name__)}.csv")
 
@@ -78,7 +85,7 @@ class HillClimber(MapVisualization):
             print(f"New score: {new_score}")
 
         # updates the new solution and score instance and return True,
-        # if the new score is higher than the old one
+        # if the new score is higher than the current one
         if new_score > self.score:
             self.solution.trajectories = new_solution.trajectories
             self.score = new_score
@@ -108,9 +115,13 @@ class HillClimber(MapVisualization):
 
         except KeyboardInterrupt:
             pass
-        algorithm = self.__class__.__name__
-        print(f"{algorithm} highest score: {self.score}") if self.verbose else None
 
+        # print name of used algorithm and its score if verbose is True
+        if self.verbose:
+            algorithm = self.__class__.__name__
+            print(f"{algorithm} highest score: {self.score}")
+
+        # create visualisation if visualize is True
         if visualize:
             self.create_visual(solution=self.solution, path=self.scores_path, auto_open=auto_open)
 
