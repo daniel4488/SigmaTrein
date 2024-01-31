@@ -21,6 +21,7 @@ class Sigma(AdvancedRandom, MapVisualization):
 
         self.score_file = ScoreFile("sigma.csv")
         self.highest_score_file = ScoreFile("sigma_highest.csv")
+        self.highest_score_file.prepare_file()
 
         # initialize a list with pre-fixed routes that start of a trajectory
         self.standard_trajectories = [["Maastricht", "Sittard", "Heerlen", "Sittard", "Roermond", "Weert", "Eindhoven"],
@@ -120,7 +121,7 @@ class Sigma(AdvancedRandom, MapVisualization):
         
         return self.make_trajectory(trajectory, departure_station, self.special_connections)
     
-    def run(self, iterations: int, visualize: bool, verbose: bool):
+    def run(self, iterations: int, visualize: bool, verbose: bool, auto_open: bool):
 
         random.seed(27012001)
         
@@ -190,6 +191,6 @@ class Sigma(AdvancedRandom, MapVisualization):
         Output(highest_score_solution.trajectories, is_valid)
 
         if visualize:
-            self.visualize(solution=highest_score_solution)
-            visualize_iterations_to_score("data/scores/sigma_highest.csv")
+            self.visualize(solution=highest_score_solution, auto_open=auto_open)
+            visualize_iterations_to_score("data/scores/sigma_highest.csv", auto_open=auto_open)
             visualize_baseline("data/scores/sigma.csv")

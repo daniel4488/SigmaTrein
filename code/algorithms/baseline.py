@@ -7,14 +7,14 @@ class Baseline(Randomize):
     def __init__(self, dataset: str) -> None:
         super().__init__(dataset=dataset)
 
-    def run(self, iterations: int, visualize: bool, verbose: bool = False) -> None:
+    def run(self, iterations: int, visualize: bool, verbose: bool = False, auto_open: bool = False) -> None:
         self.verbose = verbose
 
         self.score_file.prepare_file()
 
         try:
             for _ in range(iterations):
-                super().run(iterations=1, visualize=False, verbose=verbose, write_output=True)
+                super().run(iterations=1, visualize=False, verbose=verbose, write_output=True, auto_open=auto_open)
         except KeyboardInterrupt:
             pass
 

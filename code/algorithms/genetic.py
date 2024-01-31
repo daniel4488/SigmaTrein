@@ -23,7 +23,7 @@ class Genetic(HillClimber, MapVisualization):
     def generate_parent(self):
         """ Create random starting solution. """
 
-        return self.randomize.run(iterations=1, visualize=False, write_output=False)
+        return self.randomize.run(iterations=1, visualize=False, write_output=False, auto_open=False)
 
     def generate_children(self, parent: Solution, size: int, mutations: int = 2) -> set[Solution]:
         """ Return set of new solutions, created with the Hill Climber algorithm
@@ -43,7 +43,7 @@ class Genetic(HillClimber, MapVisualization):
 
         return children
 
-    def run(self, iterations: int, visualize: bool, repetitions: int = 1, number_of_children: int = 2000, verbose: bool = True):
+    def run(self, iterations: int, visualize: bool, repetitions: int = 1, number_of_children: int = 2000, verbose: bool = True, auto_open: bool = True):
         random.seed(123)
         self.score_file.prepare_file()
 
@@ -97,5 +97,5 @@ class Genetic(HillClimber, MapVisualization):
 
         Output(all_time_highest_score_child_solution.trajectories, is_valid = True)
         if visualize:
-            self.visualize(solution=all_time_highest_score_child_solution)
-            visualize_iterations_to_score(data=self.scores_path)
+            self.visualize(solution=all_time_highest_score_child_solution, auto_open=auto_open)
+            visualize_iterations_to_score(data=self.scores_path, auto_open=auto_open)

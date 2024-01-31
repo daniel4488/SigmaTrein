@@ -178,6 +178,14 @@ if __name__ == "__main__":
         help="runs an experiment for the chosen algorithm, only available for hill climber and simulated annealing"
     )
 
+    # add optional argument to turn off automatically showing the visualization
+    parser.add_argument(
+        "--disable_auto_open",
+        action="store_true",
+        default=False,
+        help="option to turn off automatically opening html files"
+    )
+
     # parse the command line argument
     args = parser.parse_args()
 
@@ -225,7 +233,8 @@ if __name__ == "__main__":
             iterations=args.iterations,
             visualize=(not args.visual_off),
             mutations=args.mutations,
-            verbose=args.verbose
+            verbose=args.verbose,
+            auto_open=(not args.disable_auto_open)
         )
         exit(0)
 
@@ -236,7 +245,8 @@ if __name__ == "__main__":
         simulated_annealing.run(
             iterations=args.iterations,
             visualize=(not args.visual_off),
-            verbose=args.verbose
+            verbose=args.verbose,
+            auto_open=(not args.disable_auto_open)
         )
         exit(0)
 
@@ -264,7 +274,8 @@ if __name__ == "__main__":
         simulated_annealing.run(
             iterations=args.iterations,
             visualize=(not args.visual_off),
-            verbose=args.verbose
+            verbose=args.verbose,
+            auto_open=(not args.disable_auto_open)
         )
         exit(0)
 
@@ -278,4 +289,4 @@ if __name__ == "__main__":
     exec(f"{args.algorithm} = {algorithm_class}('{args.dataset}')")
 
     # run chosen algorithm
-    exec(f"{args.algorithm}.run(iterations={args.iterations}, visualize={not args.visual_off}, verbose={args.verbose})")
+    exec(f"{args.algorithm}.run(iterations={args.iterations}, visualize={not args.visual_off}, verbose={args.verbose}, auto_open={not args.disable_auto_open})")

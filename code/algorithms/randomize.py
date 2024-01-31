@@ -188,7 +188,7 @@ class Randomize:
     def reset_used_connections(self) -> None:
         self.used_connections.clear()
 
-    def run(self, iterations: int, visualize: bool, verbose: bool = False, write_output: bool = True) -> Solution | Output:
+    def run(self, iterations: int, visualize: bool, verbose: bool = False, write_output: bool = True, auto_open: bool = False) -> Solution | Output:
         """ Creates a solution of with the maximum amount of trajectories. """
         self.reset_used_connections()
 
@@ -233,6 +233,6 @@ class Randomize:
         # Visualization
         if visualize:
             plot_device = PlotlyLoad(dataset=self.dataset)
-            plot_device.draw_graph(solution)
+            plot_device.draw_graph(solution, auto_open)
 
         return solution

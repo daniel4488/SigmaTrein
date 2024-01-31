@@ -39,7 +39,7 @@ class HillClimber(MapVisualization):
         """ Creates a solution with the random algorithm to
             begin the Hill Climber algorithm. """
 
-        self.solution = self.randomize.run(iterations=1, visualize=False, write_output=False)
+        self.solution = self.randomize.run(iterations=1, visualize=False, write_output=False, auto_open=False)
         self.score = self.solution.score
         self.trajectories = list(self.solution.trajectories)
 
@@ -90,7 +90,7 @@ class HillClimber(MapVisualization):
         return False
 
     def run(self, iterations: int, visualize: bool, mutations: int = 1,
-            verbose: bool = False):
+            verbose: bool = False, auto_open: bool = True):
         """ Runs the Hill Climber algorithm for a given amount
             of iterations and mutations. """
 
@@ -114,8 +114,8 @@ class HillClimber(MapVisualization):
 
         if visualize:
             Output(self.solution.trajectories, True)
-            visualize_iterations_to_score(data=self.scores_path)
-            self.visualize(solution=self.solution)
+            visualize_iterations_to_score(data=self.scores_path, auto_open=auto_open)
+            self.visualize(solution=self.solution, auto_open=auto_open)
 
     def new_solution(self, mutations: int):
         """ Creates a new solution with the given amount of mutations. """

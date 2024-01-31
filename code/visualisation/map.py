@@ -28,7 +28,7 @@ class PlotlyLoad(Load):
 
         # print(nx.dijkstra_path(self.G, source="Den Helder", target="Dordrecht", weight="distance"))
 
-    def draw_graph(self, solution: Solution | Output) -> None:
+    def draw_graph(self, solution: Solution | Output, auto_open: bool) -> None:
 
         traject_total_time = 0
 
@@ -328,7 +328,7 @@ class PlotlyLoad(Load):
 
         if not os.path.exists(".tmp"):
             os.mkdir(".tmp")
-        fig.write_html(".tmp/single_track.html", auto_open=False)
+        fig.write_html(".tmp/single_track.html", auto_open=auto_open)
 
 # Mapbox
 # latitude = y = north degrees

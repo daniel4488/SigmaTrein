@@ -39,7 +39,7 @@ def visualize_baseline(data: str) -> None:
     plt.savefig("code/visualisation/baseline.svg", format="svg")
 
 
-def visualize_iterations_to_score(data: str) -> None:
+def visualize_iterations_to_score(data: str, auto_open: bool) -> None:
     """ Plots scores from a csv file against the iteration. """
 
     # get scores from csv file
@@ -56,7 +56,7 @@ def visualize_iterations_to_score(data: str) -> None:
     # plt.show()
     if not os.path.exists(".tmp"):
         os.mkdir(".tmp")
-    fig.write_html(".tmp/iter_to_score.html", auto_open=False)
+    fig.write_html(".tmp/iter_to_score.html", auto_open=auto_open)
 
 
 if __name__ == "__main__":
