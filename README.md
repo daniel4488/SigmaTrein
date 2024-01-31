@@ -29,6 +29,28 @@ The Hill Climber algorithm starts by creating a solution from our random algorit
 
 ### Simulated Annealing
 
+Simulated annealing originates and is inspired by the annealing process in metallurgy,
+in which metal is heated to a high temperature and then gradually cooled down.
+The algorithm of simulated annealing works in a similar way.
+Simulated annealing falls in the class of iterative metaheuristic algorithms.
+It starts with a very high temperature and gradually cools down.
+While the temperature decreases it becomes less likely that it accepts worse solutions.
+In that way, the algorithm ideally converges.
+The difference with hill climber is that it not only makes improvements,
+but also could accept downturns.
+The idea behind this is that simulated annealing could escape from a local maxima,
+where hill climber would end, and reach the global maxima.
+
+Simulated annealing has a parameter that can be set which is the starting temperature.
+There are also a number of ways how the cooling down could be implemented.
+In this version, simulated annealing is implemented with the following cooling down schemes:
+*   linear
+*   exponential
+*   root
+*   constant
+
+There is an option available to choose between the different cooling down schemes,
+by default it is set to linear.
 
 ### Genetic
 The Genetic algorithm creates a parent solution from our random algorithm. Then it creates new solutions, called children, by mutating the parent solution using the our Hill Climber algorithm. Next, it takes the child with the highest score, and that one becomes the new parent solution. This process is repeated till there are no higher scores found. The algorithm can be repeated multiple times, this means that it automatically starts again with a whole new random solution.
