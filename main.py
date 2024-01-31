@@ -22,7 +22,7 @@ def valid_mutations(arg: str) -> int:
     """ Function to check if the given mutations argument is correct. """
 
     if not arg.isdigit() or arg == "0":
-        raise argparse.ArgumentTypeError("please enter a strictly positive integer number as mutation")
+        raise argparse.ArgumentTypeError("please enter a strictly positive integer number as mutation or repetitions")
 
     return int(arg)
 
@@ -203,6 +203,13 @@ if __name__ == "__main__":
         help="option to turn prefixed stations in randomize on or off"
     )
 
+    # repetition parameter of genetic
+    parser.add_argument(
+        "--repetitions",
+        type=valid_mutations,
+        help="sets repetitions parameter of genetic"
+    )
+
     # parse the command line argument
     args = parser.parse_args()
 
@@ -239,6 +246,14 @@ if __name__ == "__main__":
         supported_algorithms = {"randomize", "baseline"}
         if args.algorithm not in supported_algorithms:
             parser.error(f"--unique/--prefixed are only available for {', '.join(supported_algorithms)} algorithms")
+
+    # repetitions can only be set on genetic
+    if args.repetitions and args.algorithm != "genetic":
+        parser.error("repetitions works only on genetic algorithm")
+
+    # iterations are not valid for genetic algorithm
+    if args.iterations and args.algorithm == "genetic":
+        parser.error("iterations cannot be set on genetic, see readme")
 
     # set default arguments for iterations argument
     if args.iterations is None:
@@ -301,6 +316,19 @@ if __name__ == "__main__":
             visualize=(not args.visual_off),
             verbose=args.verbose,
             auto_open=(not args.disable_auto_open)
+        )
+        exit(0)
+
+    # handle mutations parameter for genetic algorithm
+    if args.repetitions:
+        from code.algorithms.genetic import Genetic
+        genetic = Genetic(dataset=args.dataset)
+        genetic.run(
+            iterations=args.iterations,
+            visualize=(not args.visual_off),
+            repetitions=args.repetitions,
+            verbose=args.verbose,
+            auto_open=(not args.disable_auto_open),
         )
         exit(0)
 
