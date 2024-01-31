@@ -37,7 +37,7 @@ for param in params:
     filename = f"hill_climber_mutations_equals_{param}.html"
 
     # default html file location
-    default_output = ".tmp/iter_to_score.html"
+    default_output = "output/iter_to_score.html"
 
     # run hill_climber algorithm with mutations parameter
     p = subprocess.run(

@@ -54,9 +54,11 @@ def visualize_iterations_to_score(data: str, auto_open: bool) -> None:
         },
         title=f"Scores of {len(scores)} iterations from a {algorithm} algorithm")
 
-    if not os.path.exists(".tmp"):
-        os.mkdir(".tmp")
-    fig.write_html(".tmp/iter_to_score.html", auto_open=auto_open)
+    output_dir = "output"
+
+    if not os.path.exists(output_dir):
+        os.mkdir(output_dir)
+    fig.write_html(f"{output_dir}/iter_to_score.html", auto_open=auto_open)
 
 
 if __name__ == "__main__":

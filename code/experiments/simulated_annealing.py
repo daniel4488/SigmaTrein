@@ -19,7 +19,7 @@ for temperature in temperatures:
     filename = f"simulated_annealing_temp_{temperature}.html"
 
     # default html file location
-    default_output = ".tmp/iter_to_score.html"
+    default_output = "output/iter_to_score.html"
 
     # run simulated_annealing algorithm
     p = subprocess.run(
