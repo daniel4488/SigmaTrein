@@ -1,11 +1,9 @@
 from code.algorithms.hill_climber import HillClimber
-from code.classes.output import Output
 from code.classes.solution import Solution
 from code.visualisation.baseline import visualize_iterations_to_score
 from code.visualisation.map_class import MapVisualization
 
 import copy
-import random
 
 
 class Genetic(HillClimber, MapVisualization):
@@ -27,8 +25,6 @@ class Genetic(HillClimber, MapVisualization):
         # call initializer of super class
         super().__init__(dataset=dataset)
 
-        self.dataset = dataset
-
     def generate_parent(self):
         """ Create a random starting solution. """
 
@@ -43,23 +39,37 @@ class Genetic(HillClimber, MapVisualization):
 
         # create a size amount of children
         for _ in range(size):
+            # create a children
             self.solution = copy.deepcopy(parent)
+
+            # add parent trajectories to child
             self.trajectories = list(parent.trajectories)
+
+            # add parent score to child
             self.score = parent.score
 
+            # mutate child
             self.new_solution(mutations)
+
+            # add new child to set with all children
             children.add(self.solution)
 
         return children
 
-    def run(self, iterations: int, visualize: bool, repetitions: int = 1, number_of_children: int = 2000, verbose: bool = True, auto_open: bool = True):
+    def run(self, iterations: int, visualize: bool, repetitions: int = 1, number_of_children: int = 2000, verbose: bool = True, auto_open: bool = True) -> None:
         """ Runs the algorithm while there are children found with a higher score. This is done
             a amount of repititions. Every time it creates the given amount of children from a parent."""
+        
+        print("Running Genetic algorithm...")
 
+        # prepare csv file
         self.score_file.prepare_file()
 
         # set all parameters to zero
         all_time_highest_score = 0
+
+        # set a parametere that keeps track of the amount of iterations
+        i = 0
 
         # repeat algorithm for the given amount of repititions
         for _ in range(repetitions):
@@ -81,18 +91,28 @@ class Genetic(HillClimber, MapVisualization):
 
                     # iterate over all children
                     for child in children:
+                        # print iterations
+                        if i % 10000 == 0:
+                            print(f"{i} iterations")
                         # write score of child to csv file
                         self.score_file.write_score(child.score)
 
                         # if this child's score is higher than till now highest child score
                         if child.score > highest_score_child:
+                            # new highest score found to True
                             new_highest_score = True
+
                             # child solution becomes the new parent solution
                             parent = child
+
                             # keep track of the highest score found
                             highest_score_child = child.score
 
+                            # create a solution with new highest score
                             solution = Solution(child.trajectories, True, self.__class__.__name__)
+                        
+                        # update iterations parameter
+                        i += 1
 
             except KeyboardInterrupt:
                 pass

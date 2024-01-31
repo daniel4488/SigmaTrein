@@ -103,18 +103,24 @@ class HillClimber(MapVisualization):
             verbose: bool = False, auto_open: bool = True):
         """ Runs the Hill Climber algorithm for a given amount
             of iterations and mutations. """
+        
+        print("Running Hill Climber algorithm...")
 
         self.verbose = verbose
 
         self.iterations = iterations
         self.make_first_solution()
         self.score_file.prepare_file()
+        i = 0
 
         # create new solutions and save scores
         try:
             for _ in range(iterations):
+                if i % 10000 == 0:
+                    print(f"{i} iterations")
                 self.new_solution(mutations)
                 self.score_file.write_score(self.score)
+                i += 1
 
         except KeyboardInterrupt:
             pass

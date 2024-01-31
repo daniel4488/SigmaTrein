@@ -155,11 +155,11 @@ class Sigma(AdvancedRandom, MapVisualization):
         try:
             for _ in range(iterations):
                 # print iterations
-                if i % 1000 == 0:
+                if i % 10000 == 0:
                     print(f"{i} iterations")
 
                 # whilst a solution is not valid, i.e. all connections used by trajectories
-                #  keep looking for a valid solution
+                # keep looking for a valid solution
                 while not self.is_valid:
                     # rest all used connections by previous solution
                     self.reset_used_connections()
@@ -191,12 +191,6 @@ class Sigma(AdvancedRandom, MapVisualization):
                 # print statements
                 if self.verbose:
                     print(f"Score: {solution.score}")
-
-                    for trajectory in solution.trajectories:
-                        print("Stations:", end="")
-                        print(trajectory, end="")
-                        print()
-                    print(highest_score)
 
                 # reset is_valid parameter
                 self.is_valid = False

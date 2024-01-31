@@ -19,19 +19,26 @@ class Baseline(Randomize, MapVisualization):
         self.highest_score_solution: Solution = None
 
     def run(self, iterations: int, visualize: bool, verbose: bool = False, auto_open: bool = False, unique: bool = True, prefixed: bool = False) -> None:
-
+        
+        print("Creating baseline...")
         self.verbose = verbose
 
         self.score_file.prepare_file()
 
+        i = 0
+
         try:
             for _ in range(iterations):
+                if i % 10000 == 0:
+                    print(f"{i} iterations")
                 solution = super().run(iterations=1, visualize=False, verbose=verbose, write_output=True, auto_open=auto_open, unique=unique, prefixed=prefixed)
                 self.score_file.write_score(solution.score)
 
                 if solution.score > self.highest_score:
                     self.highest_score = solution.score
                     self.highest_score_solution = solution
+
+                i += 1
 
         except KeyboardInterrupt:
             pass
