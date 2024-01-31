@@ -59,8 +59,45 @@ The Genetic algorithm creates a parent solution from our random algorithm. Then 
 The Sigma algorithm is an algorithm that we created ourselves. The algorithm gets a few predetermined consecutive stations and connections. These are fixed routes where some trajectories must start with. A trajectory is then made starting either from a predetermined station or a random one. After the first departure has been chosen the algorithm starts choosing its path with the advanced randomize algorithm. Once it has found a valid solution, meaning that all connections have been used by the trajectories, a heuristic starts looking at what connections can be removed from the trajectories. Starting with the shortest trajectory, it checks if both ends of the trajectory have connections that are used by other trajectories as well. If this is the case it removes these connections. It stops checking if both ends are not double connections anymore, or the whole trajectory has been removed due to all connections being double connections. In that case the whole trajectory gets removed from the final solution. 
 
 # Usage
+This application has the best experience if it is used as a command line application by running ```main.py.```
+
 Before running the ```main.py```, all packages in the ```requirements.txt``` must be installed in Python3. This can be done in one step by running in your Terminal: \
 ``` pip install -r requirements.txt ```
+
+If all requirements have been satisfied, main.py can be started by running ```python3 main.py```.
+
+Apart from this README, the command line application offers a help interface that can be called via the command line by running ```python3 main.py --help```.
+
+```main.py``` requires at least one argument which is the ```algorithm``` that needs to be executed. This can be done using ```python3 main.py <algorithm>```. The following algorithms are available.
+
+- advanced_random
+- baseline
+- genetic
+- hill_climber
+- randomize
+- sigma
+- simulated_annealing
+
+After the process has finished, one or more windows will be opened, showing the outcomes of the chosen algorithm.
+
+In addition to the mandatory option ```algorithm``` there is a whole list of optional arguments that can be used when desired.
+
+| **argument**          | **description**                                                                                   | **options**                                 | **default**                |
+|-----------------------|---------------------------------------------------------------------------------------------------|---------------------------------------------|----------------------------|
+| --help, -h            | shows the manual inside the command line                                                          |                                             |                            |
+| --iterations, -i      | specifies the number of iterations for the chosen algorithm                                       | integer larger than zero                    | varying for each algorithm |
+| --dataset             | specifies the dataset                                                                             | either holland or nationaal                 | nationaal                  |
+| --verbose, -v         | shows detailed printing statements, useful for debugging purposes                                 |                                             |                            |
+| --experiment          | runs an experiment for the chosen algorithm                                                       |                                             |                            |
+| --visual_off          | does not generate the visualization                                                               |                                             |                            |
+| --disable\_auto\_open | generates the visualization but does not automatically opens it                                   |                                             |                            |
+| --mutations           | specifies the number of mutations at each hill climber iteration, only applicable to hill climber | integer larger than zero but smaller than 8 | 1                          |
+| --start_temperature   | sets the starting temperature for simulated annealing                                             | integer or float larger than zero           | 10                         |
+| --cooling_down        | sets the cooling down scheme for simulated annealing                                              | linear, exponential, root, constant         | linear                     |
+| --alpha               | sets the alpha parameter of the exponential cooling down scheme                                   | float in (0, 1)                             | 0.99                       |
+| --not_unique          | allows the random algorithm to choose a connection multiple times within a single trajectory      |                                             |                            |
+| --prefixed            | restricts the random algorithm to choose a starting station from a list of preferred stations     |                                             |                            |
+
 
 # Experiments
 Experiments are available for the algorithms hill_climber and simulated_annealing. 
@@ -76,9 +113,9 @@ For hill_climber: ``` python3 main.py hill_climber --experiment ``` <br>
 For simulated_annealing: ``` python3 main.py simualted_annealing --experiment ```
 
 # Authors
-Daniël Frijns () \
-Timo Nijkamp () \
+Daniël Frijns (12904724) \
+Timo Nijkamp (1322608) \
 Roos van der Neut (13273000)
 
-# Specs
-SA algorithm has been implemented using MATLAB using a desktop PC with Intel® Core ™ i7-2620M, 2.7 GHz, 16.00 GB RAM, and a 64-bit Operating System. The optimal solution has been obtained after running several runs with different markov chain length with sizes varying from 50 -100 and it takes around 4-6 hours for a run to converge.
+# Specifications
+All tests have been conducted on a MacBook Pro with a Apple M2 Chip, 16.00 GB RAM, and running macOS Sonoma 14.3.
