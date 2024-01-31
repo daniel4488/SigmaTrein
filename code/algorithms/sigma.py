@@ -80,17 +80,17 @@ class Sigma(AdvancedRandom, MapVisualization):
                 # increment the current trajectory number
                 trajectory_number += 1
 
-    def choose_predetermined_first_departure_station(self, trajectory: Trajectory):
-        """ Choose a first predeparture station from the standard list if that list is still populated,
-        else choose a random first departure station. """
+    def choose_departure_station(self, trajectory: Trajectory):
+        """ Adds all predetermined stations and connections to the trajectory. Then picks a random
+            next station and returns this departure station. """
 
-        # if self.standard_trajectories still has standard trajectories left
+        # if there are still standard trajectories
         if self.standard_trajectories_copy:
-            # select the last lists from standard stations
+            # select stations and connections lists from standard list
             stations: list[str] = self.standard_trajectories_copy.pop()
-            # select the last lists from standard connections  
             connections: list[int] = self.standard_trajectories_connections_copy.pop()
-            # 
+
+            # add every station, connection and their duration to the trajectory
             trajectory.duration += connections.pop()
 
             for station in stations:
@@ -100,36 +100,36 @@ class Sigma(AdvancedRandom, MapVisualization):
                 trajectory.add_connection_number(connection)
 
             departure_station = (stations[-1], self.stations[stations[-1]])
+
+        # if there are no more predetermined stations, choose a random next one
         else:
-            # choose a random station to depart from
             departure_station = self.choose_station(list(self.stations.keys()))
 
-            # add departure station to the trajectory
+            # add random departure station to the trajectory
             trajectory.add_station(departure_station[0])
 
         return departure_station
     
     def make_sigma_trajectory(self) -> Trajectory:
-        """ Generates a randomly chosen trajectory. """
+        """ Returns a trajectory that starts with a predetermined part, and
+            is supplemented with random stations. """
 
         self.repopulate_possible_connections_for_all_stations()
 
         # initialize empty trajectory
         trajectory = Trajectory()
 
-        departure_station = self.choose_predetermined_first_departure_station(trajectory)
+        departure_station = self.choose_departure_station(trajectory)
         
         return self.make_trajectory(trajectory, departure_station, self.special_connections)
     
     def run(self, iterations: int, visualize: bool, verbose: bool, auto_open: bool):
-
-        random.seed(27012001)
         
         # prepare csv file
         self.score_file.prepare_file()
 
-        # set a parameter that keeps track if a solution is valid
         is_valid = False
+
         # set a parameter that keeps track of the highest score
         highest_score = 0 
         # set a parametere that keeps track of the amount of iterations

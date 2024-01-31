@@ -4,7 +4,6 @@ from code.classes.output import Output
 
 import plotly.graph_objects as go
 import numpy as np
-import networkx as nx
 import os
 
 
@@ -112,19 +111,13 @@ class PlotlyLoad(Load):
                     source_vector = np.array([x0, y0], dtype=np.double)
                     destination_vector = np.array([x1, y1], dtype=np.double)
 
-                    # print(f"source vector: {source_vector}")
-                    # print(f"destination vector: {destination_vector}")
-
                     original_vector = np.array([x1 - x0, y1 - y0], dtype=np.double)
                     rotation_matrix = (-1) ** double_edge_count * np.array([[0, -1], [1, 0]])
                     orthogonal_vector = np.matmul(original_vector, rotation_matrix)
-                    # print(f"original vector: {original_vector}")
-                    # print(f"orthogonal vector: {orthogonal_vector}")
 
                     assert np.dot(original_vector, orthogonal_vector) < 1e-12
                     orthogonal_vector /= np.linalg.norm(orthogonal_vector)  # normalize it
                     assert np.linalg.norm(orthogonal_vector) - 1.0 < 1e-12
-                    # print(f"orthogonal vector normalized: {orthogonal_vector}")
 
                     source_vector += orthogonal_vector * 0.004 * double_edge_count
                     destination_vector += orthogonal_vector * 0.004 * double_edge_count

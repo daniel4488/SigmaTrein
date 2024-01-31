@@ -70,7 +70,7 @@ if __name__ == "__main__":
            / ||_.--.______.--.______.--._ |---\'--\-.-/==\-.-/==\-.-/-'/--
           /__;^=(==)======(==)======(==)=^~^^^ ^^^^(-)^^^^(-)^^^^(-)^^^ aac
         ~~~^~~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~^~~~
-        
+
                     /$$$$$$  /$$                                  
                    /$$__  $$|__/                                  
                   | $$  \__/ /$$  /$$$$$$  /$$$$$$/$$$$   /$$$$$$ 
@@ -163,7 +163,8 @@ if __name__ == "__main__":
         help="sets the cooling down scheme for simulated annealing defaults to linear"
     )
 
-    # add optional argument for alpha parameter of simulated annealing exponential cooling down
+    # add optional argument for alpha parameter of simulated annealing
+    # exponential cooling down
     parser.add_argument(
         "--alpha",
         type=valid_temperature,
@@ -241,7 +242,8 @@ if __name__ == "__main__":
     # handle special run case with start temperature
     if args.start_temperature:
         from code.algorithms.simulated_annealing import SimulatedAnnealing
-        simulated_annealing = SimulatedAnnealing(dataset=args.dataset, start_temperature=args.start_temperature)
+        simulated_annealing = SimulatedAnnealing(dataset=args.dataset,
+                                                 start_temperature=args.start_temperature)
         simulated_annealing.run(
             iterations=args.iterations,
             visualize=(not args.visual_off),
