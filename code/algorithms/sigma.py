@@ -153,19 +153,6 @@ class Sigma(AdvancedRandom, MapVisualization):
 
         # set a parametere that keeps track of the amount of iterations
         i = 0
-<<<<<<< HEAD
-
-        for _ in range(iterations):
-            # print iterations
-            if i % 10000 == 0:
-                print(f"{i} iterations")
-
-            # whilst a solution is not valid, i.e. all connections used by trajectories
-            #  keep looking for a valid solution
-            while not self.is_valid:
-                # reset all used connections by previous solution
-                self.reset_used_connections_and_weight()
-=======
         try:
             for _ in range(iterations):
                 # print iterations
@@ -176,8 +163,7 @@ class Sigma(AdvancedRandom, MapVisualization):
                 # keep looking for a valid solution
                 while not self.is_valid:
                     # rest all used connections by previous solution
-                    self.reset_used_connections()
->>>>>>> d361830d1c72e4c4f703b11d6365dce38bd6e729
+                    self.reset_used_connections_and_weight()
 
                     # repopulate the standard routes lists
                     self.standard_stations_copy = copy.deepcopy(self.standard_stations)
