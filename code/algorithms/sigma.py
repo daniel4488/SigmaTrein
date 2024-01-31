@@ -117,8 +117,8 @@ class Sigma(AdvancedRandom, MapVisualization):
                 self.standard_connections_copy = copy.deepcopy(self.standard_connections)
                 # make sure that the trajectories set is empty
                 trajectories = set()
-                # create at most 20 new trajectories 
-                for _ in range(20):
+                # create at most the maximum amount of new trajectories 
+                for _ in range(int(self.constrictions.max_trajectories)):
                     # make random trajectory
                     current_trajectory = self.make_sigma_trajectory()
 
@@ -154,10 +154,10 @@ class Sigma(AdvancedRandom, MapVisualization):
                     print("Stations:", end="")
                     print(trajectory, end="")
                     print()
-            
+                print(highest_score)
+
             is_valid = False
 
-        print(highest_score) if self.verbose else None
         Output(highest_score_solution.trajectories, is_valid)
 
         if visualize:
