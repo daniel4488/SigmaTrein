@@ -230,7 +230,7 @@ class Randomize:
                 print(trajectory, end="")
                 print()
 
-        # Visualization
+        # visualization
         if visualize:
             plot_device = PlotlyLoad(dataset=self.dataset)
             plot_device.draw_graph(solution)
