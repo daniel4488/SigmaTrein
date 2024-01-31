@@ -114,8 +114,8 @@ if __name__ == "__main__":
         "randomize": 1,
         "advanced_random": 1000,
         "hill_climber": 300000,
-        "simulated_annealing": 30000,
-        "genetic": 1,
+        "simulated_annealing": 100000,
+        "genetic": 2,
         "sigma": 1000,
         "baseline": 100000
     }
