@@ -1,5 +1,6 @@
 from code.algorithms.hill_climber import HillClimber
 from code.classes.solution import Solution
+from code.classes.output import Output
 from code.visualisation.baseline import visualize_iterations_to_score
 from code.visualisation.map_class import MapVisualization
 
@@ -56,7 +57,7 @@ class Genetic(HillClimber, MapVisualization):
 
         return children
 
-    def run(self, iterations: int, visualize: bool, repetitions: int = 10000000000000000000000000000, number_of_children: int = 2000, verbose: bool = True, auto_open: bool = True) -> None:
+    def run(self, iterations: int, visualize: bool, repetitions: int = 2, number_of_children: int = 2000, verbose: bool = True, auto_open: bool = True) -> None:
         """ Runs the algorithm while there are children found with a higher score. This is done
             a amount of repititions. Every time it creates the given amount of children from a parent."""
         
@@ -121,6 +122,8 @@ class Genetic(HillClimber, MapVisualization):
 
         except KeyboardInterrupt:
             pass
+
+        Output(trajectories=all_time_highest_score_child_solution.trajectories, is_valid=all_time_highest_score_child_solution.is_valid)
 
         # create visualisation if visualize is True
         if visualize:
