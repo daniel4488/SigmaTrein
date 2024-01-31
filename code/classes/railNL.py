@@ -48,11 +48,12 @@ class RailNL:
                 # create station object
                 self.stations[station] = Station(station, float(x), float(y))
 
-    def load_connections(self) -> None:
+    def load_connections(self, dir: str = "Connecties") -> None:
         """ Converts connections data to Connection classes and
             loads them into the connections dictionary. """
 
-        with open(f"data/{self.dataset}/Connecties{self.dataset.capitalize()}.csv", "r") as file:
+        #with open(f"data/{self.dataset}/Connecties{self.dataset.capitalize()}.csv", "r") as file:
+        with open(f"data/{self.dataset}/{dir}{self.dataset.capitalize()}.csv", "r") as file:
             # remove header
             _ = file.readline()
 

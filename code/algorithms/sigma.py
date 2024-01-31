@@ -1,5 +1,6 @@
 from code.classes.trajectory import Trajectory
 from code.classes.connection import Connection
+from code.classes.railNL import RailNL
 from code.classes.solution import Solution
 from code.classes.output import Output
 from code.algorithms.advanced_random import AdvancedRandom
