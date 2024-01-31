@@ -1,16 +1,16 @@
-from code.classes.trajectory import Trajectory
-from code.classes.station import Station
 from code.classes.connection import Connection
-from code.classes.solution import Solution
-from code.classes.output import Output
-from code.classes.railNL import RailNL
 from code.classes.data import DataInfo
 from code.classes.dataset_info import DatasetInfo
-from code.visualisation.map import PlotlyLoad
+from code.classes.output import Output
+from code.classes.railNL import RailNL
+from code.classes.solution import Solution
+from code.classes.station import Station
+from code.classes.trajectory import Trajectory
 from code.classes.write_file import ScoreFile
+from code.visualisation.map import PlotlyLoad
 
-import random
 import os
+import random
 
 
 class Randomize:
@@ -39,19 +39,21 @@ class Randomize:
         # create dictionary for all stations and connections
         self.railNL = RailNL(dataset=dataset)
 
+        # load special stations and connections for the Sigma algorithm
         if self.__class__.__name__ == "Sigma":
-            # load special stations in railNL class
+            # load special stations and connections
             self.railNL.load_special_stations()
-            # dictionary with all leftover stations
-            self.stations: dict[int, Station] = self.railNL.special_stations
-            # load special connections in railNL class
             self.railNL.load_special_connections()
-            # dictionaries with all leftover connections when prefixed routes are layed out
+
+            # dictionary with all leftover stations and connections
+            self.stations: dict[int, Station] = self.railNL.special_stations            
             self.connections: dict[int, Connection] = self.railNL.special_connections
+
+        # load normal stations and connections
         else:
             self.stations: dict[int, Station] = self.railNL.stations 
             self.connections: dict[int, Connection] = self.railNL.connections
-        
+
         # set constrictions
         self.constrictions: DatasetInfo = self.set_constrictions(dataset)
 
@@ -59,14 +61,12 @@ class Randomize:
         self.preferred_departure_holland = ["Den Helder", "Dordrecht", "Hoorn", "Schiphol Airport", "Gouda", "Heemstede-Aerdenhout", "Schiphol Airport"]
         self.preferred_departure_nationaal = ["Den Helder", "Dordrecht", "Hoorn", "Enschede", "Venlo", "Maastricht", "Heerlen", "Vlissingen", "Lelystad Centrum", "Groningen", "Leeuwarden", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Amsterdam Centraal", "Amsterdam Centraal", "Amsterdam Centraal", "Amsterdam Centraal"]
 
-        self.total_trajectories = 0
-
         # variable for keeping track of used connections
         self.used_connections: set[int] = set()
 
-        # stores a solution
         self.solution: dict[int, list[str]] = {}
 
+        self.total_trajectories = 0
         self.highest_score = 0
         self.highest_score_solution: Solution = None
 
