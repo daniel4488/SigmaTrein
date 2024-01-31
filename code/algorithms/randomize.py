@@ -70,8 +70,6 @@ class Randomize:
         self.highest_score = 0
         self.highest_score_solution: Solution = None
 
-        # self.score_file = ScoreFile("baseline.csv")
-
     @staticmethod
     def set_constrictions(dataset: str) -> DatasetInfo:
         """ Sets the restrictions on trajectories for the chosen dataset. """
