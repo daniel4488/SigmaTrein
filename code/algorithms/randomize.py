@@ -31,7 +31,7 @@ class Randomize:
         # random.seed(2024)
         random.seed(7807719)
 
-        self.score_file = ScoreFile("baseline.csv")
+        # self.score_file = ScoreFile("baseline.csv")
 
         # set dataset 
         self.dataset = dataset
@@ -210,17 +210,15 @@ class Randomize:
                 break
                 
         # create solution instance
-        # if write_output:
-            # solution = Output(trajectories, is_valid)
-        # else:
-           
+        if self.__class__.__name__ == "Randomize":
+            solution = Output(trajectories, is_valid)
+        else:
             solution = Solution(trajectories, is_valid)
-            self.score_file.write_score(solution.score)
+            # self.score_file.write_score(solution.score)
 
-            if solution.score > self.highest_score:
-                self.highest_score = solution.score
-                self.highest_score_solution = solution
-
+        # if solution.score > self.highest_score:
+        #     self.highest_score = solution.score
+        #     self.highest_score_solution = solution
 
         if self.verbose:
             print(f"Score: {solution.score}")
