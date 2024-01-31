@@ -13,14 +13,19 @@ import copy
 
 
 class Sigma(AdvancedRandom, MapVisualization):
+    """
+    Algorithm following our custom Sigma algorithm.
+
+    This algorithm has a list with a few predetermined consecutive stations
+    and connections. These are fixed pieces where some trajectories must start
+    with. From there on out it fills up every trajectory with randomly chosen
+    connections.
+
+    Sigma takes the AdvancedRandom class as a parent. Furthermore it has a list
+    with prefixed routes and a list with corresponding connections. 
+    """
+
     def __init__(self, dataset: str):
-        """
-        Algorithm following our custom Sigma algorithm.
-
-
-
-        Sigma takes the AdvancedRandom class as a parent.
-        """
 
         super().__init__(dataset=dataset)
 
@@ -28,32 +33,33 @@ class Sigma(AdvancedRandom, MapVisualization):
         self.highest_score_file = ScoreFile("sigma_highest.csv")
         self.highest_score_file.prepare_file()
 
-        # initialize a list with pre-fixed routes that start of a trajectory
-        self.standard_trajectories = [["Maastricht", "Sittard", "Heerlen", "Sittard", "Roermond", "Weert", "Eindhoven"],
+        # list with pre-fixed routes that start a trajectory
+        self.standard_stations = [["Maastricht", "Sittard", "Heerlen", "Sittard", "Roermond", "Weert", "Eindhoven"],
                                        ["Venlo", "Helmond", "Eindhoven"], ["Vlissingen", "Roosendaal"],
                                        ["Den Helder", "Alkmaar"], ["Enschede", "Hengelo", "Almelo"], ["Lelystad Centrum", "Almere Centrum"]
                                        , ["Zwolle", "Assen", "Groningen", "Leeuwarden", "Heerenveen", "Steenwijk", "Zwolle"]]
         
-        # initialize a list with the corresponding connection numbers
-        #  in each list the last number represents the trajectory duration
-        self.standard_trajectories_connections = [[76, 77, 77, 78, 79, 80, 91], 
+        # list with corresponding connection numbers to the prefixed routes,
+        # in each list the last number represents the trajectory duration
+        self.standard_connections = [[76, 77, 77, 78, 79, 80, 91], 
                                                   [81, 82, 39], [75, 63], [71, 36], 
                                                   [88, 72, 17], [73, 14],
                                                   [74, 83, 84, 86, 85, 87, 146]]
         
         # empty lists where copies of the lists above can be stored
-        self.standard_trajectories_copy = []
-        self.standard_trajectories_connections_copy = []
+        self.standard_stations_copy = []
+        self.standard_connections_copy = []
 
-    def choose_predetermined_first_departure_station(self, trajectory: Trajectory):
-        """ Choose a first predeparture station from the standard list if that list is still populated,
-        else choose a random first departure station. """
+    def choose_departure_station(self, trajectory: Trajectory):
+        """ Prefixed list of stations and connections are added to a trajectory,
+            from there a random connection to a departure station is chosen. The
+            departure station is returned. """
 
         # if there are still standard trajectories
-        if self.standard_trajectories_copy:
+        if self.standard_stations_copy:
             # select stations and connections lists from standard list
-            stations: list[str] = self.standard_trajectories_copy.pop()
-            connections: list[int] = self.standard_trajectories_connections_copy.pop()
+            stations: list[str] = self.standard_stations_copy.pop()
+            connections: list[int] = self.standard_connections_copy.pop()
 
             # add every station, connection and their duration to the trajectory
             trajectory.duration += connections.pop()
@@ -74,7 +80,7 @@ class Sigma(AdvancedRandom, MapVisualization):
             trajectory.add_station(departure_station[0])
 
         return departure_station
-    
+
     def make_sigma_trajectory(self) -> Trajectory:
         """ Returns a trajectory that starts with a predetermined part, and
             is supplemented with random stations. """
@@ -87,6 +93,7 @@ class Sigma(AdvancedRandom, MapVisualization):
         return self.make_trajectory(trajectory, departure_station, self.connections)
     
     def run(self, iterations: int, visualize: bool, verbose: bool, auto_open: bool):
+        """ Runs """
         
         # prepare csv file
         self.score_file.prepare_file()
@@ -102,12 +109,12 @@ class Sigma(AdvancedRandom, MapVisualization):
             print(i)
             # while no valid solution is valid, i.e. all connections used by trajectories
             while not is_valid:
-                # reset used connections to make sure it can be populated again correctly
+
                 self.reset_used_connections()
                 # repopulate the standard trajectories copy
-                self.standard_trajectories_copy = copy.deepcopy(self.standard_trajectories)
+                self.standard_stations_copy = copy.deepcopy(self.standard_stations)
                 # repopulate the standard trajectories connections copy
-                self.standard_trajectories_connections_copy = copy.deepcopy(self.standard_trajectories_connections)
+                self.standard_connections_copy = copy.deepcopy(self.standard_connections)
                 # make sure that the trajectories set is empty
                 trajectories = set()
                 # create at most 20 new trajectories 
