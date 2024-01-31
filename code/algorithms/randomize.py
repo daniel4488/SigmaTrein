@@ -15,7 +15,16 @@ import os
 
 class Randomize:
     """
-    Algorithm to generate a randomly chosen trajectory.
+    Algorithm following a random algorithm.
+
+    This algorithm chooses a random starting station. From there it randomly
+    chooses a possible connection. This is done uptill the maximum time of
+    a trajectory is reached. In this way, a solution of multiple trajectories
+    is made. There are 2 special cases:
+    * unique = True: the random algorithm will never choose a connection
+                     more than once
+    * prefixed = True: the random algorithm starts with a few prefixed stations
+
     Random starts with a dictionary with all station names and objects, a
     dictionary with all connection numbers and objects, the constrictions
     belonging to the used dataset. Moreover, it keeps track of the connections
@@ -24,19 +33,10 @@ class Randomize:
 
     def __init__(self, dataset: str) -> None:
 
-        # make algorithm pseudo random
-        # random.seed(324488)
-        # random.seed(1309)
-        # random.seed(239094)
-        # random.seed(2024)
-        random.seed(7807719)
-
-        self.score_file = ScoreFile("baseline.csv")
-
-        # set dataset 
         self.dataset = dataset
+        self.verbose: bool = False
 
-        # set dictionary for all stations and connections
+        # create dictionary for all stations and connections
         railNL = RailNL(dataset=dataset)
         self.stations: dict[str, Station] = railNL.stations
         self.connections: dict[int, Connection] = railNL.connections
@@ -48,8 +48,7 @@ class Randomize:
         self.preferred_departure_holland = ["Den Helder", "Dordrecht", "Hoorn", "Schiphol Airport", "Gouda", "Heemstede-Aerdenhout", "Schiphol Airport"]
         self.preferred_departure_nationaal = ["Den Helder", "Dordrecht", "Hoorn", "Enschede", "Venlo", "Maastricht", "Heerlen", "Vlissingen", "Lelystad Centrum", "Groningen", "Leeuwarden", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Amsterdam Centraal", "Amsterdam Centraal", "Amsterdam Centraal", "Amsterdam Centraal"]
 
-        # variable for keeping track of amount of made trajectory
-        self.trajectory_count = 0
+        self.total_trajectories = 0
 
         # variable for keeping track of used connections
         self.used_connections: set[int] = set()
@@ -57,11 +56,10 @@ class Randomize:
         # stores a solution
         self.solution: dict[int, list[str]] = {}
 
-        # False for no print statements, true for print statements
-        self.verbose: bool = False
-
         self.highest_score = 0
         self.highest_score_solution: Solution = None
+
+        self.score_file = ScoreFile("baseline.csv")
 
     def set_constrictions(self, dataset: str) -> DatasetInfo:
         """ Sets the restrictions on trajectories for the chosen dataset. """
@@ -128,7 +126,7 @@ class Randomize:
         return departure_station
     
     def choose_prefixed_departure_station(self, trajectory: Trajectory) -> set [str, Station]:
-        index = self.trajectory_count % self.constrictions.max_trajectories
+        index = self.total_trajectories % self.constrictions.max_trajectories
         name = eval(f"self.preferred_departure_{self.dataset}[{index}]")
         station = self.stations[name]
         trajectory.add_station(name)
@@ -181,7 +179,7 @@ class Randomize:
                 break
 
         # increment trajectory counter
-        self.trajectory_count += 1
+        self.total_trajectories += 1
 
         return trajectory
 

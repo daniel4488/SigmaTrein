@@ -14,7 +14,11 @@ import copy
 class Sigma(AdvancedRandom, MapVisualization):
     def __init__(self, dataset: str):
         """
-        Description with how this algorithm works
+        Algorithm following our custom Sigma algorithm.
+
+
+
+        Sigma takes the AdvancedRandom class as a parent.
         """
 
         super().__init__(dataset=dataset)
@@ -36,23 +40,20 @@ class Sigma(AdvancedRandom, MapVisualization):
                                                   [88, 72, 17], [73, 14],
                                                   [74, 83, 84, 86, 85, 87, 146]]
         
-        # empty lists where copies of the above lists can be stored
+        # empty lists where copies of the lists above can be stored
         self.standard_trajectories_copy = []
         self.standard_trajectories_connections_copy = []
 
         # dictionaries with all leftover connections when prefixed routes are layed out
         self.special_connections: dict[int, Connection] = {}
 
-        # indicate that we do not want print statements
-        self.verbose = False
-
         # load connections excluding the ones already used by the standard trajectories
         self.load_special_connections()
-        
+
     def load_special_connections(self):
         """ Converts leftover connections data to Connection classes and
             loads them into the connections dictionary. """
-        
+
         with open("data/nationaal/sigmanationaal.csv", "r") as file:
             # remove header
             _ = file.readline()
@@ -61,14 +62,12 @@ class Sigma(AdvancedRandom, MapVisualization):
             trajectory_number = 0
 
             for line in file:
-                # remove newline character
+                # strip and split line
                 line = line.strip()
-
-                # split line
                 station_1, station_2, duration_str = line.split(",")
 
+                # convert string to float
                 duration = float(duration_str)
-                # convert string to integer
 
                 # add connection to both stations
                 self.stations[station_1].add_connection(trajectory_number)
