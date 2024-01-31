@@ -186,6 +186,22 @@ if __name__ == "__main__":
         help="option to turn off automatically opening html files"
     )
 
+    # add optional flag for unique mode in randomize.py
+    parser.add_argument(
+        "--not_unique",
+        action="store_true",
+        default=False,
+        help="disables unique option in randomize, this makes the random algorithm more random"
+    )
+
+    # add optional flag for prefixed mode in randomize.py
+    parser.add_argument(
+        "--prefixed",
+        action="store_true",
+        default=False,
+        help="option to turn prefixed stations in randomize on or off"
+    )
+
     # parse the command line argument
     args = parser.parse_args()
 
@@ -216,6 +232,12 @@ if __name__ == "__main__":
     # experiment only works with hill climber or simulated annealing
     if args.experiment and (args.algorithm not in {"simulated_annealing", "hill_climber"}):
         parser.error("experiment only works with simulated_annealing or hill_climber")
+    
+    # not_unique and prefixed can only be set on randomize or baseline
+    if args.not_unique or args.prefixed:
+        supported_algorithms = {"randomize", "baseline"}
+        if args.algorithm not in supported_algorithms:
+            parser.error(f"--unique/--prefixed are only available for {', '.join(supported_algorithms)} algorithms")
 
     # set default arguments for iterations argument
     if args.iterations is None:
@@ -224,6 +246,7 @@ if __name__ == "__main__":
     # experiment
     if args.experiment:
         os.system(f"python3 code/experiments/{args.algorithm}.py")
+        exit(0)
 
     # handle special run case with mutations option on hill climber
     if args.mutations:
@@ -288,5 +311,20 @@ if __name__ == "__main__":
     # initialise random algorithm
     exec(f"{args.algorithm} = {algorithm_class}('{args.dataset}')")
 
+    kwargs = {
+        "iterations": args.iterations,
+        "visualize": not args.visual_off,
+        "verbose": args.verbose,
+        "auto_open": not args.disable_auto_open
+    }
+    
+    if args.not_unique:
+        kwargs["unique"] = not args.not_unique
+
+    if args.prefixed:
+        kwargs["prefixed"] = args.prefixed
+
     # run chosen algorithm
-    exec(f"{args.algorithm}.run(iterations={args.iterations}, visualize={not args.visual_off}, verbose={args.verbose}, auto_open={not args.disable_auto_open})")
+    # exec(f"{args.algorithm}.run(iterations={args.iterations}, visualize={not args.visual_off}, verbose={args.verbose}, auto_open={not args.disable_auto_open})")
+    eval(f"{args.algorithm}").run(**kwargs)
+
