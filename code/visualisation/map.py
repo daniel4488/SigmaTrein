@@ -14,18 +14,15 @@ class PlotlyLoad(Load):
         # mapbox token
         self.token = open("code/visualisation/.mapbox_token").read()
 
-        # self.coloring: list[str] = ["#34568B", "#FF6F61", "#6B5B95", "#88B04B", "#F7CAC9", "#92A8D1", "#FF0000"]
         self.coloring: list[str] = [
-                         "#ffffff", "#ff0000", "#00ff00", "#0000ff", "#ff00ff",
-                        "#00ffff", "#ffff00", "#ff8000", "#80ff00", "#0080ff",
-                        "#ff0080", "#80ffff", "#ff80ff", "#ffff80", "#ffbf00",
-                        "#40ff00", "#0040ff", "#ff0040", "#40ffff", "#ffbf80"
-                        ]
+            "#ffffff", "#ff0000", "#00ff00", "#0000ff", "#ff00ff",
+            "#00ffff", "#ffff00", "#ff8000", "#80ff00", "#0080ff",
+            "#ff0080", "#80ffff", "#ff80ff", "#ffff80", "#ffbf00",
+            "#40ff00", "#0040ff", "#ff0040", "#40ffff", "#ffbf80"
+        ]
         self.edges: dict[tuple[str, str], list[str]] = {}
 
         self.verbose: bool = False
-
-        # print(nx.dijkstra_path(self.G, source="Den Helder", target="Dordrecht", weight="distance"))
 
     def draw_graph(self, solution: Solution | Output, auto_open: bool) -> None:
 
@@ -133,53 +130,6 @@ class PlotlyLoad(Load):
                     edge_trace["lat"] += (y0, y1, None)
                     edge_traces.append(edge_trace)
 
-        # Double edge
-        # double_edge = ("Castricum", "Alkmaar")
-        # double_edge_trace = go.Scatter(
-        #     x=[], y=[],
-        #     line=dict(
-        #         width=2,
-        #         color="#7FEFBD"
-        #     ),
-        #     hoverinfo='none',
-        #     mode='lines'
-        # )
-        # x0 = self.G.nodes[double_edge[0]]['x']
-        # y0 = self.G.nodes[double_edge[0]]['y']
-        # x1 = self.G.nodes[double_edge[1]]['x']
-        # y1 = self.G.nodes[double_edge[1]]['y']
-        #
-        # source_vector = np.array([x0, y0], dtype=np.double)
-        # destination_vector = np.array([x1, y1], dtype=np.double)
-        #
-        # print(f"source vector: {source_vector}")
-        # print(f"destination vector: {destination_vector}")
-        #
-        # original_vector = np.array([x1 - x0, y1 - y0], dtype=np.double)
-        # rotation_matrix = np.array([[0, -1], [1, 0]])
-        # orthogonal_vector = np.matmul(original_vector, rotation_matrix)
-        # print(f"original vector: {original_vector}")
-        # print(f"orthogonal vector: {orthogonal_vector}")
-        #
-        # assert np.dot(original_vector, orthogonal_vector) < 1e-12
-        # orthogonal_vector /= np.linalg.norm(orthogonal_vector)  # normalize it
-        # assert np.linalg.norm(orthogonal_vector) - 1.0 < 1e-12
-        # print(f"orthogonal vector normalized: {orthogonal_vector}")
-        #
-        # source_vector += orthogonal_vector * 0.004
-        # destination_vector += orthogonal_vector * 0.004
-        # print(f"source vector: {source_vector}")
-        # print(f"destination vector: {destination_vector}")
-        #
-        # x0 = source_vector[0]
-        # y0 = source_vector[1]
-        # x1 = destination_vector[0]
-        # y1 = destination_vector[1]
-        #
-        # double_edge_trace["x"] += (x0, x1, None)
-        # double_edge_trace["y"] += (y0, y1, None)
-        # edge_traces.append(double_edge_trace)
-
         # Distance label of edges
         middle_node_trace = go.Scattermapbox(
             lon=middle_node_x, lat=middle_node_y,
@@ -214,30 +164,19 @@ class PlotlyLoad(Load):
             marker=dict(
                 color='LightSkyBlue',
                 size=10,
-                # line=dict(
-                #     width=1,
-                #     color="RoyalBlue"
-                # )
             ),
             text=city_name,
             textposition='bottom center',
-            # cluster=dict(enabled=True)
         )
 
         # create network graph
         fig = go.Figure(
-            # data=[*edge_traces_gray, *edge_traces, node_trace, middle_node_trace],
             data=[*edge_traces_gray, *edge_traces, node_trace, middle_node_trace],
             layout=go.Layout(
                 title='Network graph made with Python',
                 titlefont_size=16,
                 showlegend=False,
                 hovermode='closest',
-                # margin=dict(b=20, l=5, r=5, t=40),
-                # autosize=False,
-                # width=800,
-                # height=800,
-                # margin=dict(pad=4),
                 margin=dict(l=0, r=0, t=0, b=0),
                 annotations=[dict(
                     text="RailNL",
@@ -246,8 +185,6 @@ class PlotlyLoad(Load):
                     x=0.005, y=-0.002)],
                 xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, scaleratio=1),
                 yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, scaleratio=1),
-                # xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, scaleratio=1, range=[2.314634, 6.041746]),
-                # yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, scaleratio=2, range=[51.754184, 53.007841]),
                 plot_bgcolor="white",
                 paper_bgcolor="#ECEEFE",
             )
@@ -300,11 +237,7 @@ class PlotlyLoad(Load):
 
         # Map settings
         fig.update_layout(mapbox_accesstoken=self.token)
-        # fig.update_layout(mapbox_style="dark")
-        # fig.update_layout(mapbox_style="mapbox://styles/daniel181/clrjnm54f000801pj10o7duci")
         fig.update_layout(mapbox_style="mapbox://styles/daniel181/clrooylos004201pedtslc1km")
-        # fig.update_geos(fitbounds="locations")
-        # fig.update_layout(mapbox_bounds={"west": 2.0, "east": 9.4, "south": 50.4, "north": 53.89})
         fig.update_layout(
             mapbox={
                 "center": {
@@ -315,14 +248,6 @@ class PlotlyLoad(Load):
             }
         )
 
-        # fig.update_traces(
-        #     cluster=dict(enabled=True)
-        # )
-
         if not os.path.exists(".tmp"):
             os.mkdir(".tmp")
         fig.write_html(".tmp/single_track.html", auto_open=auto_open)
-
-# Mapbox
-# latitude = y = north degrees
-# longitude = x = east degrees
