@@ -52,10 +52,9 @@ class Genetic(HillClimber, MapVisualization):
         return children
 
     def run(self, iterations: int, visualize: bool, repetitions: int = 1, number_of_children: int = 2000, verbose: bool = True, auto_open: bool = True):
-        """ Runs the algorithm a certain amount of repititions. Every time it creates
-            the given amount of children from a parent. """
+        """ Runs the algorithm while there are children found with a higher score. This is done
+            a amount of repititions. Every time it creates the given amount of children from a parent."""
 
-        random.seed(123)
         self.score_file.prepare_file()
 
         # set all parameters to zero
@@ -66,14 +65,12 @@ class Genetic(HillClimber, MapVisualization):
             # generate parent solution
             parent = self.generate_parent()
 
-            # set new_highest_score to True
+            # set score variables
             new_highest_score = True
-            # set highest_score_child to zero
             highest_score_child = 0
 
             try:
                 # run a while loop until no child with a higher score has been found
-                # i.e. till children generate better children run this loop
                 while new_highest_score:
                     # set new_highest_score to False
                     new_highest_score = False
@@ -83,14 +80,13 @@ class Genetic(HillClimber, MapVisualization):
 
                     # iterate over all children
                     for child in children:
-                        # write score of child
+                        # write score of child to csv file
                         self.score_file.write_score(child.score)
-                        # if this child's score is higher than till now highest child score
 
+                        # if this child's score is higher than till now highest child score
                         if child.score > highest_score_child:
-                            # set new_highest_score found to True
                             new_highest_score = True
-                            # the child with the highest score becomes the new parent
+                            # child solution becomes the new parent solution
                             parent = child
                             # keep track of the highest score found
                             highest_score_child = child.score
@@ -105,7 +101,9 @@ class Genetic(HillClimber, MapVisualization):
                 all_time_highest_score = highest_score_child
                 all_time_highest_score_child_solution = solution
 
-        Output(all_time_highest_score_child_solution.trajectories, is_valid = True)
+        
+
         if visualize:
+            Output(all_time_highest_score_child_solution.trajectories, is_valid = True)
             self.visualize(solution=all_time_highest_score_child_solution, auto_open=auto_open)
             visualize_iterations_to_score(data=self.scores_path, auto_open=auto_open)
