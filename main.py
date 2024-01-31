@@ -112,7 +112,7 @@ if __name__ == "__main__":
     # default iterations number
     default_iterations: dict[str, int] = {
         "randomize": 1,
-        "less_random": 10000,
+        "advanced_random": 1000,
         "hill_climber": 300000,
         "simulated_annealing": 30000,
         "genetic": 1,

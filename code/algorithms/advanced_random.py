@@ -162,7 +162,7 @@ class AdvancedRandom(MapVisualization):
 
         return trajectory
     
-    def run(self, iterations: int, visualize: bool, verbose: bool = False, write_output: bool = True) -> Solution | Output:
+    def run(self, iterations: int, visualize: bool, verbose: bool = False, write_output: bool = True, auto_open: bool = False) -> Solution | Output:
         self.score_file.prepare_file()
 
         
