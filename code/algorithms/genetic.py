@@ -52,15 +52,17 @@ class Genetic(HillClimber, MapVisualization):
         return children
 
     def run(self, iterations: int, visualize: bool, repetitions: int = 1, number_of_children: int = 2000, verbose: bool = True):
+        """ Runs the algorithm a certain amount of repititions. Every time it creates
+            the given amount of children from a parent. """
+
         random.seed(123)
         self.score_file.prepare_file()
 
         # set all parameters to zero
         all_time_highest_score = 0
 
+        # repeat algorithm for the given amount of repititions
         for _ in range(repetitions):
-            # highest_score = 0
-
             # generate parent solution
             parent = self.generate_parent()
 
