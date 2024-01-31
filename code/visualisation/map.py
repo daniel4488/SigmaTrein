@@ -60,7 +60,8 @@ class PlotlyLoad(Load):
 
         for traject_number, traject in enumerate(solution.trajectories):
             stations = traject.stations
-            edges = list(map(lambda x: tuple(sorted(x)), zip(stations, stations[1:])))
+            edges = list(map(lambda x: tuple(sorted(x)), zip(stations,
+                             stations[1:])))
             for edge in edges:
                 if edge in self.edges:
                     self.edges[edge].append(self.coloring[traject_number])
@@ -90,7 +91,8 @@ class PlotlyLoad(Load):
                 edge_trace["lat"] += (y0, y1, None)
                 edge_traces.append(edge_trace)
             else:
-                for double_edge_count, trajectory_color in enumerate(trajectory_colors):
+                for double_edge_count, trajectory_color in \
+                        enumerate(trajectory_colors):
                     edge_trace = go.Scattermapbox(
                         lon=[], lat=[],
                         line=dict(
@@ -113,13 +115,14 @@ class PlotlyLoad(Load):
                     orthogonal_vector = np.matmul(original_vector, rotation_matrix)
 
                     assert np.dot(original_vector, orthogonal_vector) < 1e-12
-                    orthogonal_vector /= np.linalg.norm(orthogonal_vector)  # normalize it
+                    orthogonal_vector /= np.linalg.norm(orthogonal_vector)
                     assert np.linalg.norm(orthogonal_vector) - 1.0 < 1e-12
 
                     source_vector += orthogonal_vector * 0.004 * double_edge_count
                     destination_vector += orthogonal_vector * 0.004 * double_edge_count
-                    print(f"source vector: {source_vector}") if self.verbose else None
-                    print(f"destination vector: {destination_vector}") if self.verbose else None
+                    if self.verbose:
+                        print(f"source vector: {source_vector}")
+                        print(f"destination vector: {destination_vector}")
 
                     x0 = source_vector[0]
                     y0 = source_vector[1]
@@ -130,7 +133,7 @@ class PlotlyLoad(Load):
                     edge_trace["lat"] += (y0, y1, None)
                     edge_traces.append(edge_trace)
 
-        # Distance label of edges
+        # distance label of edges
         middle_node_trace = go.Scattermapbox(
             lon=middle_node_x, lat=middle_node_y,
             mode='markers+text',
@@ -171,7 +174,8 @@ class PlotlyLoad(Load):
 
         # create network graph
         fig = go.Figure(
-            data=[*edge_traces_gray, *edge_traces, node_trace, middle_node_trace],
+            data=[*edge_traces_gray, *edge_traces, node_trace,
+                  middle_node_trace],
             layout=go.Layout(
                 title='Network graph made with Python',
                 titlefont_size=16,
@@ -183,8 +187,10 @@ class PlotlyLoad(Load):
                     showarrow=False,
                     xref="paper", yref="paper",
                     x=0.005, y=-0.002)],
-                xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, scaleratio=1),
-                yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, scaleratio=1),
+                xaxis=dict(showgrid=False, zeroline=False,
+                           showticklabels=False, scaleratio=1),
+                yaxis=dict(showgrid=False, zeroline=False,
+                           showticklabels=False, scaleratio=1),
                 plot_bgcolor="white",
                 paper_bgcolor="#ECEEFE",
             )
@@ -224,7 +230,7 @@ class PlotlyLoad(Load):
             ]
         )
 
-        # Add track info
+        # add track info
         fig.add_annotation(
             text=f"<b>Traject:</b> [traject] <br><b>Total time:</b> {traject_total_time}",
             align="left",
@@ -235,7 +241,7 @@ class PlotlyLoad(Load):
             y=-0.1
         )
 
-        # Map settings
+        # map settings
         fig.update_layout(mapbox_accesstoken=self.token)
         fig.update_layout(mapbox_style="mapbox://styles/daniel181/clrooylos004201pedtslc1km")
         fig.update_layout(
