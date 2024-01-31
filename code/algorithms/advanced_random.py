@@ -90,48 +90,51 @@ class AdvancedRandom(Randomize, MapVisualization):
 
         highest_score = 0
 
-        for _ in range(iterations):
+        try:
+            for _ in range(iterations):
 
-            self.reset_used_connections_and_weight()
-            trajectories = set()
+                self.reset_used_connections_and_weight()
+                trajectories = set()
 
-            # loop for the maximum amount of trajectories
-            for _ in range(int(self.constrictions.max_trajectories)):
+                # loop for the maximum amount of trajectories
+                for _ in range(int(self.constrictions.max_trajectories)):
 
-                current_trajectory = Trajectory()
+                    current_trajectory = Trajectory()
 
-                departure_station = self.choose_departure_station(current_trajectory)
+                    departure_station = self.choose_departure_station(current_trajectory)
 
-                # make advanced trajectory and add to set of trajectories
-                trajectories.add(self.make_advanced_trajectory
-                                 (current_trajectory, departure_station))
+                    # make advanced trajectory and add to set of trajectories
+                    trajectories.add(self.make_advanced_trajectory
+                                     (current_trajectory, departure_station))
 
-                # add trajectory connections to used_connections
-                self.used_connections.update(current_trajectory.connections)
+                    # add trajectory connections to used_connections
+                    self.used_connections.update(current_trajectory.connections)
 
-                if len(self.used_connections) == 89:
-                    break
+                    if len(self.used_connections) == 89:
+                        break
 
-            trajectories = list(trajectories)
+                trajectories = list(trajectories)
 
-            # create the solution object and write the score to a csv file
-            solution = Solution(trajectories, False, self.__class__.__name__)
-            self.score_file.write_score(solution.score)
+                # create the solution object and write the score to a csv file
+                solution = Solution(trajectories, False, self.__class__.__name__)
+                self.score_file.write_score(solution.score)
 
-            if solution.score > highest_score:
-                highest_score = solution.score
-                highest_score_solution = solution
+                if solution.score > highest_score:
+                    highest_score = solution.score
+                    highest_score_solution = solution
 
-            self.highest_score_file.write_score(highest_score)
+                self.highest_score_file.write_score(highest_score)
 
-            if self.verbose:
-                print(f"Score: {solution.score}")
+                if self.verbose:
+                    print(f"Score: {solution.score}")
 
-                for trajectory in solution.trajectories:
-                    print("Stations:", end="")
-                    print(trajectory, end="")
+                    for trajectory in solution.trajectories:
+                        print("Stations:", end="")
+                        print(trajectory, end="")
 
-                print(highest_score)
+                    print(highest_score)
+        except KeyboardInterrupt:
+            pass
 
         if visualize:
             self.create_visual(solution=highest_score_solution,
