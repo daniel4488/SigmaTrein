@@ -27,8 +27,9 @@ Simulated annealing has always a starting temperature (> 0) that can be adjusted
 The algorithm has a cooling down scheme that could be linear, exponential, root or constant.
 The exponential cooling down scheme has a parameter alpha that is in (0, 1).
 
-The experiments can be executed with main.py. 
-For example: ``` python3 main.py hill_climber --experiment ```.
+The experiments can be executed with main.py. <br>
+For hill_climber: ``` python3 main.py hill_climber --experiment ``` <br>
+For simulated_annealing: ``` python3 main.py simualted_annealing --experiment ```
 
 # Structure
 
