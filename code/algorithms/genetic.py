@@ -56,7 +56,7 @@ class Genetic(HillClimber, MapVisualization):
 
         return children
 
-    def run(self, iterations: int, visualize: bool, repetitions: int = 1, number_of_children: int = 2000, verbose: bool = True, auto_open: bool = True) -> None:
+    def run(self, iterations: int, visualize: bool, repetitions: int = 10000000000000000000000000000, number_of_children: int = 2000, verbose: bool = True, auto_open: bool = True) -> None:
         """ Runs the algorithm while there are children found with a higher score. This is done
             a amount of repititions. Every time it creates the given amount of children from a parent."""
         
@@ -71,16 +71,16 @@ class Genetic(HillClimber, MapVisualization):
         # set a parametere that keeps track of the amount of iterations
         i = 0
 
-        # repeat algorithm for the given amount of repititions
-        for _ in range(repetitions):
-            # generate parent solution
-            parent = self.generate_parent()
+        try:
+            # repeat algorithm for the given amount of repititions
+            for _ in range(repetitions):
+                # generate parent solution
+                parent = self.generate_parent()
 
-            # set score variables
-            new_highest_score = True
-            highest_score_child = 0
+                # set score variables
+                new_highest_score = True
+                highest_score_child = 0
 
-            try:
                 # run a while loop until no child with a higher score has been found
                 while new_highest_score:
                     # set new_highest_score to False
@@ -110,17 +110,17 @@ class Genetic(HillClimber, MapVisualization):
 
                             # create a solution with new highest score
                             solution = Solution(child.trajectories, True, self.__class__.__name__)
-                        
+
                         # update iterations parameter
                         i += 1
 
-            except KeyboardInterrupt:
-                pass
+                # check the highest score found in this tree and compare it to the most successful tree
+                if highest_score_child > all_time_highest_score:
+                    all_time_highest_score = highest_score_child
+                    all_time_highest_score_child_solution = solution
 
-            # check the highest score found in this tree and compare it to the most successful tree
-            if highest_score_child > all_time_highest_score:
-                all_time_highest_score = highest_score_child
-                all_time_highest_score_child_solution = solution
+        except KeyboardInterrupt:
+            pass
 
         # create visualisation if visualize is True
         if visualize:

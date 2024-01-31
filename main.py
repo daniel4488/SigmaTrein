@@ -116,7 +116,7 @@ if __name__ == "__main__":
         "hill_climber": 300000,
         "simulated_annealing": 100000,
         "genetic": 2,
-        "sigma": 1000,
+        "sigma": 80000,
         "baseline": 100000
     }
 

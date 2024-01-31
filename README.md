@@ -111,11 +111,25 @@ For each algorithm an appropriate number of ```iterations``` has been set by def
 | sigma               | 1000           |
 | simulated_annealing | 100000         |
 
+
+**Note:** Genetic algorithm does not have a controllable number of iterations, as it automatically stops when it converges. Therefore, the number of ```repetitions``` is given in the table.
+
 # Computation Time
 The Apollo 11 space shuttle has sent people to the moon using a board computer with 4 KB of memory. But this was in 1969 and now we are running this project with 16 GB of RAM. However, there are still limitations in what a computer can do within a restricted amount of time.
 
 We have measured and extrapolated for each algorithm how long it would take to run some number of iterations depending on the ```algorithm```. The results are shown in the table below. The number of iterations have been rounded. Any parameters for the algorithms will have the default configuration in this test.
 
+| **algorithm**       |  **3 minutes**  |  **15 minutes**  |
+|---------------------|:---------------:|:----------------:|
+| advanced_random     |     410.000     |    2.050.000     |
+| baseline            |     500.000     |    2.500.000     |
+| genetic             |       34        |       170        |
+| hill_climber        |     990.000     |    4.950.000     |
+| randomize           |        -        |        -         |
+| sigma               |     330.000     |    1.650.000     |
+| simulated_annealing |     940.000     |    4.700.000     |
+
+**Note:** Genetic algorithm does not have a controllable number of iterations, as it automatically stops when it converges. Therefore, the number of ```repetitions``` is given in the table.
 
 
 # Experiments
