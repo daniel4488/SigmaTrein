@@ -6,8 +6,10 @@ import csv
 
 class Output(Solution):
     """
+    Class describing the solution of an algorithm.
     Class Output inherits from Solution.
-    Output extents the solution class by writing an output file.
+    Output extents the solution class by writing an output file. This output file
+    is a csv file consisting of every trajectory of a solution, and its score.
     """
 
     def __init__(self, trajectories: list[Trajectory], is_valid: bool,

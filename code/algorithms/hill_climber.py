@@ -89,7 +89,7 @@ class HillClimber(MapVisualization):
             return True
         return False
 
-    def run(self, iterations: int, visualize: bool, mutations: int = 1,
+    def run(self, iterations: int, visualize: bool, mutations: int = 4,
             verbose: bool = False, auto_open: bool = True):
         """ Runs the Hill Climber algorithm for a given amount
             of iterations and mutations. """
@@ -106,19 +106,17 @@ class HillClimber(MapVisualization):
                 self.new_solution(mutations)
                 self.score_file.write_score(self.score)
 
-
         except KeyboardInterrupt:
             pass
         algorithm = self.__class__.__name__
         print(f"{algorithm} highest score: {self.score}") if self.verbose else None
 
         if visualize:
-            Output(self.solution.trajectories, True)
-            visualize_iterations_to_score(data=self.scores_path, auto_open=auto_open)
-            self.visualize(solution=self.solution, auto_open=auto_open)
+            self.create_visual(solution=self.solution, path=self.scores_path, auto_open=auto_open)
 
     def new_solution(self, mutations: int):
-        """ Creates a new solution with the given amount of mutations. """
+        """ Performs a given amount of mutations on the current solution, and takes on
+            a new solution if its score is better. """
 
         new_solution = copy.deepcopy(self.solution)
 
