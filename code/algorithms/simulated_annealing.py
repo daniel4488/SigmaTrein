@@ -1,8 +1,8 @@
-from .hill_climber import HillClimber
-from ..classes.solution import Solution
+from code.algorithms.hill_climber import HillClimber
+from code.classes.solution import Solution
 
-import random
 import numpy as np
+import random
 
 
 class SimulatedAnnealing(HillClimber):

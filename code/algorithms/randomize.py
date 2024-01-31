@@ -1,16 +1,14 @@
-from code.classes.trajectory import Trajectory
-from code.classes.station import Station
 from code.classes.connection import Connection
-from code.classes.solution import Solution
-from code.classes.output import Output
-from code.classes.railNL import RailNL
 from code.classes.data import DataInfo
 from code.classes.dataset_info import DatasetInfo
+from code.classes.output import Output
+from code.classes.railNL import RailNL
+from code.classes.solution import Solution
+from code.classes.station import Station
+from code.classes.trajectory import Trajectory
 from code.visualisation.map import PlotlyLoad
-from code.classes.write_file import ScoreFile
 
 import random
-import os
 
 
 class Randomize:
@@ -39,34 +37,50 @@ class Randomize:
         # create dictionary for all stations and connections
         self.railNL = RailNL(dataset=dataset)
 
+        # load special stations and connections for the Sigma algorithm
         if self.__class__.__name__ == "Sigma":
-            # load special stations in railNL class
+            # load special stations and connections
             self.railNL.load_special_stations()
-            # dictionary with all leftover stations
-            self.stations: dict[int, Station] = self.railNL.special_stations
-            # load special connections in railNL class
             self.railNL.load_special_connections()
-            # dictionaries with all leftover connections when prefixed routes are layed out
+
+            # dictionary with all leftover stations and connections
+            self.stations: dict[str, Station] = self.railNL.special_stations
             self.connections: dict[int, Connection] = self.railNL.special_connections
+
+        # load normal stations and connections
         else:
-            self.stations: dict[int, Station] = self.railNL.stations 
-            self.connections: dict[int, Connection] = self.railNL.connections
-        
+            self.stations = self.railNL.stations
+            self.connections = self.railNL.connections
+
         # set constrictions
         self.constrictions: DatasetInfo = self.set_constrictions(dataset)
 
         # set preferred first departure stations
-        self.preferred_departure_holland = ["Den Helder", "Dordrecht", "Hoorn", "Schiphol Airport", "Gouda", "Heemstede-Aerdenhout", "Schiphol Airport"]
-        self.preferred_departure_nationaal = ["Den Helder", "Dordrecht", "Hoorn", "Enschede", "Venlo", "Maastricht", "Heerlen", "Vlissingen", "Lelystad Centrum", "Groningen", "Leeuwarden", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Utrecht Centraal", "Amsterdam Centraal", "Amsterdam Centraal", "Amsterdam Centraal", "Amsterdam Centraal"]
-
-        self.total_trajectories = 0
+        self.preferred_departure_holland = ["Den Helder", "Dordrecht", "Hoorn",
+                                            "Schiphol Airport", "Gouda",
+                                            "Heemstede-Aerdenhout",
+                                            "Schiphol Airport"]
+        self.preferred_departure_nationaal = ["Den Helder", "Dordrecht",
+                                              "Hoorn", "Enschede", "Venlo",
+                                              "Maastricht", "Heerlen",
+                                              "Vlissingen",
+                                              "Lelystad Centrum", "Groningen",
+                                              "Leeuwarden", "Utrecht Centraal",
+                                              "Utrecht Centraal",
+                                              "Utrecht Centraal",
+                                              "Utrecht Centraal",
+                                              "Utrecht Centraal",
+                                              "Amsterdam Centraal",
+                                              "Amsterdam Centraal",
+                                              "Amsterdam Centraal",
+                                              "Amsterdam Centraal"]
 
         # variable for keeping track of used connections
         self.used_connections: set[int] = set()
 
-        # stores a solution
         self.solution: dict[int, list[str]] = {}
 
+        self.total_trajectories = 0
         self.highest_score = 0
         self.highest_score_solution: Solution = None
 
@@ -122,10 +136,10 @@ class Randomize:
         trajectory.duration = duration
         trajectory.add_connection_number(connection)
 
-    def choose_departure_station(self, trajectory: Trajectory) -> set[str, Station]:
+    def choose_departure_station(self, trajectory: Trajectory) \
+            -> tuple[str, Station]:
         """ Generates a randomly chosen trajectory. If unique is True,
             then all connections can only be selected once. """
-
 
         # choose a random station to depart from
         departure_station = self.choose_station(list(self.stations.keys()))
@@ -134,15 +148,23 @@ class Randomize:
         trajectory.add_station(departure_station[0])
 
         return departure_station
-    
-    def choose_prefixed_departure_station(self, trajectory: Trajectory) -> set [str, Station]:
+
+    def choose_prefixed_departure_station(self, trajectory: Trajectory) \
+            -> tuple[str, Station]:
+        """ Returns a prefixed departure station from the instance lists. """
+
+        # select station
         index = self.total_trajectories % self.constrictions.max_trajectories
         name = eval(f"self.preferred_departure_{self.dataset}[{index}]")
         station = self.stations[name]
+
+        # add station to trajectory
         trajectory.add_station(name)
+
         return name, station
 
-    def make_trajectory(self, unique: bool = True, prefixed: bool = False) -> Trajectory:
+    def make_trajectory(self, unique: bool = True,
+                        prefixed: bool = False) -> Trajectory:
         # add randomly chosen connections and stations to trajectory as long as
         # restrictions are still met
 
@@ -198,7 +220,9 @@ class Randomize:
 
         self.used_connections.clear()
 
-    def run(self, iterations: int, visualize: bool, verbose: bool = False, write_output: bool = True, auto_open: bool = False, unique: bool = True, prefixed: bool = False) -> Solution | Output:
+    def run(self, iterations: int, visualize: bool, verbose: bool = False,
+            write_output: bool = True, auto_open: bool = False,
+            unique: bool = True, prefixed: bool = False) -> Solution | Output:
         """ Creates a solution of with the maximum amount of trajectories. """
 
         self.reset_used_connections()
@@ -208,7 +232,8 @@ class Randomize:
 
         for _ in range(int(self.constrictions.max_trajectories)):
             # make random trajectory
-            current_trajectory = self.make_trajectory(unique=unique, prefixed=prefixed)
+            current_trajectory = self.make_trajectory(unique=unique,
+                                                      prefixed=prefixed)
 
             # add to set of trajectories
             trajectories.add(current_trajectory)
@@ -219,17 +244,12 @@ class Randomize:
             if len(self.used_connections) == RailNL.NUMBER_OF_CONNECTIONS:
                 is_valid = True
                 break
-                
+
         # create solution instance
         if self.__class__.__name__ == "Randomize":
-            solution = Output(trajectories, is_valid)
+            solution = Output(list(trajectories), is_valid)
         else:
-            solution = Solution(trajectories, is_valid)
-            # self.score_file.write_score(solution.score)
-
-        # if solution.score > self.highest_score:
-        #     self.highest_score = solution.score
-        #     self.highest_score_solution = solution
+            solution = Solution(list(trajectories), is_valid)
 
         if self.verbose:
             print(f"Score: {solution.score}")
@@ -239,7 +259,7 @@ class Randomize:
                 print(trajectory, end="")
                 print()
 
-        # visualization
+        # create visualization
         if visualize:
             plot_device = PlotlyLoad(dataset=self.dataset)
             plot_device.draw_graph(solution, auto_open)

@@ -1,18 +1,21 @@
-from code.classes.trajectory import Trajectory
-from code.classes.station import Station
-from code.classes.solution import Solution
-from code.classes.output import Output
-from code.classes.write_file import ScoreFile
-from code.visualisation.map_class import MapVisualization
-from code.visualisation.baseline import visualize_baseline
 from code.algorithms.randomize import Randomize
+from code.classes.output import Output
+from code.classes.solution import Solution
+from code.classes.station import Station
+from code.classes.trajectory import Trajectory
+from code.classes.write_file import ScoreFile
+from code.visualisation.baseline import visualize_baseline
+from code.visualisation.map_class import MapVisualization
 
 
 class AdvancedRandom(Randomize, MapVisualization):
     """
     Algorithm following our custom Advanced Random algorithm.
 
-    {omschrijving algoritme}
+    This algorithm chooses a random departing station. From there, it uses a
+    heuristic, to choose random between connections with the lowest weight.
+    This weight is determined by how many times the connection has been made
+    in prior trajectories.
 
     AdvancedRandom takes the Randomize class as a parent.
     """
@@ -61,11 +64,13 @@ class AdvancedRandom(Randomize, MapVisualization):
                                     destination_station[1])
 
             # update total duration of the trajectory
-            duration_candidate = trajectory.duration + self.connections[connection].duration
+            duration_candidate = trajectory.duration + \
+                self.connections[connection].duration
 
             # add station to trajectory if it fits within time restriction
             if duration_candidate <= self.constrictions.max_time:
-                self.update_trajectory(duration_candidate, connection, destination_station[0], trajectory)
+                self.update_trajectory(duration_candidate, connection,
+                                       destination_station[0], trajectory)
 
                 # increase weight of connection
                 self.connections[connection].weight += 1
@@ -74,7 +79,9 @@ class AdvancedRandom(Randomize, MapVisualization):
 
         return trajectory
 
-    def run(self, iterations: int, visualize: bool, verbose: bool = False, write_output: bool = True, auto_open: bool = False) -> Solution | Output:
+    def run(self, iterations: int, visualize: bool, verbose: bool = False,
+            write_output: bool = True,
+            auto_open: bool = False) -> Solution | Output:
         """ Creates solutions with the maximum amount of trajectories and
             saves their scores in a csv file. """
 
@@ -84,6 +91,7 @@ class AdvancedRandom(Randomize, MapVisualization):
         highest_score = 0
 
         for _ in range(iterations):
+
             self.reset_used_connections_and_weight()
             trajectories = set()
 
@@ -95,7 +103,8 @@ class AdvancedRandom(Randomize, MapVisualization):
                 departure_station = self.choose_departure_station(current_trajectory)
 
                 # make advanced trajectory and add to set of trajectories
-                trajectories.add(self.make_advanced_trajectory(current_trajectory, departure_station))
+                trajectories.add(self.make_advanced_trajectory
+                                 (current_trajectory, departure_station))
 
                 # add trajectory connections to used_connections
                 self.used_connections.update(current_trajectory.connections)
@@ -121,7 +130,7 @@ class AdvancedRandom(Randomize, MapVisualization):
                 for trajectory in solution.trajectories:
                     print("Stations:", end="")
                     print(trajectory, end="")
-                    print()
+
                 print(highest_score)
 
         if visualize:

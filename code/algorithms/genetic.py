@@ -1,11 +1,11 @@
-from code.classes.solution import Solution
 from code.algorithms.hill_climber import HillClimber
+from code.classes.output import Output
+from code.classes.solution import Solution
 from code.visualisation.baseline import visualize_iterations_to_score
 from code.visualisation.map_class import MapVisualization
-from code.classes.output import Output
 
-import random
 import copy
+import random
 
 
 class Genetic(HillClimber, MapVisualization):
