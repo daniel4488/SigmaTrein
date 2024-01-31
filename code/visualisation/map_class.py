@@ -12,11 +12,16 @@ class MapVisualization:
     """
 
     def create_visual(self, solution: Solution, path: str, auto_open: bool):
+        """ Creates an output object for the given solution, a graph of the
+            scores, and the visualisation picture. """
+
         Output(solution.trajectories, True)
         visualize_iterations_to_score(data=path, auto_open=auto_open)
         self.visualize(solution=solution, auto_open=auto_open)
 
     def visualize(self, solution: Solution, auto_open: bool):
+        """ Creates the background and solution of visualisation picture. """
+
         assert hasattr(self, "dataset")
         plot_device = PlotlyLoad(dataset=self.dataset)
         plot_device.draw_graph(solution, auto_open=auto_open)

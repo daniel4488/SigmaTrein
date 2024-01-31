@@ -25,6 +25,9 @@ class RailNL:
         self.stations: dict[str, Station] = {}
         self.connections: dict[int, Connection] = {}
 
+        self.special_stations: dict[str, Station] = {}
+        self.special_connections: dict[int, Connection] = {}
+
         self.load_stations()
         self.load_connections()
 
@@ -47,6 +50,29 @@ class RailNL:
 
                 # create station object
                 self.stations[station] = Station(station, float(x), float(y))
+
+    def load_special_stations(self) -> None:
+            """ Converts the station data to Station classes and loads
+                them into the stations dictionary. """
+            
+            excluded_stations = [ "Heerlen", "Sittard", "Maastricht", "Roermond", "Weert", "Assen", 
+                                "Groningen", "Leeuwarden", "Heerenveen", "Steenwijk", "Enschede", 
+                                "Hengelo", "Venlo", "Helmond", "Vlissingen", "Den Helder", 
+                                "Lelystad Centrum"]
+
+            # open StationsHolland.csv
+            with open(f"data/{self.dataset}/Stations{self.dataset.capitalize()}.csv", "r") as file:
+                # remove header
+                _ = file.readline()
+
+                # strip and split lines by comma's
+                for line in file:
+                    line = line.strip()
+                    station, y, x = line.split(",")
+
+                    if station not in excluded_stations:
+                        # create station object
+                        self.special_stations[station] = Station(station, float(x), float(y))
 
     def load_connections(self, dir: str = "Connecties") -> None:
         """ Converts connections data to Connection classes and
@@ -84,3 +110,34 @@ class RailNL:
 
             # make number of connections / trajectories a class variable
             RailNL.NUMBER_OF_CONNECTIONS = trajectory_number
+
+    def load_special_connections(self):
+        """ Converts leftover connections data to Connection classes and
+            loads them into the connections dictionary. """
+        
+        with open("data/nationaal/sigmanationaal.csv", "r") as file:
+            # remove header
+            _ = file.readline()
+
+            # keep track of the current trajectory number
+            trajectory_number = 0
+
+            for line in file:
+                # remove newline character
+                line = line.strip()
+
+                # split line
+                station_1, station_2, duration_str = line.split(",")
+
+                # convert string to float
+                duration = float(duration_str)
+
+                # add connection to both stations
+                self.special_stations[station_1].add_connection(trajectory_number)
+                self.special_stations[station_2].add_connection(trajectory_number)
+
+                # add a connection
+                self.special_connections[trajectory_number] = Connection(trajectory_number, station_1, station_2, duration)
+
+                # increment the current trajectory number
+                trajectory_number += 1

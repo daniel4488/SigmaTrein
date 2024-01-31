@@ -158,7 +158,7 @@ class Randomize:
                                                    connection)
 
             # remove created connection from destination and departure stations
-            # possible connections
+            # possible connections in unique is True
             if unique:
                 self.update_connections(connection, departure_station[1],
                                         destination_station[1])
@@ -184,10 +184,13 @@ class Randomize:
         return trajectory
 
     def reset_used_connections(self) -> None:
+        """ Clears the list of all used connections. """
+
         self.used_connections.clear()
 
     def run(self, iterations: int, visualize: bool, verbose: bool = False, write_output: bool = True, auto_open: bool = False, unique: bool = True, prefixed: bool = False) -> Solution | Output:
         """ Creates a solution of with the maximum amount of trajectories. """
+
         self.reset_used_connections()
 
         trajectories = set()
