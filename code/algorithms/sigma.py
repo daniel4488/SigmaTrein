@@ -18,7 +18,7 @@ class Sigma(AdvancedRandom, MapVisualization):
     This algorithm gets a few predetermined consecutive stations and connections. 
     These are fixed routes where some trajectories must start with. 
     A trajectory is then made starting either from a predetermined station or a random one. 
-    After the first departure has been chosen the algorithm starts choosing its 
+    After the first departure station has been chosen the algorithm starts choosing its 
     path with the advanced randomize algorithm. Once it has found a valid solution, 
     meaning that all connections have been used by the trajectories, a heuristic starts 
     looking at what connections can be removed from the trajectories. 
@@ -39,7 +39,6 @@ class Sigma(AdvancedRandom, MapVisualization):
         # Create and prepare score files
         self.score_file = ScoreFile("sigma.csv")
         self.highest_score_file = ScoreFile("sigma_highest.csv")
-        self.highest_score_file.prepare_file()
 
         # list with pre-fixed routes that start a trajectory
         self.standard_stations = [["Maastricht", "Sittard", "Heerlen", "Sittard", "Roermond", "Weert", "Eindhoven"],
@@ -106,7 +105,7 @@ class Sigma(AdvancedRandom, MapVisualization):
         """ Returns a trajectory that starts with a predetermined part, and
             is supplemented with random stations. """
 
-        # initialize empty trajectory
+        # initialize trajectory
         trajectory = Trajectory()
 
         # set departure station according to predetermined or random procedure
@@ -144,14 +143,29 @@ class Sigma(AdvancedRandom, MapVisualization):
         """ Runs Sigma algorithm. """
 
         print("Running Sigma algorithm...")
-        # prepare csv file
+        
+        # prepare csv files
         self.score_file.prepare_file()
+        self.highest_score_file.prepare_file()
 
         # set a parameter that keeps track of the highest score
         highest_score = 0 
 
         # set a parametere that keeps track of the amount of iterations
         i = 0
+<<<<<<< HEAD
+
+        for _ in range(iterations):
+            # print iterations
+            if i % 10000 == 0:
+                print(f"{i} iterations")
+
+            # whilst a solution is not valid, i.e. all connections used by trajectories
+            #  keep looking for a valid solution
+            while not self.is_valid:
+                # reset all used connections by previous solution
+                self.reset_used_connections_and_weight()
+=======
         try:
             for _ in range(iterations):
                 # print iterations
@@ -163,6 +177,7 @@ class Sigma(AdvancedRandom, MapVisualization):
                 while not self.is_valid:
                     # rest all used connections by previous solution
                     self.reset_used_connections()
+>>>>>>> d361830d1c72e4c4f703b11d6365dce38bd6e729
 
                     # repopulate the standard routes lists
                     self.standard_stations_copy = copy.deepcopy(self.standard_stations)
