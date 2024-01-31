@@ -44,7 +44,7 @@ for param in params:
         [
             "python", "main.py", "hill_climber",
             "--iterations", "50000", "--mutations", str(param),
-            "--verbose"
+            "--verbose", "--disable_auto_open"
         ],
         stdout=subprocess.PIPE,
         text=True

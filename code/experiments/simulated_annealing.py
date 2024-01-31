@@ -27,7 +27,7 @@ for temperature in temperatures:
             "python", "main.py", "simulated_annealing",
             "--iterations", "50000",
             "--start_temperature", str(temperature),
-            "--verbose"
+            "--verbose", "--disable_auto_open"
         ],
         stdout=subprocess.PIPE,
         text=True
