@@ -88,4 +88,3 @@ def test_solution(parse_output_csv) -> None:
         is_valid=True
     )
     assert solution.score == float(score)
-
