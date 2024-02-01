@@ -1,10 +1,12 @@
 from code.visualisation.load import Load
 from code.classes.solution import Solution
 from code.classes.output import Output
+from code.functions.to_snake_case import to_snake_case
 
 import plotly.graph_objects as go
 import numpy as np
 import os
+import secrets
 
 
 class PlotlyLoad(Load):
@@ -255,7 +257,12 @@ class PlotlyLoad(Load):
         )
 
         output_dir = "output"
+        filename = to_snake_case(solution.algorithm).replace(' ', '_')
+        salt = secrets.token_hex(14)
 
-        if not os.path.exists("output"):
-            os.mkdir("output")
-        fig.write_html("output/map.html", auto_open=auto_open)
+        if not os.path.exists(output_dir):
+            os.mkdir(output_dir)
+        fig.write_html(
+            f"{output_dir}/map_{filename}_{salt}.html",
+            auto_open=auto_open
+        )

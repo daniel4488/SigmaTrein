@@ -13,6 +13,7 @@ class Solution:
     def __init__(self, trajectories: list[Trajectory], is_valid: bool,
                  origin: str = "", verbose: bool = False) -> None:
 
+        self.algorithm = origin
         self.verbose: bool = verbose
         self.is_valid: bool = is_valid
         self.trajectories: list[Trajectory] = trajectories

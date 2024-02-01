@@ -245,11 +245,14 @@ class Randomize:
                 is_valid = True
                 break
 
+        # algorithm name
+        algorithm = self.__class__.__name__
+
         # create solution instance
         if self.__class__.__name__ == "Randomize":
-            solution = Output(list(trajectories), is_valid)
+            solution = Output(list(trajectories), is_valid, origin=algorithm)
         else:
-            solution = Solution(list(trajectories), is_valid)
+            solution = Solution(list(trajectories), is_valid, origin=algorithm)
 
         if self.verbose:
             print(f"Score: {solution.score}")

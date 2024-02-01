@@ -5,6 +5,7 @@ import plotly.express as px
 import seaborn as sns
 import matplotlib.pyplot as plt
 import os
+import secrets
 
 
 def read_score_file(data: str):
@@ -58,10 +59,15 @@ def visualize_iterations_to_score(data: str, auto_open: bool) -> None:
         title=f"Scores of {len(scores)} iterations from a {algorithm} algorithm")
 
     output_dir = "output"
+    filename = algorithm.replace(" ", "_")
+    salt = secrets.token_hex(14)
 
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
-    fig.write_html(f"{output_dir}/iter_to_score.html", auto_open=auto_open)
+    fig.write_html(
+        f"{output_dir}/iter_to_score_{filename}_{salt}.html",
+        auto_open=auto_open
+    )
 
 
 if __name__ == "__main__":

@@ -14,9 +14,9 @@ class Output(Solution):
     """
 
     def __init__(self, trajectories: list[Trajectory], is_valid: bool,
-                 verbose: bool = False) -> None:
+                 origin: str = "", verbose: bool = False) -> None:
 
-        super().__init__(trajectories, is_valid, verbose=verbose)
+        super().__init__(trajectories, is_valid, origin=origin, verbose=verbose)
         self.write_output()
 
     def write_output(self) -> None:

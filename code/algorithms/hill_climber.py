@@ -52,6 +52,7 @@ class HillClimber(MapVisualization):
         self.solution = self.randomize.run(iterations=1, visualize=False, write_output=False, auto_open=False)
         self.score = self.solution.score
         self.trajectories = list(self.solution.trajectories)
+        self.solution.algorithm = self.__class__.__name__
 
     def choose_trajectory(self):
         """ Selects random trajectory from current solution. """
