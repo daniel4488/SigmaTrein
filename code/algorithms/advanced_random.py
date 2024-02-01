@@ -176,5 +176,5 @@ class AdvancedRandom(Randomize, MapVisualization):
             self.create_visual(solution=highest_score_solution,
                                path="data/scores/advanced_highest.csv",
                                auto_open=auto_open)
-            visualize_baseline("data/scores/advanced.csv")
+            visualize_baseline("data/scores/advanced.csv", title=self.__class__.__name__)
 

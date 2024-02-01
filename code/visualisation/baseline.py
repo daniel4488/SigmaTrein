@@ -1,8 +1,9 @@
+from code.functions.to_snake_case import to_snake_case
+
 import pandas as pd
 import plotly.express as px
 import seaborn as sns
 import matplotlib.pyplot as plt
-
 import os
 
 
@@ -14,7 +15,7 @@ def read_score_file(data: str):
     return data
 
 
-def visualize_baseline(data: str) -> None:
+def visualize_baseline(data: str, title: str = "Random") -> None:
     """ Plots the scores from the given data against their occurence. """
 
     # get scores from csv file
@@ -28,8 +29,10 @@ def visualize_baseline(data: str) -> None:
     # create histogram
     fig = sns.histplot(scores["score"], kde=True, line_kws=line_settings)
 
+    title = to_snake_case(title).replace("_", " ").capitalize()
+
     plot_settings = {
-        "title": f"Random Algorithm with {len(scores):,} simulations",
+        "title": f"{title} algorithm with {len(scores):,} iterations",
         "xlabel": "Score"
     }
 

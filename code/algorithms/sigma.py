@@ -207,4 +207,4 @@ class Sigma(AdvancedRandom, MapVisualization):
         if visualize:
             self.visualize(solution=highest_score_solution, auto_open=auto_open)
             visualize_iterations_to_score("data/scores/sigma_highest.csv", auto_open=auto_open)
-            visualize_baseline("data/scores/sigma.csv")
+            visualize_baseline("data/scores/sigma.csv", title=self.__class__.__name__)
