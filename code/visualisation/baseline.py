@@ -17,7 +17,7 @@ def read_score_file(data: str):
 
 
 def visualize_baseline(data: str, title: str = "Random") -> None:
-    """ Plots the scores from the given data against their occurence. """
+    """ Plots the scores from the given data against their occurrence. """
 
     # get scores from csv file
     scores = read_score_file(data)

@@ -1,11 +1,9 @@
 from code.algorithms.randomize import Randomize
-from code.classes.output import Output
 from code.classes.railNL import RailNL
 from code.classes.solution import Solution
 from code.classes.trajectory import Trajectory
 from code.classes.write_file import ScoreFile
 from code.functions.to_snake_case import to_snake_case
-from code.visualisation.baseline import visualize_iterations_to_score
 from code.visualisation.map_class import MapVisualization
 
 import copy
@@ -17,7 +15,7 @@ class HillClimber(MapVisualization):
     Algorithm following the Hill Climber technique.
 
     This algorithm starts by creating a solution from our random algorithm.
-    Thereafter it starts deleting a chosen number of trajectories, and checks
+    Thereafter, it starts deleting a chosen number of trajectories, and checks
     if these solutions return better scores. If not, it tries to make random
     new solutions for every deleted trajectory. This process is repeated for
     a given amount of iterations.
@@ -36,10 +34,10 @@ class HillClimber(MapVisualization):
         self.randomize = Randomize(dataset)
 
         # variables to keep track of current solution
-        self.solution: Solution = None
-        self.trajectories: list[Trajectory] = None
-        self.score: int = None
-        self.iterations: int = None
+        self.solution: Solution | None = None
+        self.trajectories: list[Trajectory] | None = None
+        self.score: int | None = None
+        self.iterations: int | None = None
 
         # initialize score file
         self.scores_path: str = f"data/scores/{to_snake_case(self.__class__.__name__)}.csv"
@@ -67,7 +65,7 @@ class HillClimber(MapVisualization):
         # save new set of trajectories in new solution object
         new_solution.trajectories = set(self.trajectories)
 
-    def mutate_trajectory(self, trajectory: Trajectory, new_solution: Solution):
+    def mutate_trajectory(self, new_solution: Solution):
         """ Mutates a trajectory and the new solution. """
 
         # create new random trajectory
@@ -113,7 +111,7 @@ class HillClimber(MapVisualization):
         self.make_first_solution()
         self.score_file.prepare_file()
 
-        # set a parametere that keeps track of the amount of iterations  
+        # set a parameter that keeps track of the amount of iterations
         i = 0
 
         # create new solutions and save scores
@@ -159,7 +157,7 @@ class HillClimber(MapVisualization):
         if not self.check_score(new_solution):
             # create new trajectories and check their scores
             for _ in range(mutations):
-                self.mutate_trajectory(trajectory, new_solution)
+                self.mutate_trajectory(new_solution)
                 self.check_score(new_solution)
         else:
             self.solution.score = new_solution.calculate_score()

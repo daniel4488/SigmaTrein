@@ -1,7 +1,7 @@
 import os
 
 
-class ScoreFile():
+class ScoreFile:
     """
     Class used to write scores from an algorithm to a csv file.
     """

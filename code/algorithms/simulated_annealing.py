@@ -7,7 +7,7 @@ import random
 
 class SimulatedAnnealing(HillClimber):
     """
-    Algorithm following the Simulated Annealing allgorithm.
+    Algorithm following the Simulated Annealing algorithm.
 
     Simulated annealing originates and is inspired by the annealing process in metallurgy,
     in which metal is heated to a high temperature and then gradually cooled down.
@@ -32,7 +32,7 @@ class SimulatedAnnealing(HillClimber):
     There is an argument available to choose between the different cooling down schemes,
     by default it is set to linear.
 
-    SimulatedAnnealing takes the HillClimber class as a parent. Furthermore it has a
+    SimulatedAnnealing takes the HillClimber class as a parent. Furthermore, it has a
     float for the starting temperature, and a float for the current temperature.
     """
 

@@ -1,7 +1,6 @@
 from code.algorithms.hill_climber import HillClimber
 from code.classes.solution import Solution
 from code.classes.output import Output
-from code.visualisation.baseline import visualize_iterations_to_score
 from code.visualisation.map_class import MapVisualization
 
 import copy
@@ -13,7 +12,7 @@ class Genetic(HillClimber, MapVisualization):
 
     This algorithm creates a parent solution from our random algorithm. Then
     it creates new solutions, called children, by mutating the parent solution using
-    the our Hill Climber algorithm. Next, it takes the child with the best score, and
+    our Hill Climber algorithm. Next, it takes the child with the best score, and
     that one becomes the new parent solution. This process is repeated till there are
     no better scores found. Moreover, the algorithm can be repeated multiple times,
     this means that it automatically starts again with a whole new random solution.
@@ -59,7 +58,7 @@ class Genetic(HillClimber, MapVisualization):
 
     def run(self, iterations: int, visualize: bool, repetitions: int = 2, number_of_children: int = 2000, verbose: bool = True, auto_open: bool = True) -> None:
         """ Runs the algorithm while there are children found with a higher score. This is done
-            a amount of repititions. Every time it creates the given amount of children from a parent."""
+            an amount of repetitions. Every time it creates the given amount of children from a parent."""
         
         print("Running Genetic algorithm...")
 
@@ -69,11 +68,11 @@ class Genetic(HillClimber, MapVisualization):
         # set all parameters to zero
         all_time_highest_score = 0
 
-        # set a parametere that keeps track of the amount of iterations
+        # set a parameter that keeps track of the amount of iterations
         i = 0
 
         try:
-            # repeat algorithm for the given amount of repititions
+            # repeat algorithm for the given amount of repetitions
             for _ in range(repetitions):
                 # generate parent solution
                 parent = self.generate_parent()

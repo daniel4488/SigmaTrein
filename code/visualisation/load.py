@@ -60,7 +60,3 @@ class Load:
 
                 # add edge to graph
                 self.G.add_edge(station1, station2, **edge_attr)
-
-
-if __name__ == "__main__":
-    load = Load()

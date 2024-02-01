@@ -6,7 +6,7 @@ from code.visualisation.baseline import visualize_iterations_to_score
 
 class MapVisualization:
     """
-    Class used to create the visualistation of a solution from a chosen
+    Class used to create the visualisation of a solution from a chosen
     algorithm. The visualisation consists of a graph of the scores, as
     wel as a picture of the resulting trajectories.
     """

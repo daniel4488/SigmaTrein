@@ -52,33 +52,34 @@ class RailNL:
                 self.stations[station] = Station(station, float(x), float(y))
 
     def load_special_stations(self) -> None:
-            """ Converts the station data to Station classes and loads
-                them into the stations dictionary. """
-            
-            excluded_stations = [ "Heerlen", "Sittard", "Maastricht", "Roermond", "Weert", "Assen", 
-                                "Groningen", "Leeuwarden", "Heerenveen", "Steenwijk", "Enschede", 
-                                "Hengelo", "Venlo", "Helmond", "Vlissingen", "Den Helder", 
-                                "Lelystad Centrum"]
+        """ Converts the station data to Station classes and loads
+            them into the stations dictionary. """
 
-            # open StationsHolland.csv
-            with open(f"data/{self.dataset}/Stations{self.dataset.capitalize()}.csv", "r") as file:
-                # remove header
-                _ = file.readline()
+        excluded_stations = [
+            "Heerlen", "Sittard", "Maastricht", "Roermond", "Weert", "Assen",
+            "Groningen", "Leeuwarden", "Heerenveen", "Steenwijk", "Enschede",
+            "Hengelo", "Venlo", "Helmond", "Vlissingen", "Den Helder",
+            "Lelystad Centrum"
+        ]
 
-                # strip and split lines by comma's
-                for line in file:
-                    line = line.strip()
-                    station, y, x = line.split(",")
+        # open StationsHolland.csv
+        with open(f"data/{self.dataset}/Stations{self.dataset.capitalize()}.csv", "r") as file:
+            # remove header
+            _ = file.readline()
 
-                    if station not in excluded_stations:
-                        # create station object
-                        self.special_stations[station] = Station(station, float(x), float(y))
+            # strip and split lines by comma's
+            for line in file:
+                line = line.strip()
+                station, y, x = line.split(",")
+
+                if station not in excluded_stations:
+                    # create station object
+                    self.special_stations[station] = Station(station, float(x), float(y))
 
     def load_connections(self, dir: str = "Connecties") -> None:
         """ Converts connections data to Connection classes and
             loads them into the connections dictionary. """
 
-        #with open(f"data/{self.dataset}/Connecties{self.dataset.capitalize()}.csv", "r") as file:
         with open(f"data/{self.dataset}/{dir}{self.dataset.capitalize()}.csv", "r") as file:
             # remove header
             _ = file.readline()

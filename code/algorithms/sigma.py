@@ -28,7 +28,7 @@ class Sigma(AdvancedRandom, MapVisualization):
     anymore, or the whole trajectory has been removed due to all connections being 
     double connections. In that case the whole trajectory gets removed from the final solution. 
 
-    Sigma takes the AdvancedRandom class as a parent. Furthermore it has a list
+    Sigma takes the AdvancedRandom class as a parent. Furthermore, it has a list
     with prefixed routes and a list with corresponding connections. 
     """
 
@@ -41,17 +41,21 @@ class Sigma(AdvancedRandom, MapVisualization):
         self.highest_score_file = ScoreFile("sigma_highest.csv")
 
         # list with pre-fixed routes that start a trajectory
-        self.standard_stations = [["Maastricht", "Sittard", "Heerlen", "Sittard", "Roermond", "Weert", "Eindhoven"],
-                                       ["Venlo", "Helmond", "Eindhoven"], ["Vlissingen", "Roosendaal"],
-                                       ["Den Helder", "Alkmaar"], ["Enschede", "Hengelo", "Almelo"], ["Lelystad Centrum", "Almere Centrum"]
-                                       , ["Zwolle", "Assen", "Groningen", "Leeuwarden", "Heerenveen", "Steenwijk", "Zwolle"]]
+        self.standard_stations = [
+            ["Maastricht", "Sittard", "Heerlen", "Sittard", "Roermond", "Weert", "Eindhoven"],
+            ["Venlo", "Helmond", "Eindhoven"], ["Vlissingen", "Roosendaal"],
+            ["Den Helder", "Alkmaar"], ["Enschede", "Hengelo", "Almelo"], ["Lelystad Centrum", "Almere Centrum"],
+            ["Zwolle", "Assen", "Groningen", "Leeuwarden", "Heerenveen", "Steenwijk", "Zwolle"]
+        ]
         
         # list with corresponding connection numbers to the prefixed routes,
         # in each list the last number represents the trajectory duration
-        self.standard_connections = [[76, 77, 77, 78, 79, 80, 91], 
-                                                  [81, 82, 39], [75, 63], [71, 36], 
-                                                  [88, 72, 17], [73, 14],
-                                                  [74, 83, 84, 86, 85, 87, 146]]
+        self.standard_connections = [
+            [76, 77, 77, 78, 79, 80, 91],
+            [81, 82, 39], [75, 63], [71, 36],
+            [88, 72, 17], [73, 14],
+            [74, 83, 84, 86, 85, 87, 146]
+        ]
         
         # empty lists where copies of the lists above can be stored
         self.standard_stations_copy = []
@@ -79,7 +83,7 @@ class Sigma(AdvancedRandom, MapVisualization):
 
         return departure_station
     
-    def process_standard_routes(self, trajectory: Trajectory) -> Station:
+    def process_standard_routes(self, trajectory: Trajectory) -> tuple[str, Station]:
         # select stations and connections lists from standard list
         stations: list[str] = self.standard_stations_copy.pop()
         connections: list[int] = self.standard_connections_copy.pop()
@@ -151,7 +155,7 @@ class Sigma(AdvancedRandom, MapVisualization):
         # set a parameter that keeps track of the highest score
         highest_score = 0 
 
-        # set a parametere that keeps track of the amount of iterations
+        # set a parameter that keeps track of the amount of iterations
         i = 0
         try:
             for _ in range(iterations):

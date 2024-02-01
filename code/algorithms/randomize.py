@@ -16,7 +16,7 @@ class Randomize:
     Algorithm following a random algorithm.
 
     This algorithm chooses a random starting station. From there it randomly
-    chooses a possible connection. This is done uptill the maximum time of
+    chooses a possible connection. This is done until the maximum time of
     a trajectory is reached. In this way, a solution of multiple trajectories
     is made. There are 2 special cases:
     * unique = True: the random algorithm will never choose a connection
@@ -82,7 +82,7 @@ class Randomize:
 
         self.total_trajectories = 0
         self.highest_score = 0
-        self.highest_score_solution: Solution = None
+        self.highest_score_solution: Solution | None = None
 
     @staticmethod
     def set_constrictions(dataset: str) -> DatasetInfo:

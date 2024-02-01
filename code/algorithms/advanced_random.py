@@ -1,5 +1,4 @@
 from code.algorithms.randomize import Randomize
-from code.classes.output import Output
 from code.classes.solution import Solution
 from code.classes.station import Station
 from code.classes.trajectory import Trajectory
@@ -59,7 +58,7 @@ class AdvancedRandom(Randomize, MapVisualization):
             possible_connections = departure_station[1] \
                 .return_possible_connections()
 
-            # select connection with lowest weight using lambda function
+            # select connection with the lowest weight using lambda function
             connection = min(possible_connections,
                              key=lambda connection:
                              self.connections[connection].weight)
@@ -92,7 +91,7 @@ class AdvancedRandom(Randomize, MapVisualization):
 
     def run(self, iterations: int, visualize: bool, verbose: bool = False,
             write_output: bool = True,
-            auto_open: bool = False) -> Solution | Output:
+            auto_open: bool = False) -> None:
         """ Creates solutions with the maximum amount of trajectories and
             saves their scores in a csv file. """
         
@@ -105,7 +104,7 @@ class AdvancedRandom(Randomize, MapVisualization):
         # set a parameter that keeps track of the highest score
         highest_score = 0
 
-        # set a parametere that keeps track of the amount of iterations
+        # set a parameter that keeps track of the amount of iterations
         i = 0
         
         try:
@@ -177,4 +176,3 @@ class AdvancedRandom(Randomize, MapVisualization):
                                path="data/scores/advanced_highest.csv",
                                auto_open=auto_open)
             visualize_baseline("data/scores/advanced.csv", title=self.__class__.__name__)
-

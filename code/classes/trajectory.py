@@ -3,7 +3,7 @@ class Trajectory:
     """
     Class describing the route of a train.
     Trajectory object contains a float which is the duration of the whole
-    trajectory, a list with the station names it travels accross, and a list
+    trajectory, a list with the station names it travels across, and a list
     with connection numbers corresponding to this.
     """
 

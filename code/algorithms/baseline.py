@@ -17,7 +17,7 @@ class Baseline(Randomize, MapVisualization):
         # Create score file
         self.score_file = ScoreFile("baseline.csv")
         self.highest_score = 0
-        self.highest_score_solution: Solution = None
+        self.highest_score_solution: Solution | None = None
 
     def run(self, iterations: int, visualize: bool, verbose: bool = False, auto_open: bool = False, unique: bool = True, prefixed: bool = False) -> None:
         """ Runs baseline for random algorthm. """
@@ -28,7 +28,7 @@ class Baseline(Randomize, MapVisualization):
 
         self.score_file.prepare_file()
 
-        # set a parametere that keeps track of the amount of iterations
+        # set a parameter that keeps track of the amount of iterations
         i = 0
 
         try:
