@@ -9,6 +9,7 @@ from code.classes.station import Station
 from code.visualisation.baseline import visualize_baseline, visualize_iterations_to_score
 
 import copy
+from tqdm import tqdm
 
 
 class Sigma(AdvancedRandom, MapVisualization):
@@ -155,13 +156,8 @@ class Sigma(AdvancedRandom, MapVisualization):
         # set a parameter that keeps track of the highest score
         highest_score = 0 
 
-        # set a parameter that keeps track of the amount of iterations
-        i = 0
         try:
-            for _ in range(iterations):
-                # print iterations
-                if i % 10000 == 0:
-                    print(f"{i} iterations")
+            for _ in tqdm(range(iterations)):
 
                 # whilst a solution is not valid, i.e. all connections used by trajectories
                 # keep looking for a valid solution
@@ -199,8 +195,7 @@ class Sigma(AdvancedRandom, MapVisualization):
 
                 # reset is_valid parameter
                 self.is_valid = False
-                # update iterations parameter
-                i += 1
+
         except KeyboardInterrupt:
             pass
 

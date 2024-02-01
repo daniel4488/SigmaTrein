@@ -7,6 +7,8 @@ from code.classes.railNL import RailNL
 from code.visualisation.map_class import MapVisualization
 from code.visualisation.baseline import visualize_baseline
 
+from tqdm import tqdm
+
 
 class AdvancedRandom(Randomize, MapVisualization):
     """
@@ -103,15 +105,9 @@ class AdvancedRandom(Randomize, MapVisualization):
 
         # set a parameter that keeps track of the highest score
         highest_score = 0
-
-        # set a parameter that keeps track of the amount of iterations
-        i = 0
         
         try:
-            for _ in range(iterations):
-                # print iterations
-                if i % 1000 == 0:
-                    print(f"{i} iterations")
+            for _ in tqdm(range(iterations)):
 
                 # reset all used connections by previous solution
                 self.reset_used_connections_and_weight()
@@ -165,8 +161,6 @@ class AdvancedRandom(Randomize, MapVisualization):
 
                     print(highest_score)
 
-                # update iterations parameter
-                i += 1
         except KeyboardInterrupt:
             pass
 

@@ -5,6 +5,8 @@ from code.classes.write_file import ScoreFile
 from code.visualisation.baseline import visualize_baseline
 from code.visualisation.map_class import MapVisualization
 
+from tqdm import tqdm
+
 
 class Baseline(Randomize, MapVisualization):
     """
@@ -28,15 +30,9 @@ class Baseline(Randomize, MapVisualization):
 
         self.score_file.prepare_file()
 
-        # set a parameter that keeps track of the amount of iterations
-        i = 0
-
         try:
             # create solutions and write score to score file
-            for _ in range(iterations):
-                # print iterations
-                if i % 10000 == 0:
-                    print(f"{i} iterations")
+            for _ in tqdm(range(iterations)):
                 
                 solution = super().run(iterations=1, visualize=False, verbose=verbose, write_output=True, auto_open=auto_open, unique=unique, prefixed=prefixed)
 
@@ -47,8 +43,6 @@ class Baseline(Randomize, MapVisualization):
                 if solution.score > self.highest_score:
                     self.highest_score = solution.score
                     self.highest_score_solution = solution
-
-                i += 1
 
         except KeyboardInterrupt:
             pass

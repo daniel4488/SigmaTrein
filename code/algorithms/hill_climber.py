@@ -8,6 +8,7 @@ from code.visualisation.map_class import MapVisualization
 
 import copy
 import random
+from tqdm import tqdm
 
 
 class HillClimber(MapVisualization):
@@ -103,7 +104,7 @@ class HillClimber(MapVisualization):
         """ Runs the Hill Climber algorithm for a given amount
             of iterations and mutations. """
         
-        print("Running Hill Climber algorithm...")
+        print(f"Running {self.__class__.__name__} algorithm...")
 
         self.verbose = verbose
 
@@ -111,20 +112,11 @@ class HillClimber(MapVisualization):
         self.make_first_solution()
         self.score_file.prepare_file()
 
-        # set a parameter that keeps track of the amount of iterations
-        i = 0
-
         # create new solutions and save scores
         try:
-            for _ in range(iterations):
-                # print iterations
-                if i % 10000 == 0:
-                    print(f"{i} iterations")
-
+            for _ in tqdm(range(iterations)):
                 self.new_solution(mutations)
-
                 self.score_file.write_score(self.score)
-                i += 1
 
         except KeyboardInterrupt:
             pass
