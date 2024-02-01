@@ -8,3 +8,4 @@ mypy
 pandas
 seaborn
 pytest
+tqdm
