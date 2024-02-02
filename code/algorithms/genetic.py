@@ -4,6 +4,7 @@ from code.classes.output import Output
 from code.visualisation.map_class import MapVisualization
 
 import copy
+from tqdm import tqdm
 
 
 class Genetic(HillClimber, MapVisualization):
@@ -72,6 +73,12 @@ class Genetic(HillClimber, MapVisualization):
         i = 0
 
         try:
+            # this is an estimate of how long the algorithm will run
+            total_iter = repetitions * number_of_children * 10
+
+            # create progress bar
+            progress_bar = tqdm(total=total_iter)
+
             # repeat algorithm for the given amount of repetitions
             for _ in range(repetitions):
                 # generate parent solution
@@ -92,8 +99,8 @@ class Genetic(HillClimber, MapVisualization):
                     # iterate over all children
                     for child in children:
                         # print iterations
-                        if i % 10000 == 0:
-                            print(f"{i} iterations")
+                        # if i % 10000 == 0:
+                        #     print(f"{i} iterations")
                         # write score of child to csv file
                         self.score_file.write_score(child.score)
 
@@ -114,10 +121,16 @@ class Genetic(HillClimber, MapVisualization):
                         # update iterations parameter
                         i += 1
 
+                        # update progress bar
+                        progress_bar.update(1)
+
                 # check the highest score found in this tree and compare it to the most successful tree
                 if highest_score_child > all_time_highest_score:
                     all_time_highest_score = highest_score_child
                     all_time_highest_score_child_solution = solution
+
+            # close progress bar
+            progress_bar.close()
 
         except KeyboardInterrupt:
             pass
